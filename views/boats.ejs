@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%- include ('partials/head') %>
+</head>
+<body class="container"></body>
+<header class="page header">
+    <%- include ('partials/header') %>
+ </header>
+</body>
+<main>
+    <style>
+        tr.hide-table-padding td {
+        padding: 0;
+      }
+      
+      .expand-button {
+          position: relative;
+      }
+      
+      .accordion-toggle .expand-button:after
+      {
+        position: absolute;
+        left:.75rem;
+        top: 50%;
+        transform: translate(0, -50%);
+        content: '-';
+      }
+      .accordion-toggle.collapsed .expand-button:after
+      {
+        content: '+';
+      }
+      
+      #tdcard {
+        margin-top: 10px;
+        margin-bottom: 10px;
+      }
+      
+      #cardtitle {
+        margin-bottom: 0px;
+      }
+      
+      .table-responsive {
+        margin-top: 10px;
+        font-size: small;
+      }
+      
+      </style>
+      
+       <div class="table-responsive">
+        <table class="table table-hover table-sm" data-toggle="table" data-search="true">
+          <thead>
+            <tr>
+              <th data-sortable="true" scope="col">Boat Name</th>
+              <th data-sortable="true" scope="col">Owner</th>
+              <th data-sortable="true" scope="col">Year Built</th>
+              <th data-sortable="true" scope="col">Class</th>
+              <th data-sortable="true" scope="col">Hull Type</th>
+              <th data-sortable="true" scope="col">Draft</th>
+              <th data-sortable="true" scope="col">Horsepower</th>
+              <!-- <th data-sortable="true" scope="col">Engine Type</th>
+              <th data-sortable="true" scope="col">Engine Model</th> -->
+              <th data-sortable="true" scope="col">Eye Level</th>
+              <th data-sortable="true" scope="col">Official #</th>
+              <th data-sortable="true" scope="col">Call Sign</th>
+              <!-- <th scope="col">#</th> -->
+            </tr>
+          </thead>
+          <tbody>
+            <% for (let i = 0; i < boats.length; i++) { %>
+            <tr class="accordion-toggle collapsed" id="accordion1" data-toggle="collapse" data-parent="#accordion1" href="#<%= boats[i].boat_nm %>">
+              <td><%= boats[i].boat_nm %></td>
+              <td><%= boats[i].boat_owner %></td>
+              <td><%= boats[i].year_built %></td>
+              <td><%= boats[i].boat_class %></td>
+              <td><%= boats[i].hull_type %></td>
+              <td><%= boats[i].boat_draft %></td>
+              <td><%= boats[i].horsepwr %></td>
+              <!-- <td><%= boats[i].engine_bn %></td>
+              <td><%= boats[i].engine_mdl %></td> -->
+              <td><%= boats[i].eye_lvl %></td>
+              <td><%= boats[i].ofl_no %></td>
+              <td><%= boats[i].call_sign %></td>
+              <!-- <td class="expand-button"></td> -->
+              </tr>
+              <% } %>
+          </tbody>
+        </table>
+        </div>
+</main>
+<script src="shared.js" charset="utf-8"></script>
+<footer>
+    <%- include ('partials/footer') %>
+</footer>
+<script src="https://unpkg.com/bootstrap-table@1.16.0/dist/bootstrap-table.min.js"></script>
+</body>
+</html>

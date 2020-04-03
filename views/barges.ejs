@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%- include ('partials/head') %>
+</head>
+<body class="container"></body>
+<header class="page header">
+    <%- include ('partials/header') %>
+ </header>
+</body>
+<main>
+    <style>
+        tr.hide-table-padding td {
+        padding: 0;
+      }
+      
+      .expand-button {
+          position: relative;
+      }
+      
+      .accordion-toggle .expand-button:after
+      {
+        position: absolute;
+        left:.75rem;
+        top: 50%;
+        transform: translate(0, -50%);
+        content: '-';
+      }
+      .accordion-toggle.collapsed .expand-button:after
+      {
+        content: '+';
+      }
+      
+      #tdcard {
+        margin-top: 10px;
+        margin-bottom: 10px;
+      }
+      
+      #cardtitle {
+        margin-bottom: 0px;
+      }
+      
+      .table-responsive {
+        margin-top: 10px;
+      }
+      
+      </style>
+      
+       <div class="table-responsive">
+        <table class="table table-hover table-sm" data-toggle="table" data-search="true">
+          <thead>
+            <tr>
+              <th data-sortable="true" scope="col" class="text-center">Barge Name</th>
+              <th data-sortable="true" scope="col" class="text-center">Year Built</th>
+              <th data-sortable="true" scope="col" class="text-center">Barge Class</th>
+              <th data-sortable="true" scope="col" class="text-center">Barge Length</th>
+              <th data-sortable="true" scope="col" class="text-center">Barge Width</th>
+              <th data-sortable="true" scope="col" class="text-center">Barge Depth</th>
+              <th scope="col" class="text-center">Spec Sheet</th>
+              <th scope="col" class="text-center">Drawing</th>
+              <th scope="col">#</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% for (let i = 0; i < barges.length; i++) { %>
+            <tr class="accordion-toggle collapsed" id="accordion1" data-toggle="collapse" data-parent="#accordion1" href="#<%= barges[i].barge_name %>">
+              <td><%= barges[i].barge_name %></td>
+              <td><%= barges[i].year_built %></td>
+              <td><%= barges[i].barge_class %></td>
+              <td><%= barges[i].barge_length %></td>
+              <td><%= barges[i].barge_width %></td>
+              <td><%= barges[i].barge_depth %></td>
+              <td><a href="<%= barges[i].spec_sheet_url %>" class="btn btn-primary btn-sm">Spec Sheet</a></td>
+              <td><a href="<%= barges[i].drawing_url %>" class="btn btn-primary btn-sm">Drawing</a></td>
+              <td class="expand-button"></td>
+              </tr>
+              <% } %>
+          </tbody>
+        </table>
+        </div>
+</main>
+<script src="shared.js" charset="utf-8"></script>
+<footer>
+    <%- include ('partials/footer') %>
+</footer>
+<script src="https://unpkg.com/bootstrap-table@1.16.0/dist/bootstrap-table.min.js"></script>
+</body>
+</html>

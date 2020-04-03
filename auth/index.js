@@ -3,6 +3,7 @@ const bcrypt = require('bcrypt');
 const router = express.Router();
 
 const User = require('../db/user');
+const Barge = require('../db/barge');
 
 // Route paths are prepended with /auth
 
