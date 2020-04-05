@@ -1,9 +1,9 @@
 const express = require('express');
 const bcrypt = require('bcrypt');
 const router = express.Router();
-
 const User = require('../db/user');
 const Barge = require('../db/barge');
+const Job = require('../db/job');
 
 // Route paths are prepended with /auth
 
@@ -64,6 +64,13 @@ router.post('/signup', (req, res, next) => {
     }
 });
 
+function validJob(job) {
+    const validJobNumber = typeof job.ordnbr == 'string' &&
+                        job.ordnbr.trim() !='';
+
+    return validJobNumber;
+}
+
 router.post('/login', (req, res, next) => {
     if(validUser(req.body)) {
         //check to see if in DB
@@ -102,6 +109,83 @@ router.post('/login', (req, res, next) => {
         next(new Error('Invalid Login'));
     }
 });
+
+router.get('/dashboard/:order_id', (req, res) => {
+    if (!isNaN(req.params.order_id)) {
+        Job.getOneByJobId(req.params.order_id).then(job => {
+        if (job) {
+            res.json(job);
+        } else {
+            res.status(404);
+            res.send('job not found');
+        }
+        });
+    } else {
+        res.status(500);
+        res.send('invalid ID');
+    }
+    });
+
+
+router.post('/newjob', (req, res, next) => {
+    if(validJob(req.body)) {
+        Job
+        .getOneByJobNumber(req.body.ordnbr)
+        .then(job => {
+            console.log('job', job);
+            //If trip not found
+            if(!job) {
+                //this is a unique trip
+                    const job = {
+                        ordnbr : req.body.ordnbr,
+                        customer_nm : req.body.customer_nm,
+                        status: 'a',
+                        origin_location : req.body.origin_location,
+                        origin_desc : req.body.origin_desc,
+                        dest_location : req.body.dest_location,
+                        dest_desc : req.body.dest_desc,
+                        ord_notes : req.body.ord_notes,
+                        created_by: 'Neal White',
+                        last_modified_by: 'Neal White',
+                        created_dttm: new Date(),
+                        modified_dttm: new Date(),
+                    };
+
+                    Job
+                    .create(job)
+                    .then(id => {
+                // redirect
+                res.json({
+                    id,
+                    message: 'trip created'
+                });
+                    });
+                } else {
+                    // existing trip
+                    console.log('trip already exists');
+                }
+            });
+        }
+    });
+
+router.put('/dashboard/:order_id', (req, res, next) => {
+    if(validJob(req.body)) {
+        Job
+        .update(req.params.order_id, req.body).then(job => {
+            res.json(job);
+        });
+        } else {
+            next(new Error('invalid job neal'));
+        }
+});
+
+router.delete('/dashboard/:order_id', (req, res, next) => {
+        Job
+        .delete(req.params.order_id).then(() => {
+            res.send('deleted');
+        });
+});
+
 
 
 module.exports = router;

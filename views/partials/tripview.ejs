@@ -1,0 +1,206 @@
+<style>
+  tr.hide-table-padding td {
+  padding: 0;
+}
+
+.expand-button {
+	position: relative;
+}
+
+.accordion-toggle .expand-button:after
+{
+  position: absolute;
+  left:.75rem;
+  top: 50%;
+  transform: translate(0, -50%);
+  content: '-';
+}
+.accordion-toggle.collapsed .expand-button:after
+{
+  content: '+';
+}
+
+#tdcard {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+#cardtitle {
+  margin-bottom: 0px;
+}
+
+.table-responsive {
+  margin-top: 10px;
+}
+
+.card-body {
+  padding: 10px;
+}
+
+.horizontal-line {
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.hr-line-line {
+  margin: 1px;
+  border: 1px solid #F0F8FF;
+}
+
+</style>
+
+ <div class="table-responsive">
+  <table class="table table-hover table-sm" data-toggle="table" data-search="true">
+    <thead>
+      <tr>
+        <th data-sortable="true" scope="col">Job Number</th>
+        <th data-sortable="true" scope="col">Status</th>
+        <th data-sortable="true" scope="col">Customer Name</th>
+        <th data-sortable="true" scope="col">Origin Location</th>
+        <th data-sortable="true" scope="col">Destination Location</th>
+        <th scope="col">#</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% for (let i = 0; i < jobs.length; i++) { %>
+      <tr class="accordion-toggle collapsed" id="accordion1" data-toggle="collapse" data-parent="#accordion1" href="#<%= jobs[i].ordnbr %>">
+        <td><%= jobs[i].ordnbr %></td>
+        <td><%= jobs[i].status %></td>
+        <td><%= jobs[i].customer_nm %></td>
+        <td><%= jobs[i].origin_location %></td>
+        <td><%= jobs[i].dest_location %></td>
+        <td class="expand-button"></td>
+        </tr>
+          
+  <tr class="hide-table-padding">
+  <td colspan="6">
+  <div class="collapse in col-sm head-div" id="<%= jobs[i].ordnbr %>">
+    <div class="card" id="tdcard">
+      <div class="card-body">
+        <div class="row">
+        <h5 class="card-title col align-self-center" id="cardtitle"><%= jobs[i].ordnbr %> - <%= jobs[i].customer_nm %></h5>
+        <button type="button" class="btn col-1" id="edittripbutton" data-toggle="modal" data-target="#e<%= jobs[i].ordnbr %>">Edit</button>
+        <button type="button" class="btn col-1" data-toggle="modal" data-target="#d<%= jobs[i].ordnbr %>">Delete</button>
+      </div>
+
+      <!-- Edit Job Modal -->
+      <div class="modal fade" id="e<%= jobs[i].ordnbr %>" tabindex="-1" role="dialog" aria-labelledby="editTripModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="editTripModalLabel">Edit Order Details</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <!-- Edit Form Begin -->
+              <form class="edittripform" id="<%= jobs[i].order_id %>">
+                <h5>Order Information</h5>
+                <div class="row">
+                    <div class="col-4">
+                        <div class="form-group">
+                            <label hidden for="eid"></label>
+                            <input hidden type="text" class="form-control" id="eid" placeholder="Order #" value="<%= jobs[i].order_id %>">
+                            <label for="eorderNumberInput">Order #</label>
+                            <input type="text" class="form-control" id="eorderNumberInput" placeholder="Order #" value="<%= jobs[i].ordnbr %>" readonly>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                      <div class="form-group">
+                          <label for="ecustomerNameInput">Customer Name</label>
+                          <input type="text" class="form-control" id="ecustomerNameInput" placeholder="Customer Name" value="<%= jobs[i].customer_nm %>">
+                      </div>
+                  </div>
+                      <div class="col-4">
+                          <div class="form-group">
+                              <label for="eOriginInput">Origin Location</label>
+                              <input type="text" class="form-control" id="eOriginInput" placeholder="Origin" value="<%= jobs[i].origin_location %>">
+                          </div>
+                  </div>
+              </div>
+              <div class="row">
+                <div class="col-4">
+                    <div class="form-group">
+                        <label for="eOriginDescription">Origin Description</label>
+                        <input type="text" class="form-control" id="eOriginDescription" placeholder="Origin Description" value="<%= jobs[i].origin_desc %>">
+                    </div>
+                </div>
+                <div class="col-4">
+                  <div class="form-group">
+                      <label for="eDestinationInput">Destination Location</label>
+                      <input type="text" class="form-control" id="eDestinationInput" placeholder="Destination Location" value="<%= jobs[i].dest_location %>">
+                  </div>
+              </div>
+                  <div class="col-4">
+                      <div class="form-group">
+                          <label for="eDestinationDescription">Destination Description</label>
+                          <input type="text" class="form-control" id="eDestinationDescription" placeholder="Destination" value="<%= jobs[i].dest_desc %>">
+                      </div>
+              </div>
+          </div>
+                  <div class="row">
+                      <div class="col-12">
+                          <div class="form-group">
+                              <label for="eOrderNotes">Order Notes</label>
+                              <input type="text" class="form-control" id="eOrderNotes" placeholder="Order Notes" value="<%= jobs[i].ord_notes %>">
+                          </div>
+                      </div>
+                </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                </div>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <!-- Delete Job Modal -->
+
+      <div class="modal fade" id="d<%= jobs[i].ordnbr %>" tabindex="-1" role="dialog" aria-labelledby="deleteTripModalLable" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">Are you sure you want to delete job <%= jobs[i].ordnbr %>? </h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              Click DELETE to delete this job, or click Close to dismiss.
+              <form class="deletetripform" id="<%= jobs[i].order_id %>">
+                <div class="form-group">
+                  <label hidden for="did"></label>
+                  <input hidden type="text" class="form-control" id="did" placeholder="Order #" value="<%= jobs[i].ordnbr %>">
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              <button type="submit" class="btn btn-danger">DELETE THIS JOB</button>
+            </div>
+          </form>
+          </div>
+        </div>
+      </div>
+
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              </button>
+      </div>
+      <div class="horizontal-line">
+        <hr class="hr-line-line">
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          
+        </div>
+    </div>
+  </div>
+  </div></td>
+  </tr>
+  <% } %>
+      </tbody>
+    </table>
+  </div>
+  

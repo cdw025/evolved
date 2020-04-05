@@ -4,10 +4,11 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var moment = require('moment-timezone');
 var index = require('./routes/index');
 var user = require('./routes/user');
 var auth = require('./auth/index')
-
+moment().tz("America/Chicago").format();
 
 var app = express();
 

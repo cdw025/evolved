@@ -3,18 +3,34 @@
 <head>
     <%- include ('partials/head') %>
 </head>
+<style>
+    #tripTableHeader {
+        margin-bottom: 0px;
+    }
+    #headerDivId {
+        margin-left: 5px;
+        margin-right: 5px;
+    }
+</style>
 <body class="container"></body>
 <header class="page header">
     <%- include ('partials/header') %>
  </header>
 </body>
 <main>
-    
-</main>
-<script src="shared.js" charset="utf-8"></script>
-<footer>
-    <%- include ('partials/footer') %>
-</footer>
-
+    <p class="text-right">Welcome, Neal</p>
+<div class="row" id="headerDivId">
+    <div class="col-1"></div>
+    <h3 class='text-center col-10' id="tripTableHeader">Job Table</h3>
+    <button class="btn btn-primary col-1" data-toggle="modal" data-target="#exampleModal">New Job</button>
+    <%- include ('partials/newjobmodal') %>
+</div>
+    <%- include ('partials/tripview') %>
+    </main>
+    <footer>
+        <%- include ('partials/footer') %>
+    </footer>
+    <script src="shared.js" charset="utf-8"></script>
+    <script src="dashboard.js" charset="utf-8"></script>
 </body>
 </html>
