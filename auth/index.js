@@ -4,6 +4,8 @@ const router = express.Router();
 const User = require('../db/user');
 const Barge = require('../db/barge');
 const Job = require('../db/job');
+const Tow = require('../db/tow');
+
 
 // Route paths are prepended with /auth
 

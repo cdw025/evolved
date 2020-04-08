@@ -25,6 +25,12 @@
   margin-bottom: 10px;
 }
 
+#tow-card {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  background-color: #686a6e;
+}
+
 #cardtitle {
   margin-bottom: 0px;
 }
@@ -47,13 +53,18 @@
   border: 1px solid #F0F8FF;
 }
 
+.tow-row {
+  font-size: 80%;
+}
+
+
 </style>
 
  <div class="table-responsive">
-  <table class="table table-hover table-sm" data-toggle="table" data-search="true">
+  <table class="table table-hover table-sm" data-toggle="table">
     <thead>
       <tr>
-        <th data-sortable="true" scope="col">Job Number</th>
+        <th data-field="order_id" data-sortable="true" scope="col">Job Number</th>
         <th data-sortable="true" scope="col">Status</th>
         <th data-sortable="true" scope="col">Customer Name</th>
         <th data-sortable="true" scope="col">Origin Location</th>
@@ -94,8 +105,8 @@
               </button>
             </div>
             <div class="modal-body">
-              <!-- Edit Form Begin -->
-              <form class="edittripform" id="<%= jobs[i].order_id %>">
+              <!-- Edit Job Form Begin -->
+              <form class="edittripform">
                 <h5>Order Information</h5>
                 <div class="row">
                     <div class="col-4">
@@ -141,7 +152,7 @@
           </div>
                   <div class="row">
                       <div class="col-12">
-                          <div class="form-group">
+                          <div class="form-group editable">
                               <label for="eOrderNotes">Order Notes</label>
                               <input type="text" class="form-control" id="eOrderNotes" placeholder="Order Notes" value="<%= jobs[i].ord_notes %>">
                           </div>
@@ -153,12 +164,13 @@
                     <button type="submit" class="btn btn-primary">Save Changes</button>
                 </div>
             </form>
+            <!-- End Job Form End -->
           </div>
         </div>
       </div>
+      <!-- Edit Job Modal End -->
 
       <!-- Delete Job Modal -->
-
       <div class="modal fade" id="d<%= jobs[i].ordnbr %>" tabindex="-1" role="dialog" aria-labelledby="deleteTripModalLable" aria-hidden="true">
         <div class="modal-dialog" role="document">
           <div class="modal-content">
@@ -170,7 +182,7 @@
             </div>
             <div class="modal-body">
               Click DELETE to delete this job, or click Close to dismiss.
-              <form class="deletetripform" id="<%= jobs[i].order_id %>">
+              <form class="deletetripform">
                 <div class="form-group">
                   <label hidden for="did"></label>
                   <input hidden type="text" class="form-control" id="did" placeholder="Order #" value="<%= jobs[i].ordnbr %>">
@@ -184,6 +196,7 @@
           </div>
         </div>
       </div>
+      <!-- Delete Trip Modal End -->
 
               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
               </button>
@@ -193,9 +206,407 @@
       </div>
       <div class="modal-body">
         <div class="row">
+          <div class="col-5"><h5>Trip Details</h5></div>
+          <div class="col-5"><h5>Tow Details</h5></div>
+          <div class="col-2"style="text-align:right"><button class="btn btn-secondary btn-sm" data-toggle="modal" data-target="#newTowModal">New Tow</button></div>
           
         </div>
-    </div>
+        
+        <div class="row">
+        <div class="col-2">
+          Trip #:
+          <br>
+          Customer:
+          <br>
+          Origin:
+          <br>
+          Origin Details:
+          <br>
+          Destination:
+          <br>
+          Destination Details:
+          <br>
+          Trip Notes:
+      </div>
+      <div class="col-3">
+          <%= jobs[i].ordnbr %>
+          <br>
+          <%= jobs[i].customer_nm %>
+          <br>
+          <%= jobs[i].origin_location %>
+          <br>
+          <%= jobs[i].origin_desc %>
+          <br>
+          <%= jobs[i].dest_location %>
+          <br>
+          <%= jobs[i].dest_desc %>
+          <br>
+          <%= jobs[i].ord_notes %>
+      </div>
+        <div class="col-7">
+          <% for (let j = 0; j < tows.length; j++) { %>
+            <% if (tows[j].ordnbr === jobs[i].ordnbr) { %>
+                  <div class="card" id="tow-card">
+                    <div class="card-body">
+                    <div class="row">
+                      <div class="col-2">
+                      Tow ID:
+                    </div>
+                    <div class="col-4">
+                      <%= tows[j].tow_id %>
+                    </div>
+                    <div class="col-4">
+                    </div>
+                    <div class="col-2" style="text-align:right">
+                      <button type="button" class="btn btn-sm" id="edittowbutton" data-toggle="modal" data-target="#e<%= tows[j].tow_id %>">Edit</button>
+                    </div>
+                  </div>
+      <!-- Edit Tow Modal -->
+      <div class="modal fade" id="e<%= tows[j].tow_id %>" tabindex="-1" role="dialog" aria-labelledby="editTowModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="editTowModalLabel">Edit Tow Details</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <!-- Edit Tow Form Begin -->
+              <form class="edittowform">
+                <h5>Barge Information</h5>
+                <div class="row">
+                    <div class="col-2">
+                        <div class="form-group">
+                            <label hidden for="eid"></label>
+                            <input hidden type="text" class="form-control" id="eid" placeholder="Order #" value="<%= tows[j].tow_id %>">
+                            <label for="eBarge1NameInput">Barge 1 Name:</label>
+                            <input type="text" class="form-control" id="eBarge1NameInput" placeholder="Barge Name" value="<%= tows[j].barge_1_name %>">
+                        </div>
+                    </div>
+                    <div class="col-2">
+                      <div class="form-group">
+                      <label for="eBarge1Start">Barge 1 Start:</label>
+                      <input type="text" id="eBarge1Start" class="form-control datetimepicker" value="<%= tows[j].barge_1_start %>" />
+                    </div>
+                  </div>
+                  <div class="col-2">
+                    <div class="form-group">
+                    <label for="eBarge1Stop">Barge 1 Stop:</label>
+                    <input type="text" id="eBarge1Stop" class="form-control datetimepicker" value="<%= tows[j].barge_1_stop %>" />
+                  </div>
+                </div>
+                <div class="col-2">
+                  <div class="form-group">
+                  <label for="eBarge1Loc">Barge 1 Location:</label>
+                  <input type="text" id="eBarge1Loc" class="form-control" value="LM-100" />
+                </div>
+              </div>
+              <div class="col-2">
+                <div class="form-group">
+                <label for="eBarge1Coord">Barge 1 Coordinates:</label>
+                <input type="text" id="eBarge1Coord" class="form-control" value="29.952368, -90.224134" />
+              </div>
+            </div>
+            <div class="col-2">
+              <div class="form-group">
+              <label for="eBarge1Inherit">Inherit Location From:</label>
+              <input type="text" id="eBarge1Inherit" class="form-control" value="..." />
+            </div>
+          </div>
+        </div>
+                  <div class="row">
+                    <div class="col-2">
+                        <div class="form-group">
+                            <label for="eBarge2NameInput">Barge 2 Name:</label>
+                            <input type="text" class="form-control" id="eBarge2NameInput" placeholder="Barge Name" value="<%= tows[j].barge_2_name %>">
+                        </div>
+                    </div>
+                    <div class="col-2">
+                      <div class="form-group">
+                      <label for="eBarge2Start">Barge 2 Start:</label>
+                      <input type="text" id="eBarge2Start" class="form-control datetimepicker" value="<%= tows[j].barge_2_start %>" />
+                    </div>
+                  </div>
+                  <div class="col-2">
+                    <div class="form-group">
+                    <label for="eBarge2Stop">Barge 2 Stop:</label>
+                    <input type="text" id="eBarge2Stop" class="form-control datetimepicker" value="<%= tows[j].barge_2_stop %>" />
+                  </div>
+                </div>
+                <div class="col-2">
+                  <div class="form-group">
+                  <label for="eBarge2Loc">Barge 2 Location:</label>
+                  <input type="text" id="eBarge2Loc" class="form-control" value="LM-100" />
+                </div>
+              </div>
+              <div class="col-2">
+                <div class="form-group">
+                <label for="eBarge2Coord">Barge 2 Coordinates:</label>
+                <input type="text" id="eBarge2Coord" class="form-control" value="29.952368, -90.224134" />
+              </div>
+            </div>
+            <div class="col-2">
+              <div class="form-group">
+              <label for="eBarge2Inherit">Inherit Location From:</label>
+              <input type="text" id="eBarge2Inherit" class="form-control" value="..." />
+            </div>
+          </div>
+          </div>
+              <div class="row">
+                <div class="col-2">
+                    <div class="form-group">
+                        <label for="eBarge3NameInput">Barge 3 Name:</label>
+                        <input type="text" class="form-control" id="eBarge3NameInput" placeholder="Barge Name" value="<%= tows[j].barge_3_name %>">
+                    </div>
+                </div>
+                <div class="col-2">
+                  <div class="form-group">
+                  <label for="eBarge3Start">Barge 3 Start:</label>
+                  <input type="text" id="eBarge3Start" class="form-control datetimepicker" value="<%= tows[j].barge_3_start %>" />
+                </div>
+              </div>
+              <div class="col-2">
+                <div class="form-group">
+                <label for="eBarge3Stop">Barge 3 Stop:</label>
+                <input type="text" id="eBarge3Stop" class="form-control datetimepicker" value="<%= tows[j].barge_3_stop %>" />
+              </div>
+            </div>
+            <div class="col-2">
+              <div class="form-group">
+              <label for="eBarge3Loc">Barge 3 Location:</label>
+              <input type="text" id="eBarge3Loc" class="form-control" value="LM-100" />
+            </div>
+            </div>
+            <div class="col-2">
+            <div class="form-group">
+            <label for="eBarge3Coord">Barge 3 Coordinates:</label>
+            <input type="text" id="eBarge3Coord" class="form-control" value="29.952368, -90.224134" />
+            </div>
+            </div>
+            <div class="col-2">
+              <div class="form-group">
+              <label for="eBarge3Inherit">Inherit Location From:</label>
+              <input type="text" id="eBarge3Inherit" class="form-control" value="..." />
+            </div>
+          </div>
+          </div>
+          <h5>Tug Information</h5>
+                <div class="row">
+                            <div class="col-2">
+                                <div class="form-group">
+                                    <label for="eTug1NameInput">Tug 1 Name:</label>
+                                    <input type="text" class="form-control" id="eTug1NameInput" placeholder="Tug Name" value="<%= tows[j].tug_1_name %>">
+                                </div>
+                            </div>
+                            <div class="col-2">
+                              <div class="form-group">
+                              <label for="eTug1Start">Tug 1 Start:</label>
+                              <input type="text" id="eTug1Start" class="form-control datetimepicker" value="<%= tows[j].tug_1_start %>" />
+                            </div>
+                          </div>
+                          <div class="col-2">
+                            <div class="form-group">
+                            <label for="eTug1Stop">Tug 1 Stop:</label>
+                            <input type="text" id="eTug1Stop" class="form-control datetimepicker" value="<%= tows[j].tug_1_stop %>" />
+                          </div>
+                        </div>
+                        <div class="col-2">
+                          <div class="form-group">
+                          <label for="eTug1Loc">Tug 1 Location:</label>
+                          <input type="text" id="eTug1Loc" class="form-control" value="LM-100" />
+                        </div>
+                        </div>
+                        <div class="col-2">
+                        <div class="form-group">
+                        <label for="eTug1Coord">Tug 1 Coordinates:</label>
+                        <input type="text" id="eTug1Coord" class="form-control" value="29.952368, -90.224134" />
+                        </div>
+                        </div>
+                </div>
+                <div class="row">
+                              <div class="col-2">
+                                <div class="form-group">
+                                    <label for="eTug2NameInput">Tug 2 Name:</label>
+                                    <input type="text" class="form-control" id="eTug2NameInput" placeholder="Tug Name" value="<%= tows[j].tug_2_name %>">
+                                </div>
+                            </div>
+                            <div class="col-2">
+                              <div class="form-group">
+                              <label for="eTug2Start">Tug 2 Start:</label>
+                              <input type="text" id="eTug2Start" class="form-control datetimepicker" value="<%= tows[j].tug_2_start %>" />
+                            </div>
+                          </div>
+                          <div class="col-2">
+                            <div class="form-group">
+                            <label for="eTug2Stop">Tug 2 Stop:</label>
+                            <input type="text" id="eTug2Stop" class="form-control datetimepicker" value="<%= tows[j].tug_2_stop %>" />
+                          </div>
+                        </div>
+                        <div class="col-2">
+                          <div class="form-group">
+                          <label for="eTug2Loc">Tug 2 Location:</label>
+                          <input type="text" id="eTug2Loc" class="form-control" value="LM-100" />
+                        </div>
+                        </div>
+                        <div class="col-2">
+                        <div class="form-group">
+                        <label for="eTug2Coord">Tug 2 Coordinates:</label>
+                        <input type="text" id="eTug2Coord" class="form-control" value="29.952368, -90.224134" />
+                        </div>
+                        </div>
+                        <div class="col-2">
+                          <div class="form-group">
+                          <label for="eTug2Inherit">Inherit Location From:</label>
+                          <input type="text" id="eTug2Inherit" class="form-control" value="..." />
+                        </div>
+                      </div>
+               </div>
+                <div class="row">
+                          <div class="col-2">
+                            <div class="form-group">
+                                <label for="eTug3NameInput">Tug 3 Name:</label>
+                                <input type="text" class="form-control" id="eTug3NameInput" placeholder="Tug Name" value="<%= tows[j].tug_3_name %>">
+                            </div>
+                        </div>
+                        <div class="col-2">
+                          <div class="form-group">
+                          <label for="eTug3Start">Tug 3 Start:</label>
+                          <input type="text" id="eTug3Start" class="form-control datetimepicker" value="<%= tows[j].tug_3_start %>" />
+                        </div>
+                      </div>
+                      <div class="col-2">
+                        <div class="form-group">
+                        <label for="eTug3Stop">Tug 3 Stop:</label>
+                        <input type="text" id="eTug3Stop" class="form-control datetimepicker" value="<%= tows[j].tug_3_stop %>" />
+                      </div>
+                    </div>
+                    <div class="col-2">
+                      <div class="form-group">
+                      <label for="eTug3Loc">Tug 3 Location:</label>
+                      <input type="text" id="eTug3Loc" class="form-control" value="LM-100" />
+                    </div>
+                    </div>
+                    <div class="col-2">
+                    <div class="form-group">
+                    <label for="eTug3Coord">Tug 3 Coordinates:</label>
+                    <input type="text" id="eTug3Coord" class="form-control" value="29.952368, -90.224134" />
+                    </div>
+                    </div>
+                    <div class="col-2">
+                      <div class="form-group">
+                      <label for="eTug3Inherit">Inherit Location From:</label>
+                      <input type="text" id="eTug3Inherit" class="form-control" value="..." />
+                    </div>
+                  </div>
+               </div>
+              </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                  <button type="submit" class="btn btn-primary">Save Changes</button>
+                </div>
+            </form>
+          </div>
+        </div>
+      </div>
+      <!-- Edit Job Modal End -->
+                    
+      <table class="table tow-row">
+        <thead>
+          <tr>
+            <td>Asset</td>
+            <td>Location</td>
+            <td>Coordinates</td>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="tow-col"><%= tows[j].barge_1_name %></td>
+            <td>LM - 400</td>
+            <td>29.952368, -90.224134</td>
+          </tr>
+          <tr>
+            <td class="tow-col"><%= tows[j].barge_2_name %></td>
+            <td>LM - 400</td>
+            <td>29.952368, -90.224134</td>
+          </tr>
+          <tr>
+            <td class="tow-col"><%= tows[j].barge_3_name %></td>
+            <td>LM - 400</td>
+            <td>29.952368, -90.224134</td>
+          </tr>
+          <tr>
+            <td class="tow-col"><%= tows[j].boat_1_name %></td>
+            <td>LM - 400</td>
+            <td>29.952368, -90.224134</td>
+          </tr>
+          <tr>
+            <td class="tow-col"><%= tows[j].boat_2_name %></td>
+            <td>LM - 400</td>
+            <td>29.952368, -90.224134</td>
+          </tr>
+          <tr>
+            <td class="tow-col"><%= tows[j].boat_3_name %></td>
+            <td>LM - 400</td>
+            <td>29.952368, -90.224134</td>
+          </tr>
+        </tbody>
+      </table>
+                    <!-- <div class="row tow-row">
+                      <div class="col-2">
+                      Barge 1:
+                    </div>
+                    <div class="col-4 tow-col">
+                      <%= tows[j].barge_1_name %>
+                    </div>
+                    </div>
+                    <div class="row tow-row">
+                      <div class="col-2">
+                      Barge 2:
+                    </div>
+                    <div class="col-4 tow-col">
+                      <%= tows[j].barge_2_name %>
+                    </div>
+                    </div>
+                    <div class="row tow-row">
+                      <div class="col-2">
+                      Barge 3:
+                    </div>
+                    <div class="col-4 tow-col">
+                      <%= tows[j].barge_3_name %>
+                    </div>
+                    </div>
+                    <div class="row tow-row">
+                      <div class="col-2">
+                      Tug 1:
+                    </div>
+                    <div class="col-4 tow-col">
+                      <%= tows[j].boat_1_name %>
+                    </div>
+                    </div>
+                    <div class="row tow-row">
+                      <div class="col-2">
+                      Tug 2:
+                    </div>
+                    <div class="col-4 tow-col">
+                      <%= tows[j].boat_2_name %>
+                    </div>
+                    </div>
+                    <div class="row tow-row">
+                      <div class="col-2">
+                      Tug 3:
+                    </div>
+                    <div class="col-4 tow-col">
+                      <%= tows[j].boat_3_name %>
+                    </div>
+                    </div> -->
+                  </div>
+                  </div>
+            <% } %>
+            <% } %>
+        </div>
+      </div>
+      </div>
   </div>
   </div></td>
   </tr>

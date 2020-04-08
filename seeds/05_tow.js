@@ -4,7 +4,7 @@ exports.seed = (knex, Promise) => {
         const tows = [
           {
             tow_id: 1,
-            ordnbr: 'D1',
+            ordnbr: 'D3',
             barge_1_name: 'CBC759',
             barge_2_name: 'CBC760',
             barge_3_name: 'CBC761',
@@ -36,13 +36,11 @@ exports.seed = (knex, Promise) => {
           },
           {
             tow_id: 2,
-            ordnbr: 'D2',
-            barge_1_name: 'CBC759',
+            ordnbr: 'D1',
             barge_2_name: 'CBC760',
-            barge_3_name: 'CBC761',
+
             boat_1_name: 'Boat 1',
             boat_2_name: 'Boat 2',
-            boat_3_name: 'Boat 3',
             barge_1_start: new Date(),
             barge_1_stop: new Date(),
             barge_2_start: new Date(),
@@ -68,13 +66,11 @@ exports.seed = (knex, Promise) => {
           },
           {
             tow_id: 3,
-            ordnbr: 'D3',
+            ordnbr: 'D1',
             barge_1_name: 'CBC759',
-            barge_2_name: 'CBC760',
-            barge_3_name: 'CBC761',
+
             boat_1_name: 'Boat 1',
-            boat_2_name: 'Boat 2',
-            boat_3_name: 'Boat 3',
+
             barge_1_start: new Date(),
             barge_1_stop: new Date(),
             barge_2_start: new Date(),

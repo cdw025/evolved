@@ -39,19 +39,22 @@ $('#newjobform').submit((event) => {
         };
         });
 
+
+
+         
 $(document).delegate('.edittripform', 'submit', function(event) {
     event.preventDefault();
     var form = $(this);
     const job = getEditJobFromForm(form);
     console.log(job);
-    // editJob(job)
-    // .then(result => {
-    //     console.log(result);
-    //     window.location = `dashboard`;
-    // }).catch(error => {
-    //     console.error(error);
-    //     showErrorMessage(error.responseJSON.message);
-    // });
+    editJob(job)
+    .then(result => {
+        console.log(result);
+        window.location = `dashboard`;
+    }).catch(error => {
+        console.error(error);
+        showErrorMessage(error.responseJSON.message);
+    });
 });
 
 function editJob(job) {
@@ -76,3 +79,11 @@ $(document).delegate('.deletetripform', 'submit', function(event) {
 function deleteJob(job) {
     return $.delete(`${AUTH_URL}/dashboard/${job.ordnbr}`, job);
 }
+
+$(".tow-col").filter(function() {
+    return !$(this).html().trim();
+}).parent().hide();
+
+$( function() {
+    $( ".datetimepicker" ).datetimepicker();
+  } );

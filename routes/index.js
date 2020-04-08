@@ -4,6 +4,7 @@ var authMiddleware = require('../auth/middleware');
 const Barge = require('../db/barge');
 const Boat = require('../db/boat');
 const Job = require('../db/job');
+const Tow = require('../db/tow');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -37,11 +38,33 @@ router.get('/boats', authMiddleware.ensureLoggedIn, function(req, res) {
   });
 });
 
+// router.get('/dashboard', authMiddleware.ensureLoggedIn, function(req, res) {
+//   Job.getJobs().then(jobs => {
+//     jobs = JSON.parse(JSON.stringify(jobs));
+//     res.render('dashboard', { title: 'Express', jobs: jobs });
+//     });
+// });
+
 router.get('/dashboard', authMiddleware.ensureLoggedIn, function(req, res) {
-  Job.getJobs().then(jobs => {
+  Tow.getTows().then(tows => {
+    Job.getJobs().then(jobs => {
     jobs = JSON.parse(JSON.stringify(jobs));
-    res.render('dashboard', { title: 'Express', jobs: jobs });
+    tows = JSON.parse(JSON.stringify(tows));
+    jobs = jobs.sort((a, b) => parseFloat(a.order_id) - parseFloat(b.order_id));
+    res.render('dashboard', { title: 'Express', jobs: jobs, tows: tows });
   });
+    });
+});
+
+router.get('/tows', authMiddleware.ensureLoggedIn, function(req, res) {
+  Tow.getTows().then(tows => {
+    Job.getJobs().then(jobs => {
+    jobs = JSON.parse(JSON.stringify(jobs));
+    tows = JSON.parse(JSON.stringify(tows));
+    jobs.sort((a, b) => parseFloat(b.order_id) - parseFloat(a.order_id));
+    res.send(jobs);
+  });
+    });
 });
 
 
