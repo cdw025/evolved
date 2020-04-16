@@ -80,3 +80,59 @@ function getHostURL() {
           };
           return job;
       }
+
+      function getNewAssetFromForm(form) {
+        const ordnbr = form.find('input[id=asset_ordnbr]').val();
+        const asset_type = form.find('input[id=asset_type]').val();
+        const asset_name = form.find('input[id=asset_name]').val();
+        const vendor_name = form.find('input[id=vendor_name]').val();
+        const tow_group = form.find('input[id=tow_group]').val();
+        const asset_start = form.find('input[id=asset_start]').val();
+        const asset_stop = form.find('input[id=asset_stop]').val();
+        const asset_status = form.find('input[id=asset_status]').val();
+        
+     const asset = {
+                ordnbr,
+                asset_type,
+                asset_name,
+                vendor_name,
+                tow_group,
+                asset_start,
+                asset_stop,
+                asset_status
+            };
+
+            if (asset.asset_stop === "") {
+              delete asset.asset_stop
+            };
+    
+            return asset;
+      }
+
+      function getEditAssetFromForm(form) {
+        const ordnbr = form.find('input[id=asset_ordnbr]').val();
+        const asset_type = form.find('input[id=asset_type]').val();
+        const asset_name = form.find('input[id=asset_name]').val();
+        const vendor_name = form.find('input[id=vendor_name]').val();
+        const tow_group = form.find('input[id=tow_group]').val();
+        const asset_start = form.find('input[id=asset_start]').val();
+        const asset_stop = form.find('input[id=asset_stop]').val();
+        const asset_status = form.find('input[id=asset_status]').val();
+        
+     const asset = {
+                ordnbr,
+                asset_type,
+                asset_name,
+                vendor_name,
+                tow_group,
+                asset_start,
+                asset_stop,
+                asset_status
+            };
+
+            if (asset.asset_stop === "") {
+              delete asset.asset_stop
+            };
+    
+            return asset;
+      }

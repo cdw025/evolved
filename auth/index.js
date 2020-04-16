@@ -4,8 +4,8 @@ const router = express.Router();
 const User = require('../db/user');
 const Barge = require('../db/barge');
 const Job = require('../db/job');
-const Tow = require('../db/tow');
-
+const Asset = require('../db/asset');
+const AssetLog = require('../db/assetlog');
 
 // Route paths are prepended with /auth
 
@@ -189,5 +189,51 @@ router.delete('/dashboard/:order_id', (req, res, next) => {
 });
 
 
+router.post('/newasset', (req, res, next) => {
+                    const asset = {
+                        ordnbr : req.body.ordnbr,
+                        asset_type : req.body.asset_type,
+                        asset_name: req.body.asset_name,
+                        vendor_name : req.body.vendor_name,
+                        tow_group : req.body.tow_group,
+                        asset_start : req.body.asset_start,
+                        asset_stop : req.body.asset_stop,
+                        asset_status: req.body.asset_status,
+                        created_by: 'Neal White',
+                        last_modified_by: 'Neal White',
+                        created_dttm: new Date(),
+                        modified_dttm: new Date(),
+                    };
+
+                    Asset
+                    .create(asset)
+                    .then(asset_id => {
+                    
+                // redirect
+                res.json({
+                    asset_id,
+                    message: 'asset created'
+                });
+                    });
+                });
+
+
+    function validAsset(asset) {
+        const validAssetNumber = typeof asset.asset_id == 'string' &&
+                                        asset.asset_id.trim() !='';
+    
+        return validAssetNumber;
+    }
+
+    router.put('/dashboard/asset/:asset_id', (req, res, next) => {
+    if(validAsset(req.body)) {
+        Asset
+        .update(req.params.asset_id, req.body).then(asset => {
+            res.json(asset);
+        });
+        } else {
+            next(new Error('invalid asset neal'));
+        }
+});
 
 module.exports = router;

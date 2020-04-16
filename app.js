@@ -4,7 +4,7 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-var moment = require('moment');
+var _ = require('lodash');
 var index = require('./routes/index');
 var user = require('./routes/user');
 var auth = require('./auth/index');
@@ -14,7 +14,12 @@ var app = express();
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
+// moment scripts
+var shortDateFormat = "D/M/YY @ kk:mm"; // this is just an example of storing a date format once so you can change it in one place and have it propagate
+app.locals.moment = require('moment');; // this makes moment available as a variable in every EJS page
+app.locals.shortDateFormat = shortDateFormat;
 
+ 
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
@@ -28,6 +33,8 @@ app.use(express.static('public/clientjs'));
 app.use('/auth', auth);
 app.use('/', index);
 app.use('/user', user);
+
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

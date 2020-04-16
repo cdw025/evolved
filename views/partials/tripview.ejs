@@ -25,7 +25,7 @@
   margin-bottom: 10px;
 }
 
-#tow-card {
+.tow-card {
   margin-top: 10px;
   margin-bottom: 10px;
   background-color: #686a6e;
@@ -53,10 +53,47 @@
   border: 1px solid #F0F8FF;
 }
 
-.tow-row {
+.asset-row {
   font-size: 80%;
 }
 
+.job-details {
+  padding-top: 10px;
+  font-size: 90%;
+}
+
+.card-header {
+  padding: 5px;
+}
+
+.table td {
+   text-align: left;  
+}
+
+.table th {
+   text-align: left;
+   padding: 0px;  
+}
+
+.table {
+  margin: 0px;
+}
+
+.btn-sm {
+  height:90%;
+  width:90%;
+  font-size: 100%;
+  padding: 0px;
+  vertical-align: middle;
+}
+
+.btn-secondary {
+  font-size: 80%;
+}
+
+.dropdown-item {
+  font-size: 100%;
+}
 
 </style>
 
@@ -196,415 +233,413 @@
           </div>
         </div>
       </div>
-      <!-- Delete Trip Modal End -->
+      <!-- Delete Job Modal End -->
 
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              </button>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        </button>
       </div>
       <div class="horizontal-line">
         <hr class="hr-line-line">
       </div>
       <div class="modal-body">
         <div class="row">
-          <div class="col-5"><h5>Trip Details</h5></div>
-          <div class="col-5"><h5>Tow Details</h5></div>
-          <div class="col-2"style="text-align:right"><button class="btn btn-secondary btn-sm" data-toggle="modal" data-target="#newTowModal">New Tow</button></div>
-          
+          <div class="col-3"><h5>Trip Details</h5></div>
+          <div class="col-6"><h5>Tow Details</h5></div>
+          <div class="col-3"style="text-align:right">
+            <button class="btn btn-secondary" data-toggle="modal" data-target="#na<%= jobs[i].ordnbr %>">Add Asset</button>
+            
+          </div>
         </div>
+
+        <!-- Add Assets Modal Begin -->
+        <div class="modal fade" id="na<%= jobs[i].ordnbr %>" tabindex="-1" role="dialog" aria-labelledby="newJobModalLabel" aria-hidden="true">
+          <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="NewAssetModalLabel">Add Asset to Job <%= jobs[i].ordnbr %></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <!-- Add Assets Form Begin -->
+                <form class="newassetform">
+                  <h5>Asset Information</h5>
+                  <div class="row">
+                      <div class="col-4">
+                        <div class="form-group">
+                          <label hidden for="asset_ordnbr"></label>
+                          <input hidden type="text" class="form-control" id="asset_ordnbr" placeholder="Order #" value="<%= jobs[i].ordnbr %>">
+                          <label for="asset_type">Asset Type</label>
+                          <input type="text" class="form-control" list="asset-type-list" id="asset_type"/>
+                            <datalist id="asset-type-list">
+                              <option value="Barge"></option>
+                              <option value="Boat"></option>
+                            </datalist>
+                        </div>
+                      </div>
+                      <div class="col-4">
+                        <div class="form-group">
+                            <label for="asset_name">Asset Name</label>
+                            <input type="text" class="form-control" id="asset_name" placeholder="Asset Name">
+                        </div>
+                    </div>
+                        <div class="col-4">
+                            <div class="form-group">
+                                <label for="vendor_name">Vendor Name</label>
+                                <input type="text" class="form-control" id="vendor_name" placeholder="Vendor Name">
+                            </div>
+                    </div>
+                </div>
+                <div class="row">
+                  <div class="col-4">
+                      <div class="form-group">
+                          <label for="tow_group">Tow Group</label>
+                          <input type="text" class="form-control" id="tow_group" placeholder="Tow Group">
+                      </div>
+                  </div>
+                  <div class="col-4">
+                    <div class="form-group">
+                        <label for="asset_start">Asset Start</label>
+                        <input type="text" class="form-control datetimepicker" id="asset_start" placeholder="Start Time/Date">
+                    </div>
+                </div>
+                    <div class="col-4">
+                        <div class="form-group">
+                            <label for="asset_stop">Asset Stop</label>
+                            <input type="text" class="form-control datetimepicker" id="asset_stop" placeholder="Stop Time/Date">
+                        </div>
+                </div>
+            </div>
+            <div class="row">
+              <div class="col-4">
+                  <div class="form-group">
+                      <label for="asset_status">Asset Status</label>
+                      <input type="text" class="form-control" list="asset-status-list" id="asset_status" placeholder="Active or Inactive">
+                            <datalist id="asset-status-list">
+                              <option value="Active"></option>
+                              <option value="Inactive"></option>
+                            </datalist>
+                  </div>
+              </div>
+        </div>
+      </div>
+                  <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                      <button type="submit" class="btn btn-primary">Add New Asset</button>
+                  </div>
+              </form>
+
+              <!-- Add Assets Form End -->
+
+          </div>
+        </div>
+      </div>
+
+      <!-- Add Assets Modal End -->
+        
+        
         
         <div class="row">
-        <div class="col-2">
-          Trip #:
+        <div class="col-3 job-details">
+          Origin:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<%= jobs[i].origin_location %>
           <br>
-          Customer:
+          Destination:&nbsp;&nbsp;<%= jobs[i].dest_location %>
           <br>
-          Origin:
+          Customer:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<%= jobs[i].customer_nm %>
           <br>
-          Origin Details:
-          <br>
-          Destination:
-          <br>
-          Destination Details:
-          <br>
-          Trip Notes:
-      </div>
-      <div class="col-3">
-          <%= jobs[i].ordnbr %>
-          <br>
-          <%= jobs[i].customer_nm %>
-          <br>
-          <%= jobs[i].origin_location %>
-          <br>
-          <%= jobs[i].origin_desc %>
-          <br>
-          <%= jobs[i].dest_location %>
-          <br>
-          <%= jobs[i].dest_desc %>
-          <br>
-          <%= jobs[i].ord_notes %>
-      </div>
-        <div class="col-7">
-          <% for (let j = 0; j < tows.length; j++) { %>
-            <% if (tows[j].ordnbr === jobs[i].ordnbr) { %>
-                  <div class="card" id="tow-card">
-                    <div class="card-body">
-                    <div class="row">
-                      <div class="col-2">
-                      Tow ID:
-                    </div>
-                    <div class="col-4">
-                      <%= tows[j].tow_id %>
-                    </div>
-                    <div class="col-4">
-                    </div>
-                    <div class="col-2" style="text-align:right">
-                      <button type="button" class="btn btn-sm" id="edittowbutton" data-toggle="modal" data-target="#e<%= tows[j].tow_id %>">Edit</button>
-                    </div>
-                  </div>
-      <!-- Edit Tow Modal -->
-      <div class="modal fade" id="e<%= tows[j].tow_id %>" tabindex="-1" role="dialog" aria-labelledby="editTowModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-xl" role="document">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title" id="editTowModalLabel">Edit Tow Details</h5>
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-            <div class="modal-body">
-              <!-- Edit Tow Form Begin -->
-              <form class="edittowform">
-                <h5>Barge Information</h5>
-                <div class="row">
-                    <div class="col-2">
-                        <div class="form-group">
-                            <label hidden for="eid"></label>
-                            <input hidden type="text" class="form-control" id="eid" placeholder="Order #" value="<%= tows[j].tow_id %>">
-                            <label for="eBarge1NameInput">Barge 1 Name:</label>
-                            <input type="text" class="form-control" id="eBarge1NameInput" placeholder="Barge Name" value="<%= tows[j].barge_1_name %>">
-                        </div>
-                    </div>
-                    <div class="col-2">
-                      <div class="form-group">
-                      <label for="eBarge1Start">Barge 1 Start:</label>
-                      <input type="text" id="eBarge1Start" class="form-control datetimepicker" value="<%= tows[j].barge_1_start %>" />
-                    </div>
-                  </div>
-                  <div class="col-2">
-                    <div class="form-group">
-                    <label for="eBarge1Stop">Barge 1 Stop:</label>
-                    <input type="text" id="eBarge1Stop" class="form-control datetimepicker" value="<%= tows[j].barge_1_stop %>" />
-                  </div>
-                </div>
-                <div class="col-2">
-                  <div class="form-group">
-                  <label for="eBarge1Loc">Barge 1 Location:</label>
-                  <input type="text" id="eBarge1Loc" class="form-control" value="LM-100" />
-                </div>
-              </div>
-              <div class="col-2">
-                <div class="form-group">
-                <label for="eBarge1Coord">Barge 1 Coordinates:</label>
-                <input type="text" id="eBarge1Coord" class="form-control" value="29.952368, -90.224134" />
-              </div>
-            </div>
-            <div class="col-2">
-              <div class="form-group">
-              <label for="eBarge1Inherit">Inherit Location From:</label>
-              <input type="text" id="eBarge1Inherit" class="form-control" value="..." />
-            </div>
-          </div>
+          Notes:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<%= jobs[i].ord_notes %>
         </div>
+        
+        
+          <div class="col-9">
+          <div class="card tow-card">
+            <div class="card-header">Tow Group 1</div>
+            <div class="card-body tow-col">
+              <table class="table table-sm table-borderless">
+                <thead>
+                  <tr class="d-flex asset-row">
+                    <th class="col-2">Asset</th>
+                    <th class="col-2">Status</th>
+                    <th class="col-2">Location</th>
+                    <th class="col-2">ETA</th>
+                    <th class="col-2">Created At</th>
+                    <th class="col-2"></th>
+                  </tr>
+                </thead>
+                <tbody class="asset-tbody">
+            <% for (let j = 0; j < assets.length; j++) { %>
+              <% if (assets[j].ordnbr === jobs[i].ordnbr && assets[j].tow_group === 1 && assets[j].asset_status === "Active") { %>
+                  <tr class="d-flex asset-row">
+                    <td class="col-2">
+                  <%= assets[j].asset_name %>
+                    </td>
+                  <% for (let k = 0; k < logs.length; k++) { %>
+                    <% if (assets[j].ordnbr === logs[k].ordnbr && assets[j].asset_name === logs[k].asset_name) { %>
+                      <td class="col-2">
+                        <%= logs[k].status %>
+                      </td>
+                      <td class="col-2">
+                        <%= logs[k].location %>
+                      </td>
+                      <td class="col-2">
+                        <%= moment(logs[k].dest_eta).format('M/D/YY @ kk:mm') %>
+                      </td>
+                      <td class="col-2">
+                        <%= moment(logs[k].created_dttm).format('M/D/YY @ kk:mm') %>
+                      </td>
+                      <td class="col-2">
+                        <div class="dropdown">
+                          <button class="btn btn-primary btn-sm dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            more
+                          </button>
+                          <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            <a class="dropdown-item" data-toggle="modal" data-target="#nae<%= assets[j].asset_id %>">edit asset</a>
+                            <a class="dropdown-item" href="#">edit logs</a>
+                            <a class="dropdown-item" href="#">go to log view</a>
+                            <a class="dropdown-item" href="#">delete asset</a>
+                          </div>
+        <!-- Edit Assets Modal Begin -->
+        <div class="modal fade" id="nae<%= assets[j].asset_id %>" tabindex="-1" role="dialog" aria-labelledby="newJobModalLabel" aria-hidden="true">
+          <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="NewAssetModalLabel">Add Asset to Job <%= jobs[i].ordnbr %></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <!-- Edit Assets Form Begin -->
+                <form class="editassetform">
+                  <h5>Asset Information</h5>
                   <div class="row">
-                    <div class="col-2">
+                      <div class="col-4">
                         <div class="form-group">
-                            <label for="eBarge2NameInput">Barge 2 Name:</label>
-                            <input type="text" class="form-control" id="eBarge2NameInput" placeholder="Barge Name" value="<%= tows[j].barge_2_name %>">
+                          <label hidden for="asset_ordnbr"></label>
+                          <input hidden type="text" class="form-control" id="asset_ordnbr" placeholder="Order #" value="<%= assets[j].asset_id %>">
+                          <label for="asset_type">Asset Type</label>
+                          <input type="text" class="form-control" list="asset-type-list" id="asset_type" value="<%= assets[j].asset_type %>">
+                            <datalist id="asset-type-list">
+                              <option value="Barge"></option>
+                              <option value="Boat"></option>
+                            </datalist>
+                        </div>
+                      </div>
+                      <div class="col-4">
+                        <div class="form-group">
+                            <label for="asset_name">Asset Name</label>
+                            <input type="text" class="form-control" id="asset_name" value="<%= assets[j].asset_name %>">
                         </div>
                     </div>
-                    <div class="col-2">
-                      <div class="form-group">
-                      <label for="eBarge2Start">Barge 2 Start:</label>
-                      <input type="text" id="eBarge2Start" class="form-control datetimepicker" value="<%= tows[j].barge_2_start %>" />
+                        <div class="col-4">
+                            <div class="form-group">
+                                <label for="vendor_name">Vendor Name</label>
+                                <input type="text" class="form-control" id="vendor_name" value="<%= assets[j].vendor_name %>">
+                            </div>
                     </div>
-                  </div>
-                  <div class="col-2">
-                    <div class="form-group">
-                    <label for="eBarge2Stop">Barge 2 Stop:</label>
-                    <input type="text" id="eBarge2Stop" class="form-control datetimepicker" value="<%= tows[j].barge_2_stop %>" />
-                  </div>
                 </div>
-                <div class="col-2">
+                <div class="row">
+                  <div class="col-4">
+                      <div class="form-group">
+                          <label for="tow_group">Tow Group</label>
+                          <input type="text" class="form-control" id="tow_group" value="<%= assets[j].tow_group %>">
+                      </div>
+                  </div>
+                  <div class="col-4">
+                    <div class="form-group">
+                        <label for="asset_start">Asset Start</label>
+                        <input type="text" class="form-control datetimepicker" id="asset_start" value="<%= assets[j].asset_start %>">
+                    </div>
+                </div>
+                    <div class="col-4">
+                        <div class="form-group">
+                            <label for="asset_stop">Asset Stop</label>
+                            <input type="text" class="form-control datetimepicker" id="asset_stop" value="<%= assets[j].asset_stop %>">
+                        </div>
+                </div>
+            </div>
+            <div class="row">
+              <div class="col-4">
                   <div class="form-group">
-                  <label for="eBarge2Loc">Barge 2 Location:</label>
-                  <input type="text" id="eBarge2Loc" class="form-control" value="LM-100" />
-                </div>
-              </div>
-              <div class="col-2">
-                <div class="form-group">
-                <label for="eBarge2Coord">Barge 2 Coordinates:</label>
-                <input type="text" id="eBarge2Coord" class="form-control" value="29.952368, -90.224134" />
-              </div>
-            </div>
-            <div class="col-2">
-              <div class="form-group">
-              <label for="eBarge2Inherit">Inherit Location From:</label>
-              <input type="text" id="eBarge2Inherit" class="form-control" value="..." />
-            </div>
-          </div>
-          </div>
-              <div class="row">
-                <div class="col-2">
-                    <div class="form-group">
-                        <label for="eBarge3NameInput">Barge 3 Name:</label>
-                        <input type="text" class="form-control" id="eBarge3NameInput" placeholder="Barge Name" value="<%= tows[j].barge_3_name %>">
-                    </div>
-                </div>
-                <div class="col-2">
-                  <div class="form-group">
-                  <label for="eBarge3Start">Barge 3 Start:</label>
-                  <input type="text" id="eBarge3Start" class="form-control datetimepicker" value="<%= tows[j].barge_3_start %>" />
-                </div>
-              </div>
-              <div class="col-2">
-                <div class="form-group">
-                <label for="eBarge3Stop">Barge 3 Stop:</label>
-                <input type="text" id="eBarge3Stop" class="form-control datetimepicker" value="<%= tows[j].barge_3_stop %>" />
-              </div>
-            </div>
-            <div class="col-2">
-              <div class="form-group">
-              <label for="eBarge3Loc">Barge 3 Location:</label>
-              <input type="text" id="eBarge3Loc" class="form-control" value="LM-100" />
-            </div>
-            </div>
-            <div class="col-2">
-            <div class="form-group">
-            <label for="eBarge3Coord">Barge 3 Coordinates:</label>
-            <input type="text" id="eBarge3Coord" class="form-control" value="29.952368, -90.224134" />
-            </div>
-            </div>
-            <div class="col-2">
-              <div class="form-group">
-              <label for="eBarge3Inherit">Inherit Location From:</label>
-              <input type="text" id="eBarge3Inherit" class="form-control" value="..." />
-            </div>
-          </div>
-          </div>
-          <h5>Tug Information</h5>
-                <div class="row">
-                            <div class="col-2">
-                                <div class="form-group">
-                                    <label for="eTug1NameInput">Tug 1 Name:</label>
-                                    <input type="text" class="form-control" id="eTug1NameInput" placeholder="Tug Name" value="<%= tows[j].tug_1_name %>">
-                                </div>
-                            </div>
-                            <div class="col-2">
-                              <div class="form-group">
-                              <label for="eTug1Start">Tug 1 Start:</label>
-                              <input type="text" id="eTug1Start" class="form-control datetimepicker" value="<%= tows[j].tug_1_start %>" />
-                            </div>
-                          </div>
-                          <div class="col-2">
-                            <div class="form-group">
-                            <label for="eTug1Stop">Tug 1 Stop:</label>
-                            <input type="text" id="eTug1Stop" class="form-control datetimepicker" value="<%= tows[j].tug_1_stop %>" />
-                          </div>
-                        </div>
-                        <div class="col-2">
-                          <div class="form-group">
-                          <label for="eTug1Loc">Tug 1 Location:</label>
-                          <input type="text" id="eTug1Loc" class="form-control" value="LM-100" />
-                        </div>
-                        </div>
-                        <div class="col-2">
-                        <div class="form-group">
-                        <label for="eTug1Coord">Tug 1 Coordinates:</label>
-                        <input type="text" id="eTug1Coord" class="form-control" value="29.952368, -90.224134" />
-                        </div>
-                        </div>
-                </div>
-                <div class="row">
-                              <div class="col-2">
-                                <div class="form-group">
-                                    <label for="eTug2NameInput">Tug 2 Name:</label>
-                                    <input type="text" class="form-control" id="eTug2NameInput" placeholder="Tug Name" value="<%= tows[j].tug_2_name %>">
-                                </div>
-                            </div>
-                            <div class="col-2">
-                              <div class="form-group">
-                              <label for="eTug2Start">Tug 2 Start:</label>
-                              <input type="text" id="eTug2Start" class="form-control datetimepicker" value="<%= tows[j].tug_2_start %>" />
-                            </div>
-                          </div>
-                          <div class="col-2">
-                            <div class="form-group">
-                            <label for="eTug2Stop">Tug 2 Stop:</label>
-                            <input type="text" id="eTug2Stop" class="form-control datetimepicker" value="<%= tows[j].tug_2_stop %>" />
-                          </div>
-                        </div>
-                        <div class="col-2">
-                          <div class="form-group">
-                          <label for="eTug2Loc">Tug 2 Location:</label>
-                          <input type="text" id="eTug2Loc" class="form-control" value="LM-100" />
-                        </div>
-                        </div>
-                        <div class="col-2">
-                        <div class="form-group">
-                        <label for="eTug2Coord">Tug 2 Coordinates:</label>
-                        <input type="text" id="eTug2Coord" class="form-control" value="29.952368, -90.224134" />
-                        </div>
-                        </div>
-                        <div class="col-2">
-                          <div class="form-group">
-                          <label for="eTug2Inherit">Inherit Location From:</label>
-                          <input type="text" id="eTug2Inherit" class="form-control" value="..." />
-                        </div>
-                      </div>
-               </div>
-                <div class="row">
-                          <div class="col-2">
-                            <div class="form-group">
-                                <label for="eTug3NameInput">Tug 3 Name:</label>
-                                <input type="text" class="form-control" id="eTug3NameInput" placeholder="Tug Name" value="<%= tows[j].tug_3_name %>">
-                            </div>
-                        </div>
-                        <div class="col-2">
-                          <div class="form-group">
-                          <label for="eTug3Start">Tug 3 Start:</label>
-                          <input type="text" id="eTug3Start" class="form-control datetimepicker" value="<%= tows[j].tug_3_start %>" />
-                        </div>
-                      </div>
-                      <div class="col-2">
-                        <div class="form-group">
-                        <label for="eTug3Stop">Tug 3 Stop:</label>
-                        <input type="text" id="eTug3Stop" class="form-control datetimepicker" value="<%= tows[j].tug_3_stop %>" />
-                      </div>
-                    </div>
-                    <div class="col-2">
-                      <div class="form-group">
-                      <label for="eTug3Loc">Tug 3 Location:</label>
-                      <input type="text" id="eTug3Loc" class="form-control" value="LM-100" />
-                    </div>
-                    </div>
-                    <div class="col-2">
-                    <div class="form-group">
-                    <label for="eTug3Coord">Tug 3 Coordinates:</label>
-                    <input type="text" id="eTug3Coord" class="form-control" value="29.952368, -90.224134" />
-                    </div>
-                    </div>
-                    <div class="col-2">
-                      <div class="form-group">
-                      <label for="eTug3Inherit">Inherit Location From:</label>
-                      <input type="text" id="eTug3Inherit" class="form-control" value="..." />
-                    </div>
+                      <label for="asset_status">Asset Status</label>
+                      <input type="text" class="form-control" list="asset-status-list" id="asset_status" value="<%= assets[j].asset_status %>">
+                            <datalist id="asset-status-list">
+                              <option value="Active"></option>
+                              <option value="Inactive"></option>
+                            </datalist>
                   </div>
-               </div>
               </div>
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                  <button type="submit" class="btn btn-primary">Save Changes</button>
-                </div>
-            </form>
+        </div>
+      </div>
+                  <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                      <button type="submit" class="btn btn-primary">Add New Asset</button>
+                  </div>
+              </form>
+
+              <!-- Edit Assets Form End -->
+
           </div>
         </div>
       </div>
-      <!-- Edit Job Modal End -->
-                    
-      <table class="table tow-row">
-        <thead>
-          <tr>
-            <td>Asset</td>
-            <td>Location</td>
-            <td>Coordinates</td>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td class="tow-col"><%= tows[j].barge_1_name %></td>
-            <td>LM - 400</td>
-            <td>29.952368, -90.224134</td>
-          </tr>
-          <tr>
-            <td class="tow-col"><%= tows[j].barge_2_name %></td>
-            <td>LM - 400</td>
-            <td>29.952368, -90.224134</td>
-          </tr>
-          <tr>
-            <td class="tow-col"><%= tows[j].barge_3_name %></td>
-            <td>LM - 400</td>
-            <td>29.952368, -90.224134</td>
-          </tr>
-          <tr>
-            <td class="tow-col"><%= tows[j].boat_1_name %></td>
-            <td>LM - 400</td>
-            <td>29.952368, -90.224134</td>
-          </tr>
-          <tr>
-            <td class="tow-col"><%= tows[j].boat_2_name %></td>
-            <td>LM - 400</td>
-            <td>29.952368, -90.224134</td>
-          </tr>
-          <tr>
-            <td class="tow-col"><%= tows[j].boat_3_name %></td>
-            <td>LM - 400</td>
-            <td>29.952368, -90.224134</td>
-          </tr>
-        </tbody>
-      </table>
-                    <!-- <div class="row tow-row">
-                      <div class="col-2">
-                      Barge 1:
+
+      <!-- Edit Assets Modal End -->
+                        </div>
+                      </td>
+                      <% } %>
+                      <% } %>
+                    </tr>
+                    <% } %>
+                    <% } %>
+                  </tbody>
+                  </table>
+             </div>
+            </div>
+            <div class="card tow-card">
+              <div class="card-header">Tow Group 2</div>
+            <div class="card-body tow-col">
+              <table class="table table-sm table-borderless">
+                <thead>
+                  <tr class="d-flex asset-row">
+                    <th class="col-2">Asset</th>
+                    <th class="col-2">Status</th>
+                    <th class="col-2">Location</th>
+                    <th class="col-2">ETA</th>
+                    <th class="col-2">Created At</th>
+                    <th class="col-2"></th>
+                  </tr>
+                </thead>
+                <tbody class="asset-tbody">
+            <% for (let j = 0; j < assets.length; j++) { %>
+              <% if (assets[j].ordnbr === jobs[i].ordnbr && assets[j].tow_group === 2 && assets[j].asset_status === "Active") { %>
+                  <tr class="d-flex asset-row">
+                    <td class="col-2">
+                  <%= assets[j].asset_name %>
+                    </td>
+                  <% for (let k = 0; k < logs.length; k++) { %>
+                    <% if (assets[j].ordnbr === logs[k].ordnbr && assets[j].asset_name === logs[k].asset_name) { %>
+                      <td class="col-2">
+                        <%= logs[k].status %>
+                      </td>
+                      <td class="col-2">
+                        <%= logs[k].location %>
+                      </td>
+                      <td class="col-2">
+                        <%= moment(logs[k].dest_eta).format('M/D/YY @ kk:mm') %>
+                      </td>
+                      <td class="col-2">
+                        <%= moment(logs[k].created_dttm).format('M/D/YY @ kk:mm') %>
+                      </td>
+                      <td class="col-2">
+                        <div class="dropdown">
+                          <button class="btn btn-primary btn-sm dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            more
+                          </button>
+                          <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            <a class="dropdown-item" data-toggle="modal" data-target="#nae2<%= assets[j].asset_id %>">edit asset</a>
+                            <a class="dropdown-item" href="#">edit logs</a>
+                            <a class="dropdown-item" href="#">go to log view</a>
+                            <a class="dropdown-item" href="#">delete asset</a>
+                          </div>
+                          <!-- Edit Assets Modal Begin -->
+        <div class="modal fade" id="nae2<%= assets[j].asset_id %>" tabindex="-1" role="dialog" aria-labelledby="newJobModalLabel" aria-hidden="true">
+          <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="NewAssetModalLabel">Add Asset to Job <%= jobs[i].ordnbr %></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <!-- Edit Assets Form Begin -->
+                <form class="editassetform">
+                  <h5>Asset Information</h5>
+                  <div class="row">
+                      <div class="col-4">
+                        <div class="form-group">
+                          <label hidden for="asset_ordnbr"></label>
+                          <input hidden type="text" class="form-control" id="asset_ordnbr" placeholder="Order #" value="<%= assets[j].asset_id %>">
+                          <label for="asset_type">Asset Type</label>
+                          <input type="text" class="form-control" list="asset-type-list" id="asset_type" value="<%= assets[j].asset_type %>">
+                            <datalist id="asset-type-list">
+                              <option value="Barge"></option>
+                              <option value="Boat"></option>
+                            </datalist>
+                        </div>
+                      </div>
+                      <div class="col-4">
+                        <div class="form-group">
+                            <label for="asset_name">Asset Name</label>
+                            <input type="text" class="form-control" id="asset_name" value="<%= assets[j].asset_name %>">
+                        </div>
                     </div>
-                    <div class="col-4 tow-col">
-                      <%= tows[j].barge_1_name %>
+                        <div class="col-4">
+                            <div class="form-group">
+                                <label for="vendor_name">Vendor Name</label>
+                                <input type="text" class="form-control" id="vendor_name" value="<%= assets[j].vendor_name %>">
+                            </div>
                     </div>
-                    </div>
-                    <div class="row tow-row">
-                      <div class="col-2">
-                      Barge 2:
-                    </div>
-                    <div class="col-4 tow-col">
-                      <%= tows[j].barge_2_name %>
-                    </div>
-                    </div>
-                    <div class="row tow-row">
-                      <div class="col-2">
-                      Barge 3:
-                    </div>
-                    <div class="col-4 tow-col">
-                      <%= tows[j].barge_3_name %>
-                    </div>
-                    </div>
-                    <div class="row tow-row">
-                      <div class="col-2">
-                      Tug 1:
-                    </div>
-                    <div class="col-4 tow-col">
-                      <%= tows[j].boat_1_name %>
-                    </div>
-                    </div>
-                    <div class="row tow-row">
-                      <div class="col-2">
-                      Tug 2:
-                    </div>
-                    <div class="col-4 tow-col">
-                      <%= tows[j].boat_2_name %>
-                    </div>
-                    </div>
-                    <div class="row tow-row">
-                      <div class="col-2">
-                      Tug 3:
-                    </div>
-                    <div class="col-4 tow-col">
-                      <%= tows[j].boat_3_name %>
-                    </div>
-                    </div> -->
+                </div>
+                <div class="row">
+                  <div class="col-4">
+                      <div class="form-group">
+                          <label for="tow_group">Tow Group</label>
+                          <input type="text" class="form-control" id="tow_group" value="<%= assets[j].tow_group %>">
+                      </div>
                   </div>
+                  <div class="col-4">
+                    <div class="form-group">
+                        <label for="asset_start">Asset Start</label>
+                        <input type="text" class="form-control datetimepicker" id="asset_start" value="<%= assets[j].asset_start %>">
+                    </div>
+                </div>
+                    <div class="col-4">
+                        <div class="form-group">
+                            <label for="asset_stop">Asset Stop</label>
+                            <input type="text" class="form-control datetimepicker" id="asset_stop" value="<%= assets[j].asset_stop %>">
+                        </div>
+                </div>
+            </div>
+            <div class="row">
+              <div class="col-4">
+                  <div class="form-group">
+                      <label for="asset_status">Asset Status</label>
+                      <input type="text" class="form-control" list="asset-status-list" id="asset_status" value="<%= assets[j].asset_status %>">
+                            <datalist id="asset-status-list">
+                              <option value="Active"></option>
+                              <option value="Inactive"></option>
+                            </datalist>
                   </div>
-            <% } %>
-            <% } %>
+              </div>
         </div>
+      </div>
+                  <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                      <button type="submit" class="btn btn-primary">Add New Asset</button>
+                  </div>
+              </form>
+
+              <!-- Edit Assets Form End -->
+
+          </div>
+        </div>
+      </div>
+
+      <!-- Edit Assets Modal End -->
+                        </div>
+                      </td>
+                      <% } %>
+                      <% } %>
+                    </tr>
+                    <% } %>
+                    <% } %>
+                  </tbody>
+                  </table>
+             </div>
+              </div>
+          </div>
       </div>
       </div>
   </div>

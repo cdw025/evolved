@@ -1,0 +1,82 @@
+<style type="text/css">
+    .outer {
+      border: 1px solid red;
+      padding: 18px;
+      margin: 12px;
+    }
+    .inner {
+      margin: 12px;
+      padding: 12px;
+      border: 1px solid green;
+    }
+  </style>
+
+
+<% for (let i = 0; i < jobs.length; i++) { %>
+<div class="outer">
+Job: <%= jobs[i].ordnbr %>
+<div class="inner">
+  Group 1
+<% for (let j = 0; j < assets.length; j++) { %>
+  <% if (assets[j].ordnbr === jobs[i].ordnbr && assets[j].tow_group === 1) { %>
+      <div class="outer">
+        <tr>
+          <td>
+        <%= assets[j].asset_name %>
+          </td>
+        <% for (let k = 0; k < logs.length; k++) { %>
+          <% if (assets[j].ordnbr === logs[k].ordnbr && assets[j].asset_name === logs[k].asset_name) { %>
+            <td>
+              <%= logs[k].log_id %>
+            </td>
+            <td>
+              <%= logs[k].dest_eta %>
+            </td>
+            <% } %>
+            <% } %>
+          </tr>
+          </div>
+      <% } %>
+      
+      <% } %>
+    </div>
+    <div class="inner">
+      Group 2
+    <% for (let j = 0; j < assets.length; j++) { %>
+      <% if (assets[j].ordnbr === jobs[i].ordnbr && assets[j].tow_group === 2) { %>
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Asset</th>
+                <th>Log_ID</th>
+                <th>Destination</th>
+                <th>ETA</th>
+              </tr>
+            </thead>
+            <tbody>
+            <tr>
+              <td>
+            <%= assets[j].asset_name %>
+              </td>
+            <% for (let k = 0; k < logs.length; k++) { %>
+              <% if (assets[j].ordnbr === logs[k].ordnbr && assets[j].asset_name === logs[k].asset_name) { %>
+                <td>
+                  <%= logs[k].log_id %>
+                </td>
+                <td>
+                  <%= logs[k].dest_desc %>
+                </td>
+                <td>
+                  <%= logs[k].dest_eta %>
+                </td>
+                <% } %>
+                <% } %>
+              </tr>
+            </tbody>
+            </table>
+          <% } %>
+          
+          <% } %>
+        </div>
+  </div>
+    <% } %>

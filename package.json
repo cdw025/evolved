@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node ./bin/www"
+    "start": "nodemon ./bin/www"
   },
   "dependencies": {
     "bcrypt": "^4.0.1",
@@ -19,6 +19,7 @@
     "jquery": "^3.4.1",
     "jquery-datetimepicker": "^2.5.21",
     "knex": "^0.12.9",
+    "lodash": "^4.17.15",
     "moment": "^2.24.0",
     "moment-timezone": "^0.5.28",
     "morgan": "~1.7.0",

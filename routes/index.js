@@ -4,7 +4,9 @@ var authMiddleware = require('../auth/middleware');
 const Barge = require('../db/barge');
 const Boat = require('../db/boat');
 const Job = require('../db/job');
-const Tow = require('../db/tow');
+const Asset = require('../db/asset');
+const AssetLog = require('../db/assetlog');
+var _ = require('lodash');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -46,23 +48,66 @@ router.get('/boats', authMiddleware.ensureLoggedIn, function(req, res) {
 // });
 
 router.get('/dashboard', authMiddleware.ensureLoggedIn, function(req, res) {
-  Tow.getTows().then(tows => {
+  Asset.getAssets().then(assets => {
     Job.getJobs().then(jobs => {
+      AssetLog.getLogs().then(logs => {
     jobs = JSON.parse(JSON.stringify(jobs));
-    tows = JSON.parse(JSON.stringify(tows));
+    assets = JSON.parse(JSON.stringify(assets));
+    logs = JSON.parse(JSON.stringify(logs));
     jobs = jobs.sort((a, b) => parseFloat(a.order_id) - parseFloat(b.order_id));
-    res.render('dashboard', { title: 'Express', jobs: jobs, tows: tows });
+    logs = logs.sort((a, b) => parseFloat(b.log_id) - parseFloat(a.log_id));
+            // javascript function to find max log_id value for each asset_name 
+            // in order to only print one result per asset name
+            const arrayFiltered = [];
+            logs.forEach(obj => {
+                const item = arrayFiltered.find(thisItem => thisItem.asset_name === obj.asset_name);
+                if (item) {
+                    if (item.log_id < obj.log_id) {
+                        item.log_id = obj.log_id;
+                    }
+                    return;
+                }
+                arrayFiltered.push(obj);
+            });
+
+
+
+    console.log(arrayFiltered);
+    res.render('dashboard', { title: 'Express', jobs: jobs, assets: assets, logs: arrayFiltered });
+  });
   });
     });
 });
 
-router.get('/tows', authMiddleware.ensureLoggedIn, function(req, res) {
-  Tow.getTows().then(tows => {
+
+router.get('/assets', authMiddleware.ensureLoggedIn, function(req, res) {
+  Asset.getAssets().then(assets => {
     Job.getJobs().then(jobs => {
+      AssetLog.getLogs().then(logs => {
     jobs = JSON.parse(JSON.stringify(jobs));
-    tows = JSON.parse(JSON.stringify(tows));
-    jobs.sort((a, b) => parseFloat(b.order_id) - parseFloat(a.order_id));
-    res.send(jobs);
+    assets = JSON.parse(JSON.stringify(assets));
+    logs = JSON.parse(JSON.stringify(logs));
+    jobs = jobs.sort((a, b) => parseFloat(a.order_id) - parseFloat(b.order_id));
+    logs = logs.sort((a, b) => parseFloat(b.log_id) - parseFloat(a.log_id));
+            // javascript function to find max log_id value for each asset_name 
+            // in order to only print one result per asset name
+            const arrayFiltered = [];
+            logs.forEach(obj => {
+                const item = arrayFiltered.find(thisItem => thisItem.asset_name === obj.asset_name);
+                if (item) {
+                    if (item.log_id < obj.log_id) {
+                        item.log_id = obj.log_id;
+                    }
+                    return;
+                }
+                arrayFiltered.push(obj);
+            });
+
+
+
+    console.log(arrayFiltered);
+    res.render('assets', { title: 'Express', jobs: jobs, assets: assets, logs: arrayFiltered });
+  });
   });
     });
 });
