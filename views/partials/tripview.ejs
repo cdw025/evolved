@@ -397,14 +397,14 @@
                             <a class="dropdown-item" data-toggle="modal" data-target="#nae<%= assets[j].asset_id %>">edit asset</a>
                             <a class="dropdown-item" href="#">edit logs</a>
                             <a class="dropdown-item" href="#">go to log view</a>
-                            <a class="dropdown-item" href="#">delete asset</a>
+                            <a class="dropdown-item" data-toggle="modal" data-target="#d<%= assets[j].asset_id %>">delete asset</a>
                           </div>
         <!-- Edit Assets Modal Begin -->
         <div class="modal fade" id="nae<%= assets[j].asset_id %>" tabindex="-1" role="dialog" aria-labelledby="newJobModalLabel" aria-hidden="true">
           <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
               <div class="modal-header">
-                <h5 class="modal-title" id="NewAssetModalLabel">Add Asset to Job <%= jobs[i].ordnbr %></h5>
+                <h5 class="modal-title" id="NewAssetModalLabel">Edit Asset <%= assets[j].asset_name %></h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                   <span aria-hidden="true">&times;</span>
                 </button>
@@ -416,8 +416,9 @@
                   <div class="row">
                       <div class="col-4">
                         <div class="form-group">
-                          <label hidden for="asset_ordnbr"></label>
-                          <input hidden type="text" class="form-control" id="asset_ordnbr" placeholder="Order #" value="<%= assets[j].asset_id %>">
+                          <input hidden type="text" class="form-control" id="asset_ordnbr" placeholder="Order #" value="<%= assets[j].ordnbr %>">
+                          <label hidden for="asset_id"></label>
+                          <input hidden type="text" class="form-control" id="asset_id" placeholder="ID Number" value="<%= assets[j].asset_id %>">
                           <label for="asset_type">Asset Type</label>
                           <input type="text" class="form-control" list="asset-type-list" id="asset_type" value="<%= assets[j].asset_type %>">
                             <datalist id="asset-type-list">
@@ -449,13 +450,13 @@
                   <div class="col-4">
                     <div class="form-group">
                         <label for="asset_start">Asset Start</label>
-                        <input type="text" class="form-control datetimepicker" id="asset_start" value="<%= assets[j].asset_start %>">
+                        <input type="text" class="form-control datetimepicker" id="asset_start" value="<%= moment(assets[j].asset_start).format('M/D/YY @ kk:mm') %>">
                     </div>
                 </div>
                     <div class="col-4">
                         <div class="form-group">
                             <label for="asset_stop">Asset Stop</label>
-                            <input type="text" class="form-control datetimepicker" id="asset_stop" value="<%= assets[j].asset_stop %>">
+                            <input type="text" class="form-control datetimepicker" id="asset_stop" value="<%= moment(assets[j].asset_stop).format('M/D/YY @ kk:mm') %>">
                         </div>
                 </div>
             </div>
@@ -474,7 +475,7 @@
       </div>
                   <div class="modal-footer">
                       <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                      <button type="submit" class="btn btn-primary">Add New Asset</button>
+                      <button type="submit" class="btn btn-primary">Save Changes</button>
                   </div>
               </form>
 
@@ -485,6 +486,33 @@
       </div>
 
       <!-- Edit Assets Modal End -->
+      <!-- Delete Asset Modal -->
+      <div class="modal fade" id="d<%= assets[j].asset_id %>" tabindex="-1" role="dialog" aria-labelledby="deleteAssetModalLable" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="deleteAssetModalID">Are you sure you want to delete asset <%= assets[j].asset_name %> from <%= assets[j].ordnbr %>? </h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              Click DELETE to delete this job, or click Close to dismiss.
+              <form class="deleteassetform">
+                <div class="form-group">
+                  <label hidden for="did"></label>
+                  <input hidden type="text" class="form-control" id="did" placeholder="Order #" value="<%= assets[j].asset_id %>">
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              <button type="submit" class="btn btn-danger">DELETE THIS ASSET</button>
+            </div>
+          </form>
+          </div>
+        </div>
+      </div>
+      <!-- Delete Job Modal End -->
                         </div>
                       </td>
                       <% } %>
@@ -540,14 +568,14 @@
                             <a class="dropdown-item" data-toggle="modal" data-target="#nae2<%= assets[j].asset_id %>">edit asset</a>
                             <a class="dropdown-item" href="#">edit logs</a>
                             <a class="dropdown-item" href="#">go to log view</a>
-                            <a class="dropdown-item" href="#">delete asset</a>
+                            <a class="dropdown-item" data-toggle="modal" data-target="#d2<%= assets[j].asset_id %>">delete asset</a>
                           </div>
-                          <!-- Edit Assets Modal Begin -->
+             <!-- Edit Assets Modal Begin -->
         <div class="modal fade" id="nae2<%= assets[j].asset_id %>" tabindex="-1" role="dialog" aria-labelledby="newJobModalLabel" aria-hidden="true">
           <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
               <div class="modal-header">
-                <h5 class="modal-title" id="NewAssetModalLabel">Add Asset to Job <%= jobs[i].ordnbr %></h5>
+                <h5 class="modal-title" id="NewAssetModalLabel">Edit Asset <%= assets[j].asset_name %></h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                   <span aria-hidden="true">&times;</span>
                 </button>
@@ -560,7 +588,9 @@
                       <div class="col-4">
                         <div class="form-group">
                           <label hidden for="asset_ordnbr"></label>
-                          <input hidden type="text" class="form-control" id="asset_ordnbr" placeholder="Order #" value="<%= assets[j].asset_id %>">
+                          <input hidden type="text" class="form-control" id="asset_ordnbr" placeholder="Order #" value="<%= assets[j].ordnbr %>">
+                          <label hidden for="asset_id"></label>
+                          <input hidden type="text" class="form-control" id="asset_id" placeholder="ID Number" value="<%= assets[j].asset_id %>">
                           <label for="asset_type">Asset Type</label>
                           <input type="text" class="form-control" list="asset-type-list" id="asset_type" value="<%= assets[j].asset_type %>">
                             <datalist id="asset-type-list">
@@ -592,13 +622,13 @@
                   <div class="col-4">
                     <div class="form-group">
                         <label for="asset_start">Asset Start</label>
-                        <input type="text" class="form-control datetimepicker" id="asset_start" value="<%= assets[j].asset_start %>">
+                        <input type="text" class="form-control datetimepicker" id="asset_start" value="<%= moment(assets[j].asset_start).format('M/D/YY @ kk:mm') %>">
                     </div>
                 </div>
                     <div class="col-4">
                         <div class="form-group">
                             <label for="asset_stop">Asset Stop</label>
-                            <input type="text" class="form-control datetimepicker" id="asset_stop" value="<%= assets[j].asset_stop %>">
+                            <input type="text" class="form-control datetimepicker" id="asset_stop" value="<%= moment(assets[j].asset_stop).format('M/D/YY @ kk:mm') %>">
                         </div>
                 </div>
             </div>
@@ -617,7 +647,7 @@
       </div>
                   <div class="modal-footer">
                       <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                      <button type="submit" class="btn btn-primary">Add New Asset</button>
+                      <button type="submit" class="btn btn-primary">Save Changes</button>
                   </div>
               </form>
 
@@ -628,6 +658,33 @@
       </div>
 
       <!-- Edit Assets Modal End -->
+      <!-- Delete Asset Modal -->
+      <div class="modal fade" id="d2<%= assets[j].asset_id %>" tabindex="-1" role="dialog" aria-labelledby="deleteAssetModalLable" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="deleteAssetModalID">Are you sure you want to delete asset <%= assets[j].asset_name %> from <%= assets[j].ordnbr %>? </h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              Click DELETE to delete this job, or click Close to dismiss.
+              <form class="deleteassetform">
+                <div class="form-group">
+                  <label hidden for="did"></label>
+                  <input hidden type="text" class="form-control" id="did" placeholder="Order #" value="<%= assets[j].asset_id %>">
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              <button type="submit" class="btn btn-danger">DELETE THIS ASSET</button>
+            </div>
+          </form>
+          </div>
+        </div>
+      </div>
+      <!-- Delete Asset Modal End -->             
                         </div>
                       </td>
                       <% } %>

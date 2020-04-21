@@ -1,0 +1,86 @@
+<!-- Edit Assets Modal Begin -->
+<div class="modal fade" id="nae<%= assets[j].asset_id %>" tabindex="-1" role="dialog" aria-labelledby="newJobModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="NewAssetModalLabel">Add Asset to Job <%= jobs[i].ordnbr %></h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <!-- Edit Assets Form Begin -->
+          <form class="editassetform">
+            <h5>Asset Information</h5>
+            <div class="row">
+                <div class="col-4">
+                  <div class="form-group">
+                    <label hidden for="asset_ordnbr"></label>
+                    <input hidden type="text" class="form-control" id="asset_ordnbr" placeholder="Order #" value="<%= assets[j].asset_id %>">
+                    <label for="asset_type">Asset Type</label>
+                    <input type="text" class="form-control" list="asset-type-list" id="asset_type" value="<%= assets[j].asset_type %>">
+                      <datalist id="asset-type-list">
+                        <option value="Barge"></option>
+                        <option value="Boat"></option>
+                      </datalist>
+                  </div>
+                </div>
+                <div class="col-4">
+                  <div class="form-group">
+                      <label for="asset_name">Asset Name</label>
+                      <input type="text" class="form-control" id="asset_name" value="<%= assets[j].asset_name %>">
+                  </div>
+              </div>
+                  <div class="col-4">
+                      <div class="form-group">
+                          <label for="vendor_name">Vendor Name</label>
+                          <input type="text" class="form-control" id="vendor_name" value="<%= assets[j].vendor_name %>">
+                      </div>
+              </div>
+          </div>
+          <div class="row">
+            <div class="col-4">
+                <div class="form-group">
+                    <label for="tow_group">Tow Group</label>
+                    <input type="text" class="form-control" id="tow_group" value="<%= assets[j].tow_group %>">
+                </div>
+            </div>
+            <div class="col-4">
+              <div class="form-group">
+                  <label for="asset_start">Asset Start</label>
+                  <input type="text" class="form-control datetimepicker" id="asset_start" value="<%= assets[j].asset_start %>">
+              </div>
+          </div>
+              <div class="col-4">
+                  <div class="form-group">
+                      <label for="asset_stop">Asset Stop</label>
+                      <input type="text" class="form-control datetimepicker" id="asset_stop" value="<%= assets[j].asset_stop %>">
+                  </div>
+          </div>
+      </div>
+      <div class="row">
+        <div class="col-4">
+            <div class="form-group">
+                <label for="asset_status">Asset Status</label>
+                <input type="text" class="form-control" list="asset-status-list" id="asset_status" value="<%= assets[j].asset_status %>">
+                      <datalist id="asset-status-list">
+                        <option value="Active"></option>
+                        <option value="Inactive"></option>
+                      </datalist>
+            </div>
+        </div>
+  </div>
+</div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary">Add New Asset</button>
+            </div>
+        </form>
+
+        <!-- Edit Assets Form End -->
+
+    </div>
+  </div>
+</div>
+
+<!-- Edit Assets Modal End -->

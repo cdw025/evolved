@@ -5,9 +5,9 @@ module.exports = {
   getLogs: function() {
     return knex('deckvsllogs');
   },
-  create: function(asset) {
-    return knex('deckassetfil').insert(asset,'asset_id').then(asset_id => {
-      return asset_id[0];
+  create: function(log) {
+    return knex('deckvsllogs').insert(log,'log_id').then(log_id => {
+      return log_id[0];
     });
   },
   update: function(order_id, job) {

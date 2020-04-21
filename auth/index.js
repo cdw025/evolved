@@ -207,33 +207,42 @@ router.post('/newasset', (req, res, next) => {
 
                     Asset
                     .create(asset)
-                    .then(asset_id => {
-                    
+                    .then(asset => {
                 // redirect
                 res.json({
-                    asset_id,
+                    asset,
                     message: 'asset created'
                 });
+
                     });
-                });
+                });        
+
+
 
 
     function validAsset(asset) {
-        const validAssetNumber = typeof asset.asset_id == 'string' &&
-                                        asset.asset_id.trim() !='';
-    
-        return validAssetNumber;
-    }
+    const validAssetNumber = asset.asset_id.trim() !='';
+
+    return validAssetNumber;
+}
 
     router.put('/dashboard/asset/:asset_id', (req, res, next) => {
-    if(validAsset(req.body)) {
+        if(validAsset(req.body)) {
+            Asset
+            .update(req.params.asset_id, req.body).then(asset => {
+                res.json(asset);
+            });
+            } else {
+                next(new Error('invalid asset neal'));
+            }
+    });
+
+    router.delete('/dashboard/asset/:asset_id', (req, res, next) => {
         Asset
-        .update(req.params.asset_id, req.body).then(asset => {
-            res.json(asset);
+        .delete(req.params.asset_id).then(() => {
+            res.send('deleted');
         });
-        } else {
-            next(new Error('invalid asset neal'));
-        }
 });
+
 
 module.exports = router;

@@ -27,6 +27,7 @@ function getHostURL() {
     $errorMessage.show();
   }
 
+
   function getNewJobFromForm() {
     const ordnbr = $('#JobNumberInput').val();
     const customer_nm = $('#customerNameInput').val();
@@ -111,6 +112,7 @@ function getHostURL() {
 
       function getEditAssetFromForm(form) {
         const ordnbr = form.find('input[id=asset_ordnbr]').val();
+        const asset_id = form.find('input[id=asset_id]').val();
         const asset_type = form.find('input[id=asset_type]').val();
         const asset_name = form.find('input[id=asset_name]').val();
         const vendor_name = form.find('input[id=vendor_name]').val();
@@ -121,6 +123,7 @@ function getHostURL() {
         
      const asset = {
                 ordnbr,
+                asset_id,
                 asset_type,
                 asset_name,
                 vendor_name,
@@ -136,3 +139,13 @@ function getHostURL() {
     
             return asset;
       }
+
+
+      function getDeleteAssetFromForm(form) {
+        const asset_id = form.find('input[id=did]').val();
+    
+            const asset = {
+                asset_id
+            };
+            return asset;
+        }

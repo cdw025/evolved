@@ -56,8 +56,8 @@ exports.seed = (knex, Promise) => {
           },
           {
             log_id: 3,
-            ordnbr: 'D3',
-            asset_name: 'Capt. Chase',
+            ordnbr: 'D2',
+            asset_name: 'CBC759',
             log_dttm: new Date(),
             start_fuel: 40000,
             fuel_burn: 1200,

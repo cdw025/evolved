@@ -13,7 +13,7 @@ module.exports = {
   update: function(asset_id, asset) {
     return knex('deckassetfil').where('asset_id', asset_id).update(asset, '*');
   },
-  delete: function(ordnbr) {
-    return knex('deckorderfil').where('ordnbr', ordnbr).del();
+  delete: function(asset_id) {
+    return knex('deckassetfil').where('asset_id', asset_id).del();
   }
 }
