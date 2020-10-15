@@ -18,7 +18,7 @@
     "hbs": "~4.0.1",
     "jquery": "^3.4.1",
     "jquery-datetimepicker": "^2.5.21",
-    "knex": "^0.12.9",
+    "knex": "^0.19.5",
     "lodash": "^4.17.15",
     "moment": "^2.24.0",
     "moment-timezone": "^0.5.28",
