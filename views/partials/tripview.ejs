@@ -95,8 +95,15 @@
   font-size: 100%;
 }
 
-</style>
+.job-notes ul {
+  white-space: pre-wrap;
+  font-size: 90%;
+}
 
+</style>
+<script type="text/javascript">
+  window.addEventListener('keydown',function(e){if(e.keyIdentifier=='U+000A'||e.keyIdentifier=='Enter'||e.keyCode==13){if(e.target.nodeName=='INPUT'&&e.target.type=='text'){e.preventDefault();return false;}}},true);
+  </script>
  <div class="table-responsive">
   <table class="table table-hover table-sm" data-toggle="table">
     <thead>
@@ -189,10 +196,10 @@
           </div>
                   <div class="row">
                       <div class="col-12">
-                          <div class="form-group editable">
-                              <label for="eOrderNotes">Order Notes</label>
-                              <input type="text" class="form-control" id="eOrderNotes" placeholder="Order Notes" value="<%= jobs[i].ord_notes %>">
-                          </div>
+                        <div class="form-group">
+                          <label for="eOrderNotes">Example textarea</label>
+                          <textarea class="form-control" id="eOrderNotes" rows="3" value="<%= jobs[i].ord_notes %>"><%= jobs[i].ord_notes %></textarea>
+                        </div>  
                       </div>
                 </div>
                 </div>
@@ -347,8 +354,8 @@
           Destination:&nbsp;&nbsp;<%= jobs[i].dest_location %>
           <br>
           Customer:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<%= jobs[i].customer_nm %>
-          <br>
-          Notes:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<%= jobs[i].ord_notes %>
+         <br>
+          Notes:
         </div>
         
         
@@ -697,6 +704,9 @@
              </div>
               </div>
           </div>
+      </div>
+      <div class="job-notes">
+        <ul><%= jobs[i].ord_notes %></ul>
       </div>
       </div>
   </div>

@@ -5,7 +5,7 @@ exports.seed = (knex, Promise) => {
           {
             asset_id: 1,
             ordnbr: 'D3',
-            asset_status: 'Active',
+            asset_status: 'A',
             tow_group: 1,
             asset_type: 'Barge',
             asset_name: 'CBC Savannah',
@@ -20,7 +20,7 @@ exports.seed = (knex, Promise) => {
           {
             asset_id: 2,
             ordnbr: 'D3',
-            asset_status: 'Active',
+            asset_status: 'A',
             tow_group: 1,
             asset_type: 'Boat',
             asset_name: 'Capt. Chase',
@@ -35,7 +35,7 @@ exports.seed = (knex, Promise) => {
           {
             asset_id: 3,
             ordnbr: 'D2',
-            asset_status: 'Active',
+            asset_status: 'A',
             tow_group: 1,
             asset_type: 'Barge',
             asset_name: 'CBC759',
@@ -50,7 +50,7 @@ exports.seed = (knex, Promise) => {
           {
             asset_id: 4,
             ordnbr: 'D3',
-            asset_status: 'Active',
+            asset_status: 'A',
             tow_group: 2,
             asset_type: 'Boat',
             asset_name: 'Trey Paul',

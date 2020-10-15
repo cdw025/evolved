@@ -50,31 +50,33 @@ router.get('/boats', authMiddleware.ensureLoggedIn, function(req, res) {
 router.get('/dashboard', authMiddleware.ensureLoggedIn, function(req, res) {
   Asset.getAssets().then(assets => {
     Job.getJobs().then(jobs => {
-      AssetLog.getLogs().then(logs => {
+      // AssetLog.getLogs().then(logs => {
     jobs = JSON.parse(JSON.stringify(jobs));
     assets = JSON.parse(JSON.stringify(assets));
-    logs = JSON.parse(JSON.stringify(logs));
+    // logs = JSON.parse(JSON.stringify(logs));
     jobs = jobs.sort((a, b) => parseFloat(a.order_id) - parseFloat(b.order_id));
-    logs = logs.sort((a, b) => parseFloat(b.log_id) - parseFloat(a.log_id));
+    // logs = logs.sort((a, b) => parseFloat(b.log_id) - parseFloat(a.log_id));
             // javascript function to find max log_id value for each asset_name 
             // in order to only print one result per asset name
-            const arrayFiltered = [];
-            logs.forEach(obj => {
-                const item = arrayFiltered.find(thisItem => thisItem.asset_name === obj.asset_name);
-                if (item) {
-                    if (item.log_id < obj.log_id) {
-                        item.log_id = obj.log_id;
-                    }
-                    return;
-                }
-                arrayFiltered.push(obj);
-            });
+            // const arrayFiltered = [];
+            // logs.forEach(obj => {
+            //     const item = arrayFiltered.find(thisItem => thisItem.asset_name === obj.asset_name);
+            //     if (item) {
+            //         if (item.log_id < obj.log_id) {
+            //             item.log_id = obj.log_id;
+            //         }
+            //         return;
+            //     }
+            //     arrayFiltered.push(obj);
+            // });
 
 
 
-    console.log(arrayFiltered);
-    res.render('dashboard', { title: 'Express', jobs: jobs, assets: assets, logs: arrayFiltered });
+    // console.log(arrayFiltered);
+    res.render('dashboard', { title: 'Express', jobs: jobs, assets: assets
+    // , logs: arrayFiltered 
   });
+  // });
   });
     });
 });

@@ -58,7 +58,7 @@ function getHostURL() {
     const origin_desc = form.find('input[id=eOriginDescription]').val();
     const dest_location = form.find('input[id=eDestinationInput]').val();
     const dest_desc = form.find('input[id=eDestinationDescription]').val();
-    const ord_notes = form.find('input[id=eOrderNotes]').val();
+    const ord_notes = form.find('textarea[id=eOrderNotes]').val();
 
         const job = {
             order_id,
