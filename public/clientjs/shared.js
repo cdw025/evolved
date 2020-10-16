@@ -30,21 +30,45 @@ function getHostURL() {
 
   function getNewJobFromForm() {
     const ordnbr = $('#JobNumberInput').val();
-    const customer_nm = $('#customerNameInput').val();
-    const origin_location = $('#OriginInput').val();
-    const origin_desc = $('#OriginDescription').val();
-    const dest_location = $('#DestinationInput').val();
-    const dest_desc = $('#DestinationDescription').val();
-    const ord_notes = $('#OrderNotes').val();
+    const status= $('#jobStatus').val();
+    const pm_assigned= $('#pmAssigned').val();
+    const origin = $('#originInput').val();
+    const destination = $('#destinationInput').val();
+    const est_start_date = $('#estStartDate').val();
+    const origin_desc = $('#originDesc').val();
+    const destination_desc = $('#destDesc').val();
+    const ord_notes = $('#jobNotes').val();
+    const customer = $('#customer').val();
+    const customer_nm = $('#customer_nm').val();
+    const customer_phone = $('#customer_phone').val();
+    const customer_email = $('#customer_email').val();
+    const customer_notes = $('#customer_notes').val();
+    const vendor = $('#vendor').val();
+    const vendor_nm = $('#vendor_nm').val();
+    const vendor_phone = $('#vendor_phone').val();
+    const vendor_email = $('#vendor_email').val();
+    const vendor_notes = $('#vendor_notes').val();
     
  const job = {
             ordnbr,
-            customer_nm,
-            origin_location,
+            status,
+            pm_assigned,
+            origin,
+            destination,
+            est_start_date,
             origin_desc,
-            dest_location,
-            dest_desc,
-            ord_notes
+            destination_desc,
+            ord_notes,
+            customer,
+            customer_nm,
+            customer_phone,
+            customer_email,
+            customer_notes,
+            vendor,
+            vendor_nm,
+            vendor_phone,
+            vendor_email,
+            vendor_notes
         };
 
         return job;

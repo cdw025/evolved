@@ -1,5 +1,5 @@
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="newJobModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-dialog modal-xl" role="document">
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title" id="NewJobModalLabel">Create New Job</h5>
@@ -19,45 +19,129 @@
                 </div>
                 <div class="col-4">
                   <div class="form-group">
-                      <label for="customerNameInput">Customer Name</label>
-                      <input type="text" class="form-control" id="customerNameInput" placeholder="Customer Name">
+                      <label for="jobStatus">Status</label>
+                      <input type="text" class="form-control" id="jobStatus" placeholder="Status">
                   </div>
               </div>
                   <div class="col-4">
                       <div class="form-group">
-                          <label for="OriginInput">Origin Location</label>
-                          <input type="text" class="form-control" id="OriginInput" placeholder="Origin">
+                          <label for="pmAssigned">PM Assigned</label>
+                          <input type="text" class="form-control" id="pmAssigned" placeholder="PM Assigned">
                       </div>
               </div>
           </div>
           <div class="row">
             <div class="col-4">
                 <div class="form-group">
-                    <label for="OriginDescription">Origin Description</label>
-                    <input type="text" class="form-control" id="OriginDescription" placeholder="Origin Description">
+                    <label for="originInput">Origin</label>
+                    <input type="text" class="form-control" id="originInput" placeholder="Origin">
                 </div>
             </div>
             <div class="col-4">
               <div class="form-group">
-                  <label for="DestinationInput">Destination Location</label>
-                  <input type="text" class="form-control" id="DestinationInput" placeholder="Destination Location">
+                  <label for="destinationInput">Destination</label>
+                  <input type="text" class="form-control" id="destinationInput" placeholder="Destination">
               </div>
           </div>
               <div class="col-4">
                   <div class="form-group">
-                      <label for="DestinationDescription">Destination Description</label>
-                      <input type="text" class="form-control" id="DestinationDescription" placeholder="Destination">
+                      <label for="estStartDate">Estimated Start Date</label>
+                      <input type="text" class="form-control" id="estStartDate" placeholder="Estimated Start Date">
                   </div>
           </div>
       </div>
               <div class="row">
-                  <div class="col-12">
+                  <div class="col-4">
                       <div class="form-group">
-                          <label for="OrderNotes">Order Notes</label>
-                          <input type="text" class="form-control" id="OrderNotes" placeholder="Order Notes">
+                          <label for="originDesc">Origin Desc.</label>
+                          <input type="text" class="form-control" id="originDesc" placeholder="Origin Desc.">
                       </div>
                   </div>
+                  <div class="col-4">
+                    <div class="form-group">
+                        <label for="destDesc">Destination Desc.</label>
+                        <input type="text" class="form-control" id="destDesc" placeholder="Destination Desc.">
+                    </div>
+                </div>
             </div>
+            <div class="row">
+                <div class="col-12">
+                    <div class="form-group">
+                        <label for="jobNotes">Job Notes</label>
+                        <textarea class="form-control" id="jobNotes" rows="2" placeholder="Enter any general job notes here."></textarea>
+                    </div>
+                </div>
+          </div>
+          <h5>Customer Information</h5>
+            <div class="row">
+                <div class="col-3">
+                    <div class="form-group">
+                        <label for="customer">Customer</label>
+                        <input type="text" class="form-control" id="customer" placeholder="Enter Customer Company">
+                    </div>
+                </div>
+                <div class="col-3">
+                  <div class="form-group">
+                      <label for="customer_nm">Customer Contact</label>
+                      <input type="text" class="form-control" id="customer_nm" placeholder="Enter Customer Contact Name">
+                  </div>
+              </div>
+                  <div class="col-3">
+                      <div class="form-group">
+                          <label for="customer_phone">Customer Phone</label>
+                          <input type="text" class="form-control" id="customer_phone" placeholder="Enter Customer Phone">
+                      </div>
+              </div>
+              <div class="col-3">
+                <div class="form-group">
+                    <label for="customer_email">Customer Email</label>
+                    <input type="text" class="form-control" id="customer_email" placeholder="Enter Customer Email">
+                </div>
+        </div>
+          </div>
+          <div class="row">
+            <div class="col-12">
+                <div class="form-group">
+                    <label for="customer_notes">Customer Notes</label>
+                    <textarea class="form-control" id="customer_notes" rows="2" placeholder="Enter any customer notes here."></textarea>
+                </div>
+            </div>
+      </div>
+      <h5>Vendor Information</h5>
+            <div class="row">
+                <div class="col-3">
+                    <div class="form-group">
+                        <label for="vendor">Vendor</label>
+                        <input type="text" class="form-control" id="vendor" placeholder="Enter Vendor Company">
+                    </div>
+                </div>
+                <div class="col-3">
+                  <div class="form-group">
+                      <label for="vendor_nm">Vendor Contact</label>
+                      <input type="text" class="form-control" id="vendor_nm" placeholder="Enter Vendor Contact Name">
+                  </div>
+              </div>
+                  <div class="col-3">
+                      <div class="form-group">
+                          <label for="vendor_phone">Vendor Phone</label>
+                          <input type="text" class="form-control" id="vendor_phone" placeholder="Enter Vendor Phone">
+                      </div>
+              </div>
+              <div class="col-3">
+                <div class="form-group">
+                    <label for="vendor_email">Vendor Email</label>
+                    <input type="text" class="form-control" id="vendor_email" placeholder="Enter Vendor Email">
+                </div>
+        </div>
+          </div>
+          <div class="row">
+            <div class="col-12">
+                <div class="form-group">
+                    <label for="vendor_notes">Vendor Notes</label>
+                    <textarea class="form-control" id="vendor_notes" rows="2" placeholder="Enter any vendor notes here."></textarea>
+                </div>
+            </div>
+      </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                 <button type="submit" class="btn btn-primary" onsubmit="return false">Create New Job</button>

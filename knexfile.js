@@ -6,7 +6,7 @@ module.exports = {
 
   development: {
     client: 'pg',
-    connection: 'postgres://postgres:postgres@localhost/evolved'
+    connection: 'postgres://postgres:postgres@localhost/cbctriptracker'
   },
   production: {
     client: 'pg',
