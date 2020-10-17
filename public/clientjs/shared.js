@@ -76,23 +76,47 @@ function getHostURL() {
   
   function getEditJobFromForm(form) {
     const order_id = form.find('input[id=eid]').val();
-    const ordnbr = form.find('input[id=eorderNumberInput]').val();
-    const customer_nm = form.find('input[id=ecustomerNameInput]').val();
-    const origin_location = form.find('input[id=eOriginInput]').val();
-    const origin_desc = form.find('input[id=eOriginDescription]').val();
-    const dest_location = form.find('input[id=eDestinationInput]').val();
-    const dest_desc = form.find('input[id=eDestinationDescription]').val();
-    const ord_notes = form.find('textarea[id=eOrderNotes]').val();
+    const ordnbr = form.find('input[id=eJobNumberInput]').val();
+    const status = form.find('input[id=ejobStatus]').val();
+    const pm_assigned = form.find('input[id=epmAssigned]').val();
+    const origin = form.find('input[id=eoriginInput]').val();
+    const destination = form.find('input[id=edestinationInput]').val();
+    const est_start_date = form.find('input[id=eestStartDate]').val();
+    const origin_desc = form.find('textarea[id=eoriginDesc]').val();
+    const destination_desc = form.find('textarea[id=edestDesc]').val();
+    const ord_notes = form.find('textarea[id=ejobNotes]').val();
+    const customer = form.find('textarea[id=ecustomer]').val();
+    const customer_nm = form.find('textarea[id=ecustomer_nm]').val();
+    const customer_phone = form.find('textarea[id=ecustomer_phone]').val();
+    const customer_email = form.find('textarea[id=ecustomer_email]').val();
+    const customer_notes = form.find('textarea[id=ecustomer_notes]').val();
+    const vendor = form.find('textarea[id=evendor]').val();
+    const vendor_nm = form.find('textarea[id=evendor_nm]').val();
+    const vendor_phone = form.find('textarea[id=evendor_phone]').val();
+    const vendor_email = form.find('textarea[id=evendor_email]').val();
+    const vendor_notes = form.find('textarea[id=evendor_notes]').val();
 
         const job = {
             order_id,
             ordnbr,
-            customer_nm,
-            origin_location,
+            status,
+            pm_assigned,
+            origin,
+            destination,
+            est_start_date,
             origin_desc,
-            dest_location,
-            dest_desc,
-            ord_notes
+            destination_desc,
+            ord_notes,
+            customer,
+            customer_nm,
+            customer_phone,
+            customer_email,
+            customer_notes,
+            vendor,
+            vendor_nm,
+            vendor_phone,
+            vendor_email,
+            vendor_notes
         };
         return job;
     }
