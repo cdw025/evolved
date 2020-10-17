@@ -161,7 +161,7 @@ td {
             <td class="d-inline-block col-2"><%= jobs[i].destination %></td>
             <td class="d-inline-block col-2"><%= jobs[i].pm_assigned %></td>
             <td class="d-inline-block col-1"><%= jobs[i].status %></td>
-            <td class="d-inline-block col-2"><%= jobs[i].est_start_date %></td>
+            <td class="d-inline-block col-2"><%= moment(jobs[i].est_start_date).format('M/D/YY') %></td>
             <!-- <td class="expand-button" class="d-inline-block col-1"></td> -->
             </tr>
               
@@ -228,7 +228,7 @@ td {
                       <div class="col-4">
                           <div class="form-group">
                               <label for="eestStartDate">Estimated Start Date</label>
-                              <input type="text" class="form-control" id="eestStartDate" placeholder="Destination" value="<%= jobs[i].est_start_date %>">
+                              <input type="date" class="form-control" id="eestStartDate" placeholder="Destination" value="<%= jobs[i].est_start_date %>">
                           </div>
                   </div>
               </div>
@@ -867,7 +867,7 @@ td {
             <td class="d-inline-block col-2"><%= jobs[i].destination %></td>
             <td class="d-inline-block col-2"><%= jobs[i].pm_assigned %></td>
             <td class="d-inline-block col-1"><%= jobs[i].status %></td>
-            <td class="d-inline-block col-2"><%= jobs[i].est_start_date %></td>
+            <td class="d-inline-block col-2"><%= moment(jobs[i].est_start_date).format('M/D/YY') %></td>
             <!-- <td class="expand-button" class="d-inline-block col-1"></td> -->
             </tr>
               
@@ -934,7 +934,7 @@ td {
                       <div class="col-4">
                           <div class="form-group">
                               <label for="eestStartDate">Estimated Start Date</label>
-                              <input type="text" class="form-control" id="eestStartDate" placeholder="Destination" value="<%= jobs[i].est_start_date %>">
+                              <input type="date" class="form-control" id="eestStartDate" placeholder="Destination" value="<%= jobs[i].est_start_date %>">
                           </div>
                   </div>
               </div>
@@ -1573,7 +1573,7 @@ td {
             <td class="d-inline-block col-2"><%= jobs[i].destination %></td>
             <td class="d-inline-block col-2"><%= jobs[i].pm_assigned %></td>
             <td class="d-inline-block col-1"><%= jobs[i].status %></td>
-            <td class="d-inline-block col-2"><%= jobs[i].est_start_date %></td>
+            <td class="d-inline-block col-2"><%= moment(jobs[i].est_start_date).format('M/D/YY') %></td>
             <!-- <td class="expand-button" class="d-inline-block col-1"></td> -->
             </tr>
               
@@ -1640,7 +1640,7 @@ td {
                       <div class="col-4">
                           <div class="form-group">
                               <label for="eestStartDate">Estimated Start Date</label>
-                              <input type="text" class="form-control" id="eestStartDate" placeholder="Destination" value="<%= jobs[i].est_start_date %>">
+                              <input type="date" class="form-control" id="eestStartDate" placeholder="Destination" value="<%= jobs[i].est_start_date %>">
                           </div>
                   </div>
               </div>
