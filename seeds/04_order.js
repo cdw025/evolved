@@ -3,6 +3,7 @@ exports.seed = (knex, Promise) => {
       .then(() => {
         const orders = [
             {
+              order_id: '1',
               ordnbr: 'D1234',
               status: 'Upcoming',
               pm_assigned: 'Neal W.',
@@ -28,6 +29,7 @@ exports.seed = (knex, Promise) => {
               modified_dttm: new Date()
             },
             {
+              order_id: '2',
               ordnbr: 'D2345',
               status: 'Upcoming',
               pm_assigned: 'Andrew D.',
@@ -53,6 +55,7 @@ exports.seed = (knex, Promise) => {
               modified_dttm: new Date()
             },
             {
+              order_id: '3',
               ordnbr: 'D3456',
               status: 'Active',
               pm_assigned: 'John W.',
@@ -78,6 +81,7 @@ exports.seed = (knex, Promise) => {
               modified_dttm: new Date()
             },
             {
+              order_id: '4',
               ordnbr: 'D4567',
               status: 'Active',
               pm_assigned: 'Andrew D.',
@@ -103,6 +107,7 @@ exports.seed = (knex, Promise) => {
               modified_dttm: new Date()
             },
             {
+              order_id: '5',
               ordnbr: 'D5678',
               status: 'Completed',
               pm_assigned: 'Neal W.',
@@ -128,6 +133,7 @@ exports.seed = (knex, Promise) => {
               modified_dttm: new Date()
             },
             {
+              order_id: '6',
               ordnbr: 'D6789',
               status: 'Completed',
               pm_assigned: 'John W.',
