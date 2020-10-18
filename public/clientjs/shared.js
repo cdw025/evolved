@@ -77,7 +77,7 @@ function getHostURL() {
   function getEditJobFromForm(form) {
     const order_id = form.find('input[id=eid]').val();
     const ordnbr = form.find('input[id=eJobNumberInput]').val();
-    const status = form.find('input[id=ejobStatus]').val();
+    const status = form.find('select[id=ejobStatus]').val();
     const pm_assigned = form.find('input[id=epmAssigned]').val();
     const origin = form.find('input[id=eoriginInput]').val();
     const destination = form.find('input[id=edestinationInput]').val();
