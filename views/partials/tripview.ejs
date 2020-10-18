@@ -62,9 +62,6 @@
   font-size: 100%;
 }
 
-.card-header {
-  padding: 5px;
-}
 
 /* .table td {
    text-align: left;  
@@ -117,12 +114,20 @@ td {
   font-size: 120%;
 }
 
+.job-note-headers {
+  text-align: left;
+  text-decoration: underline;
+}
+
+.right-tabs .nav {
+    float: right;
+}
 
 </style>
 <script type="text/javascript">
   window.addEventListener('keydown',function(e){if(e.keyIdentifier=='U+000A'||e.keyIdentifier=='Enter'||e.keyCode==13){if(e.target.nodeName=='INPUT'&&e.target.type=='text'){e.preventDefault();return false;}}},true);
   </script>
-
+<br>
 <ul class="nav nav-tabs" id="myTab" role="tablist">
   <li class="nav-item">
     <a class="nav-link active" id="home-tab" data-toggle="tab" href="#upcoming" role="tab" aria-controls="home" aria-selected="true">Upcoming</a>
@@ -132,6 +137,11 @@ td {
   </li>
   <li class="nav-item">
     <a class="nav-link" id="contact-tab" data-toggle="tab" href="#completed" role="tab" aria-controls="contact" aria-selected="false">Completed</a>
+  </li>
+  <li class="nav-item ml-auto">
+    <a class="nav-link" id="contact-tab" data-toggle="tab" href="#archived" role="tab" aria-controls="contact" aria-selected="false" style="padding:0px">
+      <img src="../trash.png" width = "30" height = "30">
+    </a>
   </li>
 </ul>
 <div class="tab-content" id="myTabContent">
@@ -156,7 +166,7 @@ td {
         <tbody>
           <tr class="accordion-toggle collapsed row m-0" id="accordion1" data-toggle="collapse" data-parent="#accordion1" href="#<%= jobs[i].ordnbr %>">
             <td class="d-inline-block col-1"><%= jobs[i].ordnbr %></td>
-            <td class="d-inline-block col-2"><%= jobs[i].customer_nm %></td>
+            <td class="d-inline-block col-2"><%= jobs[i].customer %></td>
             <td class="d-inline-block col-2"><%= jobs[i].origin %></td>
             <td class="d-inline-block col-2"><%= jobs[i].destination %></td>
             <td class="d-inline-block col-2"><%= jobs[i].pm_assigned %></td>
@@ -171,7 +181,7 @@ td {
         <div class="card" id="tdcard">
           <div class="card-body">
             <div class="row">
-            <h5 class="card-title col align-self-center" id="cardtitle"><%= jobs[i].ordnbr %> - <%= jobs[i].customer_nm %></h5>
+            <h5 class="card-title col align-self-center" id="cardtitle"><%= jobs[i].ordnbr %> - <%= jobs[i].customer %></h5>
             <button type="button" class="btn col-1" id="edittripbutton" data-toggle="modal" data-target="#e<%= jobs[i].ordnbr %>">Edit</button>
             <button type="button" class="btn col-1" data-toggle="modal" data-target="#d<%= jobs[i].ordnbr %>">Delete</button>
           </div>
@@ -208,7 +218,7 @@ td {
                           <div class="col-4">
                               <div class="form-group">
                                   <label for="epmAssigned">PM Assigned</label>
-                                  <input type="text" class="form-control" id="eOriginInput" placeholder="Origin" value="<%= jobs[i].pm_assigned %>">
+                                  <input type="text" class="form-control" id="epmAssigned" placeholder="Origin" value="<%= jobs[i].pm_assigned %>">
                               </div>
                       </div>
                   </div>
@@ -242,7 +252,7 @@ td {
                 <div class="col-4">
                   <div class="form-group">
                       <label for="edestDesc">Destination Desc.</label>
-                      <input type="text" class="form-control" id="edestDesc" placeholder="Destination Desc." value="<%= jobs[i].destination_des %>">
+                      <input type="text" class="form-control" id="edestDesc" placeholder="Destination Desc." value="<%= jobs[i].destination_desc %>">
                   </div>
               </div>
           </div>
@@ -250,7 +260,7 @@ td {
               <div class="col-12">
                   <div class="form-group">
                       <label for="ejobNotes">Job Notes</label>
-                      <textarea class="form-control" id="ejobNotes" rows="2" placeholder="Enter any general job notes here." value="<%= jobs[i].ord_notes %>"></textarea>
+                      <textarea class="form-control" id="ejobNotes" rows="2" placeholder="Enter any general job notes here."><%= jobs[i].ord_notes %></textarea>
                   </div>
               </div>
         </div>
@@ -285,7 +295,7 @@ td {
           <div class="col-12">
               <div class="form-group">
                   <label for="ecustomer_notes">Customer Notes</label>
-                  <textarea class="form-control" id="ecustomer_notes" rows="2" placeholder="Enter any customer notes here." value="<%= jobs[i].customer_notes %>"></textarea>
+                  <textarea class="form-control" id="ecustomer_notes" rows="2" placeholder="Enter any customer notes here."><%= jobs[i].customer_notes %></textarea>
               </div>
           </div>
     </div>
@@ -320,7 +330,7 @@ td {
           <div class="col-12">
               <div class="form-group">
                   <label for="evendor_notes">Vendor Notes</label>
-                  <textarea class="form-control" id="evendor_notes" rows="2" placeholder="Enter any vendor notes here." value="<%= jobs[i].vendor_notes %>"></textarea>
+                  <textarea class="form-control" id="evendor_notes" rows="2" placeholder="Enter any vendor notes here."><%= jobs[i].vendor_notes %></textarea>
               </div>
           </div>
     </div>
@@ -372,471 +382,121 @@ td {
           </div>
           <div class="modal-body">
             <div class="row">
-              <div class="col-3"><h5>Trip Details</h5></div>
-              <div class="col-6"><h5>Tow Details</h5></div>
-              <div class="col-3"style="text-align:right">
-                <button class="btn btn-secondary" data-toggle="modal" data-target="#na<%= jobs[i].ordnbr %>">Add Asset</button>
-                
-              </div>
-            </div>
-    
-            <!-- Add Assets Modal Begin -->
-            <div class="modal fade" id="na<%= jobs[i].ordnbr %>" tabindex="-1" role="dialog" aria-labelledby="newJobModalLabel" aria-hidden="true">
-              <div class="modal-dialog modal-lg" role="document">
-                <div class="modal-content">
-                  <div class="modal-header">
-                    <h5 class="modal-title" id="NewAssetModalLabel">Add Asset to Job <%= jobs[i].ordnbr %></h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                      <span aria-hidden="true">&times;</span>
-                    </button>
-                  </div>
-                  <div class="modal-body">
-                    <!-- Add Assets Form Begin -->
-                    <form class="newassetform">
-                      <h5>Asset Information</h5>
-                      <div class="row">
-                          <div class="col-4">
-                            <div class="form-group">
-                              <label hidden for="asset_ordnbr"></label>
-                              <input hidden type="text" class="form-control" id="asset_ordnbr" placeholder="Order #" value="<%= jobs[i].ordnbr %>">
-                              <label for="asset_type">Asset Type</label>
-                              <input type="text" class="form-control" list="asset-type-list" id="asset_type"/>
-                                <datalist id="asset-type-list">
-                                  <option value="Barge"></option>
-                                  <option value="Boat"></option>
-                                </datalist>
-                            </div>
-                          </div>
-                          <div class="col-4">
-                            <div class="form-group">
-                                <label for="asset_name">Asset Name</label>
-                                <input type="text" class="form-control" id="asset_name" placeholder="Asset Name">
-                            </div>
-                        </div>
-                            <div class="col-4">
-                                <div class="form-group">
-                                    <label for="vendor_name">Vendor Name</label>
-                                    <input type="text" class="form-control" id="vendor_name" placeholder="Vendor Name">
-                                </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                      <div class="col-4">
-                          <div class="form-group">
-                              <label for="tow_group">Tow Group</label>
-                              <input type="text" class="form-control" id="tow_group" placeholder="Tow Group">
-                          </div>
-                      </div>
-                      <div class="col-4">
-                        <div class="form-group">
-                            <label for="asset_start">Asset Start</label>
-                            <input type="text" class="form-control datetimepicker" id="asset_start" placeholder="Start Time/Date">
-                        </div>
-                    </div>
-                        <div class="col-4">
-                            <div class="form-group">
-                                <label for="asset_stop">Asset Stop</label>
-                                <input type="text" class="form-control datetimepicker" id="asset_stop" placeholder="Stop Time/Date">
-                            </div>
-                    </div>
-                </div>
-                <div class="row">
-                  <div class="col-4">
-                      <div class="form-group">
-                          <label for="asset_status">Asset Status</label>
-                          <input type="text" class="form-control" list="asset-status-list" id="asset_status" placeholder="Active or Inactive">
-                                <datalist id="asset-status-list">
-                                  <option value="Active"></option>
-                                  <option value="Inactive"></option>
-                                </datalist>
-                      </div>
-                  </div>
-            </div>
+            <div class="card col-8 border-0" style="font-size:medium">
+              <h6 class="card-header border">Trip Details</h6>
+              <div class="card-body border">
+            <table class="table table-borderless">
+                <tbody>
+                <tr class="d-flex">
+                  <td class="col-3">Origin:</td>
+                  <td class="col-6"><%= jobs[i].origin %></td>
+                </tr>
+                <tr class="d-flex">
+                  <td class="col-3">Origin Desc.:</td>
+                  <td class="col-6"><%= jobs[i].origin_desc %></td>
+                </tr>
+                <tr class="d-flex">
+                  <td class="col-3">Destination:</td>
+                  <td class="col-6"><%= jobs[i].destination %></td>
+                </tr>
+                <tr class="d-flex">
+                  <td class="col-3">Destination Description:</td>
+                  <td class="col-6"><%= jobs[i].destination_desc %></td>
+                </tr>
+                <tr class="d-flex">
+                  <td class="col-3">Start Date:</td>
+                  <td class="col-6"><%= jobs[i].est_start_date %></td>
+                </tr>
+                <tr class="d-flex">
+                  <td class="col-3">PM Assigned:</td>
+                  <td class="col-6"><%= jobs[i].pm_assigned %></td>
+                </tr>
+                <tr class="d-flex">
+                  <td class="col-3">Status:</td>
+                  <td class="col-6"><%= jobs[i].status %></td>
+                </tr>
+                <tr class="d-flex">
+                  <td class="col-3">Trip Notes:</td>
+                  <td class="col-9"><%= jobs[i].ord_notes %></td>
+                </tr>
+              </tbody>
+            </table>
           </div>
-                      <div class="modal-footer">
-                          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                          <button type="submit" class="btn btn-primary">Add New Asset</button>
-                      </div>
-                  </form>
-    
-                  <!-- Add Assets Form End -->
-    
-              </div>
-            </div>
           </div>
-    
-          <!-- Add Assets Modal End -->
-            
-            
-            
+          <div class="col-4">
             <div class="row">
-            <div class="col-3 job-details">
-              Origin:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<%= jobs[i].origin_location %>
-              <br>
-              Destination:&nbsp;&nbsp;<%= jobs[i].dest_location %>
-              <br>
-              Customer:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<%= jobs[i].customer_nm %>
-             <br>
-              Notes:
+              <div class="card col-12 border-0" style="padding-right:15px">
+            <h6 class="job-note-headers card-header border">Customer Details</h6>
+            <div class="card-body border">
+          <table class="table table-borderless">
+              <tbody>
+              <tr class="d-flex">
+                <td class="col-4">Customer:</td>
+                <td class="col-6"><%= jobs[i].customer %></td>
+              </tr>
+              <tr class="d-flex">
+                <td class="col-4">Customer Contact:</td>
+                <td class="col-6"><%= jobs[i].customer_nm %></td>
+              </tr>
+              <tr class="d-flex">
+                <td class="col-4">Customer Phone:</td>
+                <td class="col-6"><%= jobs[i].customer_phone %></td>
+              </tr>
+              <tr class="d-flex">
+                <td class="col-4">Customer Email:</td>
+                <td class="col-6"><%= jobs[i].customer_email %></td>
+              </tr>
+              <tr class="d-flex">
+                <td class="col-4">Notes:</td>
+                <td class="col-6"><%= jobs[i].customer_notes %></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        </div>
+        </div>
+        <div class="row" style="line-height:5px"><br></div>
+        <div class="row">
+          <div class="card col-12 border-0" style="padding-right:15px">
+        <h6 class="job-note-headers card-header border">Vendor Details</h6>
+        <div class="card-body border">
+      <table class="table table-borderless">
+          <tbody>
+          <tr class="d-flex">
+            <td class="col-4">Vendor:</td>
+            <td class="col-6"><%= jobs[i].vendor %></td>
+          </tr>
+          <tr class="d-flex">
+            <td class="col-4">Vendor Contact:</td>
+            <td class="col-6"><%= jobs[i].vendor_nm %></td>
+          </tr>
+          <tr class="d-flex">
+            <td class="col-4">Vendor Phone:</td>
+            <td class="col-6"><%= jobs[i].vendor_phone %></td>
+          </tr>
+          <tr class="d-flex">
+            <td class="col-4">Vendor Email:</td>
+            <td class="col-6"><%= jobs[i].vendor_email %></td>
+          </tr>
+          <tr class="d-flex">
+            <td class="col-4">Notes:</td>
+            <td class="col-6"><%= jobs[i].vendor_notes %></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    </div>
+    </div>
+      </div>
+        </div>
             </div>
-            
-            
-              <div class="col-9">
-              <div class="card tow-card">
-                <div class="card-header">Tow Group 1</div>
-                <div class="card-body tow-col">
-                  <table class="table table-sm table-borderless">
-                    <thead>
-                      <tr class="d-flex asset-row">
-                        <th class="col-2">Asset</th>
-                        <th class="col-2">Status</th>
-                        <th class="col-2">Location</th>
-                        <th class="col-2">ETA</th>
-                        <th class="col-2">Created At</th>
-                        <th class="col-2"></th>
-                      </tr>
-                    </thead>
-                    <tbody class="asset-tbody">
-                <% for (let j = 0; j < assets.length; j++) { %>
-                  <% if (assets[j].ordnbr === jobs[i].ordnbr && assets[j].tow_group === 1 && assets[j].asset_status === "Active") { %>
-                      <tr class="d-flex asset-row">
-                        <td class="col-2">
-                      <%= assets[j].asset_name %>
-                        </td>
-                      <% for (let k = 0; k < logs.length; k++) { %>
-                        <% if (assets[j].ordnbr === logs[k].ordnbr && assets[j].asset_name === logs[k].asset_name) { %>
-                          <td class="col-2">
-                            <%= logs[k].status %>
-                          </td>
-                          <td class="col-2">
-                            <%= logs[k].location %>
-                          </td>
-                          <td class="col-2">
-                            <%= moment(logs[k].dest_eta).format('M/D/YY @ kk:mm') %>
-                          </td>
-                          <td class="col-2">
-                            <%= moment(logs[k].created_dttm).format('M/D/YY @ kk:mm') %>
-                          </td>
-                          <td class="col-2">
-                            <div class="dropdown">
-                              <button class="btn btn-primary btn-sm dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                more
-                              </button>
-                              <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                <a class="dropdown-item" data-toggle="modal" data-target="#nae<%= assets[j].asset_id %>">edit asset</a>
-                                <a class="dropdown-item" href="#">edit logs</a>
-                                <a class="dropdown-item" href="#">go to log view</a>
-                                <a class="dropdown-item" data-toggle="modal" data-target="#d<%= assets[j].asset_id %>">delete asset</a>
-                              </div>
-            <!-- Edit Assets Modal Begin -->
-            <div class="modal fade" id="nae<%= assets[j].asset_id %>" tabindex="-1" role="dialog" aria-labelledby="newJobModalLabel" aria-hidden="true">
-              <div class="modal-dialog modal-lg" role="document">
-                <div class="modal-content">
-                  <div class="modal-header">
-                    <h5 class="modal-title" id="NewAssetModalLabel">Edit Asset <%= assets[j].asset_name %></h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                      <span aria-hidden="true">&times;</span>
-                    </button>
-                  </div>
-                  <div class="modal-body">
-                    <!-- Edit Assets Form Begin -->
-                    <form class="editassetform">
-                      <h5>Asset Information</h5>
-                      <div class="row">
-                          <div class="col-4">
-                            <div class="form-group">
-                              <input hidden type="text" class="form-control" id="asset_ordnbr" placeholder="Order #" value="<%= assets[j].ordnbr %>">
-                              <label hidden for="asset_id"></label>
-                              <input hidden type="text" class="form-control" id="asset_id" placeholder="ID Number" value="<%= assets[j].asset_id %>">
-                              <label for="asset_type">Asset Type</label>
-                              <input type="text" class="form-control" list="asset-type-list" id="asset_type" value="<%= assets[j].asset_type %>">
-                                <datalist id="asset-type-list">
-                                  <option value="Barge"></option>
-                                  <option value="Boat"></option>
-                                </datalist>
-                            </div>
-                          </div>
-                          <div class="col-4">
-                            <div class="form-group">
-                                <label for="asset_name">Asset Name</label>
-                                <input type="text" class="form-control" id="asset_name" value="<%= assets[j].asset_name %>">
-                            </div>
-                        </div>
-                            <div class="col-4">
-                                <div class="form-group">
-                                    <label for="vendor_name">Vendor Name</label>
-                                    <input type="text" class="form-control" id="vendor_name" value="<%= assets[j].vendor_name %>">
-                                </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                      <div class="col-4">
-                          <div class="form-group">
-                              <label for="tow_group">Tow Group</label>
-                              <input type="text" class="form-control" id="tow_group" value="<%= assets[j].tow_group %>">
-                          </div>
-                      </div>
-                      <div class="col-4">
-                        <div class="form-group">
-                            <label for="asset_start">Asset Start</label>
-                            <input type="text" class="form-control datetimepicker" id="asset_start" value="<%= moment(assets[j].asset_start).format('M/D/YY @ kk:mm') %>">
-                        </div>
-                    </div>
-                        <div class="col-4">
-                            <div class="form-group">
-                                <label for="asset_stop">Asset Stop</label>
-                                <input type="text" class="form-control datetimepicker" id="asset_stop" value="<%= moment(assets[j].asset_stop).format('M/D/YY @ kk:mm') %>">
-                            </div>
-                    </div>
-                </div>
-                <div class="row">
-                  <div class="col-4">
-                      <div class="form-group">
-                          <label for="asset_status">Asset Status</label>
-                          <input type="text" class="form-control" list="asset-status-list" id="asset_status" value="<%= assets[j].asset_status %>">
-                                <datalist id="asset-status-list">
-                                  <option value="Active"></option>
-                                  <option value="Inactive"></option>
-                                </datalist>
-                      </div>
-                  </div>
-            </div>
-          </div>
-                      <div class="modal-footer">
-                          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                          <button type="submit" class="btn btn-primary">Save Changes</button>
-                      </div>
-                  </form>
-    
-                  <!-- Edit Assets Form End -->
-    
-              </div>
-            </div>
-          </div>
-    
-          <!-- Edit Assets Modal End -->
-          <!-- Delete Asset Modal -->
-          <div class="modal fade" id="d<%= assets[j].asset_id %>" tabindex="-1" role="dialog" aria-labelledby="deleteAssetModalLable" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <h5 class="modal-title" id="deleteAssetModalID">Are you sure you want to delete asset <%= assets[j].asset_name %> from <%= assets[j].ordnbr %>? </h5>
-                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                  </button>
-                </div>
-                <div class="modal-body">
-                  Click DELETE to delete this job, or click Close to dismiss.
-                  <form class="deleteassetform">
-                    <div class="form-group">
-                      <label hidden for="did"></label>
-                      <input hidden type="text" class="form-control" id="did" placeholder="Order #" value="<%= assets[j].asset_id %>">
-                  </div>
-                </div>
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                  <button type="submit" class="btn btn-danger">DELETE THIS ASSET</button>
-                </div>
-              </form>
-              </div>
-            </div>
-          </div>
-          <!-- Delete Job Modal End -->
-                            </div>
-                          </td>
-                          <% } %>
-                          <% } %>
-                        </tr>
-                        <% } %>
-                        <% } %>
-                      </tbody>
-                      </table>
-                 </div>
-                </div>
-                <div class="card tow-card">
-                  <div class="card-header">Tow Group 2</div>
-                <div class="card-body tow-col">
-                  <table class="table table-sm table-borderless">
-                    <thead>
-                      <tr class="d-flex asset-row">
-                        <th class="col-2">Asset</th>
-                        <th class="col-2">Status</th>
-                        <th class="col-2">Location</th>
-                        <th class="col-2">ETA</th>
-                        <th class="col-2">Created At</th>
-                        <th class="col-2"></th>
-                      </tr>
-                    </thead>
-                    <tbody class="asset-tbody">
-                <% for (let j = 0; j < assets.length; j++) { %>
-                  <% if (assets[j].ordnbr === jobs[i].ordnbr && assets[j].tow_group === 2 && assets[j].asset_status === "Active") { %>
-                      <tr class="d-flex asset-row">
-                        <td class="col-2">
-                      <%= assets[j].asset_name %>
-                        </td>
-                      <% for (let k = 0; k < logs.length; k++) { %>
-                        <% if (assets[j].ordnbr === logs[k].ordnbr && assets[j].asset_name === logs[k].asset_name) { %>
-                          <td class="col-2">
-                            <%= logs[k].status %>
-                          </td>
-                          <td class="col-2">
-                            <%= logs[k].location %>
-                          </td>
-                          <td class="col-2">
-                            <%= moment(logs[k].dest_eta).format('M/D/YY @ kk:mm') %>
-                          </td>
-                          <td class="col-2">
-                            <%= moment(logs[k].created_dttm).format('M/D/YY @ kk:mm') %>
-                          </td>
-                          <td class="col-2">
-                            <div class="dropdown">
-                              <button class="btn btn-primary btn-sm dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                more
-                              </button>
-                              <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                <a class="dropdown-item" data-toggle="modal" data-target="#nae2<%= assets[j].asset_id %>">edit asset</a>
-                                <a class="dropdown-item" href="#">edit logs</a>
-                                <a class="dropdown-item" href="#">go to log view</a>
-                                <a class="dropdown-item" data-toggle="modal" data-target="#d2<%= assets[j].asset_id %>">delete asset</a>
-                              </div>
-                 <!-- Edit Assets Modal Begin -->
-            <div class="modal fade" id="nae2<%= assets[j].asset_id %>" tabindex="-1" role="dialog" aria-labelledby="newJobModalLabel" aria-hidden="true">
-              <div class="modal-dialog modal-lg" role="document">
-                <div class="modal-content">
-                  <div class="modal-header">
-                    <h5 class="modal-title" id="NewAssetModalLabel">Edit Asset <%= assets[j].asset_name %></h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                      <span aria-hidden="true">&times;</span>
-                    </button>
-                  </div>
-                  <div class="modal-body">
-                    <!-- Edit Assets Form Begin -->
-                    <form class="editassetform">
-                      <h5>Asset Information</h5>
-                      <div class="row">
-                          <div class="col-4">
-                            <div class="form-group">
-                              <label hidden for="asset_ordnbr"></label>
-                              <input hidden type="text" class="form-control" id="asset_ordnbr" placeholder="Order #" value="<%= assets[j].ordnbr %>">
-                              <label hidden for="asset_id"></label>
-                              <input hidden type="text" class="form-control" id="asset_id" placeholder="ID Number" value="<%= assets[j].asset_id %>">
-                              <label for="asset_type">Asset Type</label>
-                              <input type="text" class="form-control" list="asset-type-list" id="asset_type" value="<%= assets[j].asset_type %>">
-                                <datalist id="asset-type-list">
-                                  <option value="Barge"></option>
-                                  <option value="Boat"></option>
-                                </datalist>
-                            </div>
-                          </div>
-                          <div class="col-4">
-                            <div class="form-group">
-                                <label for="asset_name">Asset Name</label>
-                                <input type="text" class="form-control" id="asset_name" value="<%= assets[j].asset_name %>">
-                            </div>
-                        </div>
-                            <div class="col-4">
-                                <div class="form-group">
-                                    <label for="vendor_name">Vendor Name</label>
-                                    <input type="text" class="form-control" id="vendor_name" value="<%= assets[j].vendor_name %>">
-                                </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                      <div class="col-4">
-                          <div class="form-group">
-                              <label for="tow_group">Tow Group</label>
-                              <input type="text" class="form-control" id="tow_group" value="<%= assets[j].tow_group %>">
-                          </div>
-                      </div>
-                      <div class="col-4">
-                        <div class="form-group">
-                            <label for="asset_start">Asset Start</label>
-                            <input type="text" class="form-control datetimepicker" id="asset_start" value="<%= moment(assets[j].asset_start).format('M/D/YY @ kk:mm') %>">
-                        </div>
-                    </div>
-                        <div class="col-4">
-                            <div class="form-group">
-                                <label for="asset_stop">Asset Stop</label>
-                                <input type="text" class="form-control datetimepicker" id="asset_stop" value="<%= moment(assets[j].asset_stop).format('M/D/YY @ kk:mm') %>">
-                            </div>
-                    </div>
-                </div>
-                <div class="row">
-                  <div class="col-4">
-                      <div class="form-group">
-                          <label for="asset_status">Asset Status</label>
-                          <input type="text" class="form-control" list="asset-status-list" id="asset_status" value="<%= assets[j].asset_status %>">
-                                <datalist id="asset-status-list">
-                                  <option value="Active"></option>
-                                  <option value="Inactive"></option>
-                                </datalist>
-                      </div>
-                  </div>
-            </div>
-          </div>
-                      <div class="modal-footer">
-                          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                          <button type="submit" class="btn btn-primary">Save Changes</button>
-                      </div>
-                  </form>
-    
-                  <!-- Edit Assets Form End -->
-    
-              </div>
-            </div>
-          </div>
-    
-          <!-- Edit Assets Modal End -->
-          <!-- Delete Asset Modal -->
-          <div class="modal fade" id="d2<%= assets[j].asset_id %>" tabindex="-1" role="dialog" aria-labelledby="deleteAssetModalLable" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <h5 class="modal-title" id="deleteAssetModalID">Are you sure you want to delete asset <%= assets[j].asset_name %> from <%= assets[j].ordnbr %>? </h5>
-                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                  </button>
-                </div>
-                <div class="modal-body">
-                  Click DELETE to delete this job, or click Close to dismiss.
-                  <form class="deleteassetform">
-                    <div class="form-group">
-                      <label hidden for="did"></label>
-                      <input hidden type="text" class="form-control" id="did" placeholder="Order #" value="<%= assets[j].asset_id %>">
-                  </div>
-                </div>
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                  <button type="submit" class="btn btn-danger">DELETE THIS ASSET</button>
-                </div>
-              </form>
-              </div>
-            </div>
-          </div>
-          <!-- Delete Asset Modal End -->             
-                            </div>
-                          </td>
-                          <% } %>
-                          <% } %>
-                        </tr>
-                        <% } %>
-                        <% } %>
-                      </tbody>
-                      </table>
-                 </div>
-                  </div>
-              </div>
-          </div>
-          <div class="job-notes">
-            <ul><%= jobs[i].ord_notes %></ul>
-          </div>
           </div>
       </div>
-      </div></td>
-      </tr>
+    </td>
+    </tr>
+        </tbody>
+    <% } %>
       <% } %>
-      <% } %>
-          </tbody>
         </table>
       </div>
   </div>
@@ -862,7 +522,7 @@ td {
         <tbody>
           <tr class="accordion-toggle collapsed row m-0" id="accordion1" data-toggle="collapse" data-parent="#accordion1" href="#<%= jobs[i].ordnbr %>">
             <td class="d-inline-block col-1"><%= jobs[i].ordnbr %></td>
-            <td class="d-inline-block col-2"><%= jobs[i].customer_nm %></td>
+            <td class="d-inline-block col-2"><%= jobs[i].customer %></td>
             <td class="d-inline-block col-2"><%= jobs[i].origin %></td>
             <td class="d-inline-block col-2"><%= jobs[i].destination %></td>
             <td class="d-inline-block col-2"><%= jobs[i].pm_assigned %></td>
@@ -872,18 +532,18 @@ td {
             </tr>
               
       <tr class="hide-table-padding">
-      <td colspan="6">
+      <td colspan="12">
       <div class="collapse in col-sm head-div" id="<%= jobs[i].ordnbr %>">
         <div class="card" id="tdcard">
           <div class="card-body">
             <div class="row">
-            <h5 class="card-title col align-self-center" id="cardtitle"><%= jobs[i].ordnbr %> - <%= jobs[i].customer_nm %></h5>
+            <h5 class="card-title col align-self-center" id="cardtitle"><%= jobs[i].ordnbr %> - <%= jobs[i].customer %></h5>
             <button type="button" class="btn col-1" id="edittripbutton" data-toggle="modal" data-target="#e<%= jobs[i].ordnbr %>">Edit</button>
             <button type="button" class="btn col-1" data-toggle="modal" data-target="#d<%= jobs[i].ordnbr %>">Delete</button>
           </div>
     
-           <!-- Edit Job Modal -->
-           <div class="modal fade" id="e<%= jobs[i].ordnbr %>" tabindex="-1" role="dialog" aria-labelledby="editTripModalLabel" aria-hidden="true">
+          <!-- Edit Job Modal -->
+          <div class="modal fade" id="e<%= jobs[i].ordnbr %>" tabindex="-1" role="dialog" aria-labelledby="editTripModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-lg" role="document">
               <div class="modal-content">
                 <div class="modal-header">
@@ -914,7 +574,7 @@ td {
                           <div class="col-4">
                               <div class="form-group">
                                   <label for="epmAssigned">PM Assigned</label>
-                                  <input type="text" class="form-control" id="eOriginInput" placeholder="Origin" value="<%= jobs[i].pm_assigned %>">
+                                  <input type="text" class="form-control" id="epmAssigned" placeholder="Origin" value="<%= jobs[i].pm_assigned %>">
                               </div>
                       </div>
                   </div>
@@ -948,7 +608,7 @@ td {
                 <div class="col-4">
                   <div class="form-group">
                       <label for="edestDesc">Destination Desc.</label>
-                      <input type="text" class="form-control" id="edestDesc" placeholder="Destination Desc." value="<%= jobs[i].destination_des %>">
+                      <input type="text" class="form-control" id="edestDesc" placeholder="Destination Desc." value="<%= jobs[i].destination_desc %>">
                   </div>
               </div>
           </div>
@@ -956,7 +616,7 @@ td {
               <div class="col-12">
                   <div class="form-group">
                       <label for="ejobNotes">Job Notes</label>
-                      <textarea class="form-control" id="ejobNotes" rows="2" placeholder="Enter any general job notes here." value="<%= jobs[i].ord_notes %>"></textarea>
+                      <textarea class="form-control" id="ejobNotes" rows="2" placeholder="Enter any general job notes here."><%= jobs[i].ord_notes %></textarea>
                   </div>
               </div>
         </div>
@@ -991,7 +651,7 @@ td {
           <div class="col-12">
               <div class="form-group">
                   <label for="ecustomer_notes">Customer Notes</label>
-                  <textarea class="form-control" id="ecustomer_notes" rows="2" placeholder="Enter any customer notes here." value="<%= jobs[i].customer_notes %>"></textarea>
+                  <textarea class="form-control" id="ecustomer_notes" rows="2" placeholder="Enter any customer notes here."><%= jobs[i].customer_notes %></textarea>
               </div>
           </div>
     </div>
@@ -1026,7 +686,7 @@ td {
           <div class="col-12">
               <div class="form-group">
                   <label for="evendor_notes">Vendor Notes</label>
-                  <textarea class="form-control" id="evendor_notes" rows="2" placeholder="Enter any vendor notes here." value="<%= jobs[i].vendor_notes %>"></textarea>
+                  <textarea class="form-control" id="evendor_notes" rows="2" placeholder="Enter any vendor notes here."><%= jobs[i].vendor_notes %></textarea>
               </div>
           </div>
     </div>
@@ -1078,477 +738,483 @@ td {
           </div>
           <div class="modal-body">
             <div class="row">
-              <div class="col-3"><h5>Trip Details</h5></div>
-              <div class="col-6"><h5>Tow Details</h5></div>
-              <div class="col-3"style="text-align:right">
-                <button class="btn btn-secondary" data-toggle="modal" data-target="#na<%= jobs[i].ordnbr %>">Add Asset</button>
-                
-              </div>
-            </div>
-    
-            <!-- Add Assets Modal Begin -->
-            <div class="modal fade" id="na<%= jobs[i].ordnbr %>" tabindex="-1" role="dialog" aria-labelledby="newJobModalLabel" aria-hidden="true">
-              <div class="modal-dialog modal-lg" role="document">
-                <div class="modal-content">
-                  <div class="modal-header">
-                    <h5 class="modal-title" id="NewAssetModalLabel">Add Asset to Job <%= jobs[i].ordnbr %></h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                      <span aria-hidden="true">&times;</span>
-                    </button>
-                  </div>
-                  <div class="modal-body">
-                    <!-- Add Assets Form Begin -->
-                    <form class="newassetform">
-                      <h5>Asset Information</h5>
-                      <div class="row">
-                          <div class="col-4">
-                            <div class="form-group">
-                              <label hidden for="asset_ordnbr"></label>
-                              <input hidden type="text" class="form-control" id="asset_ordnbr" placeholder="Order #" value="<%= jobs[i].ordnbr %>">
-                              <label for="asset_type">Asset Type</label>
-                              <input type="text" class="form-control" list="asset-type-list" id="asset_type"/>
-                                <datalist id="asset-type-list">
-                                  <option value="Barge"></option>
-                                  <option value="Boat"></option>
-                                </datalist>
-                            </div>
-                          </div>
-                          <div class="col-4">
-                            <div class="form-group">
-                                <label for="asset_name">Asset Name</label>
-                                <input type="text" class="form-control" id="asset_name" placeholder="Asset Name">
-                            </div>
-                        </div>
-                            <div class="col-4">
-                                <div class="form-group">
-                                    <label for="vendor_name">Vendor Name</label>
-                                    <input type="text" class="form-control" id="vendor_name" placeholder="Vendor Name">
-                                </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                      <div class="col-4">
-                          <div class="form-group">
-                              <label for="tow_group">Tow Group</label>
-                              <input type="text" class="form-control" id="tow_group" placeholder="Tow Group">
-                          </div>
-                      </div>
-                      <div class="col-4">
-                        <div class="form-group">
-                            <label for="asset_start">Asset Start</label>
-                            <input type="text" class="form-control datetimepicker" id="asset_start" placeholder="Start Time/Date">
-                        </div>
-                    </div>
-                        <div class="col-4">
-                            <div class="form-group">
-                                <label for="asset_stop">Asset Stop</label>
-                                <input type="text" class="form-control datetimepicker" id="asset_stop" placeholder="Stop Time/Date">
-                            </div>
-                    </div>
-                </div>
-                <div class="row">
-                  <div class="col-4">
-                      <div class="form-group">
-                          <label for="asset_status">Asset Status</label>
-                          <input type="text" class="form-control" list="asset-status-list" id="asset_status" placeholder="Active or Inactive">
-                                <datalist id="asset-status-list">
-                                  <option value="Active"></option>
-                                  <option value="Inactive"></option>
-                                </datalist>
-                      </div>
-                  </div>
-            </div>
+            <div class="card col-8 border-0" style="font-size:medium">
+              <h6 class="card-header border">Trip Details</h6>
+              <div class="card-body border">
+            <table class="table table-borderless">
+                <tbody>
+                <tr class="d-flex">
+                  <td class="col-3">Origin:</td>
+                  <td class="col-6"><%= jobs[i].origin %></td>
+                </tr>
+                <tr class="d-flex">
+                  <td class="col-3">Origin Desc.:</td>
+                  <td class="col-6"><%= jobs[i].origin_desc %></td>
+                </tr>
+                <tr class="d-flex">
+                  <td class="col-3">Destination:</td>
+                  <td class="col-6"><%= jobs[i].destination %></td>
+                </tr>
+                <tr class="d-flex">
+                  <td class="col-3">Destination Description:</td>
+                  <td class="col-6"><%= jobs[i].destination_desc %></td>
+                </tr>
+                <tr class="d-flex">
+                  <td class="col-3">Start Date:</td>
+                  <td class="col-6"><%= jobs[i].est_start_date %></td>
+                </tr>
+                <tr class="d-flex">
+                  <td class="col-3">PM Assigned:</td>
+                  <td class="col-6"><%= jobs[i].pm_assigned %></td>
+                </tr>
+                <tr class="d-flex">
+                  <td class="col-3">Status:</td>
+                  <td class="col-6"><%= jobs[i].status %></td>
+                </tr>
+                <tr class="d-flex">
+                  <td class="col-3">Trip Notes:</td>
+                  <td class="col-9"><%= jobs[i].ord_notes %></td>
+                </tr>
+              </tbody>
+            </table>
           </div>
-                      <div class="modal-footer">
-                          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                          <button type="submit" class="btn btn-primary">Add New Asset</button>
-                      </div>
-                  </form>
-    
-                  <!-- Add Assets Form End -->
-    
-              </div>
-            </div>
           </div>
-    
-          <!-- Add Assets Modal End -->
-            
-            
-            
+          <div class="col-4">
             <div class="row">
-            <div class="col-3 job-details">
-              Origin:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<%= jobs[i].origin_location %>
-              <br>
-              Destination:&nbsp;&nbsp;<%= jobs[i].dest_location %>
-              <br>
-              Customer:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<%= jobs[i].customer_nm %>
-             <br>
-              Notes:
+              <div class="card col-12 border-0" style="padding-right:15px">
+            <h6 class="job-note-headers card-header border">Customer Details</h6>
+            <div class="card-body border">
+          <table class="table table-borderless">
+              <tbody>
+              <tr class="d-flex">
+                <td class="col-4">Customer:</td>
+                <td class="col-6"><%= jobs[i].customer %></td>
+              </tr>
+              <tr class="d-flex">
+                <td class="col-4">Customer Contact:</td>
+                <td class="col-6"><%= jobs[i].customer_nm %></td>
+              </tr>
+              <tr class="d-flex">
+                <td class="col-4">Customer Phone:</td>
+                <td class="col-6"><%= jobs[i].customer_phone %></td>
+              </tr>
+              <tr class="d-flex">
+                <td class="col-4">Customer Email:</td>
+                <td class="col-6"><%= jobs[i].customer_email %></td>
+              </tr>
+              <tr class="d-flex">
+                <td class="col-4">Notes:</td>
+                <td class="col-6"><%= jobs[i].customer_notes %></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        </div>
+        </div>
+        <div class="row" style="line-height:5px"><br></div>
+        <div class="row">
+          <div class="card col-12 border-0" style="padding-right:15px">
+        <h6 class="job-note-headers card-header border">Vendor Details</h6>
+        <div class="card-body border">
+      <table class="table table-borderless">
+          <tbody>
+          <tr class="d-flex">
+            <td class="col-4">Vendor:</td>
+            <td class="col-6"><%= jobs[i].vendor %></td>
+          </tr>
+          <tr class="d-flex">
+            <td class="col-4">Vendor Contact:</td>
+            <td class="col-6"><%= jobs[i].vendor_nm %></td>
+          </tr>
+          <tr class="d-flex">
+            <td class="col-4">Vendor Phone:</td>
+            <td class="col-6"><%= jobs[i].vendor_phone %></td>
+          </tr>
+          <tr class="d-flex">
+            <td class="col-4">Vendor Email:</td>
+            <td class="col-6"><%= jobs[i].vendor_email %></td>
+          </tr>
+          <tr class="d-flex">
+            <td class="col-4">Notes:</td>
+            <td class="col-6"><%= jobs[i].vendor_notes %></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    </div>
+    </div>
+      </div>
+        </div>
             </div>
-            
-            
-              <div class="col-9">
-              <div class="card tow-card">
-                <div class="card-header">Tow Group 1</div>
-                <div class="card-body tow-col">
-                  <table class="table table-sm table-borderless">
-                    <thead>
-                      <tr class="d-flex asset-row">
-                        <th class="col-2">Asset</th>
-                        <th class="col-2">Status</th>
-                        <th class="col-2">Location</th>
-                        <th class="col-2">ETA</th>
-                        <th class="col-2">Created At</th>
-                        <th class="col-2"></th>
-                      </tr>
-                    </thead>
-                    <tbody class="asset-tbody">
-                <% for (let j = 0; j < assets.length; j++) { %>
-                  <% if (assets[j].ordnbr === jobs[i].ordnbr && assets[j].tow_group === 1 && assets[j].asset_status === "Active") { %>
-                      <tr class="d-flex asset-row">
-                        <td class="col-2">
-                      <%= assets[j].asset_name %>
-                        </td>
-                      <% for (let k = 0; k < logs.length; k++) { %>
-                        <% if (assets[j].ordnbr === logs[k].ordnbr && assets[j].asset_name === logs[k].asset_name) { %>
-                          <td class="col-2">
-                            <%= logs[k].status %>
-                          </td>
-                          <td class="col-2">
-                            <%= logs[k].location %>
-                          </td>
-                          <td class="col-2">
-                            <%= moment(logs[k].dest_eta).format('M/D/YY @ kk:mm') %>
-                          </td>
-                          <td class="col-2">
-                            <%= moment(logs[k].created_dttm).format('M/D/YY @ kk:mm') %>
-                          </td>
-                          <td class="col-2">
-                            <div class="dropdown">
-                              <button class="btn btn-primary btn-sm dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                more
-                              </button>
-                              <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                <a class="dropdown-item" data-toggle="modal" data-target="#nae<%= assets[j].asset_id %>">edit asset</a>
-                                <a class="dropdown-item" href="#">edit logs</a>
-                                <a class="dropdown-item" href="#">go to log view</a>
-                                <a class="dropdown-item" data-toggle="modal" data-target="#d<%= assets[j].asset_id %>">delete asset</a>
-                              </div>
-            <!-- Edit Assets Modal Begin -->
-            <div class="modal fade" id="nae<%= assets[j].asset_id %>" tabindex="-1" role="dialog" aria-labelledby="newJobModalLabel" aria-hidden="true">
-              <div class="modal-dialog modal-lg" role="document">
-                <div class="modal-content">
-                  <div class="modal-header">
-                    <h5 class="modal-title" id="NewAssetModalLabel">Edit Asset <%= assets[j].asset_name %></h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                      <span aria-hidden="true">&times;</span>
-                    </button>
-                  </div>
-                  <div class="modal-body">
-                    <!-- Edit Assets Form Begin -->
-                    <form class="editassetform">
-                      <h5>Asset Information</h5>
-                      <div class="row">
-                          <div class="col-4">
-                            <div class="form-group">
-                              <input hidden type="text" class="form-control" id="asset_ordnbr" placeholder="Order #" value="<%= assets[j].ordnbr %>">
-                              <label hidden for="asset_id"></label>
-                              <input hidden type="text" class="form-control" id="asset_id" placeholder="ID Number" value="<%= assets[j].asset_id %>">
-                              <label for="asset_type">Asset Type</label>
-                              <input type="text" class="form-control" list="asset-type-list" id="asset_type" value="<%= assets[j].asset_type %>">
-                                <datalist id="asset-type-list">
-                                  <option value="Barge"></option>
-                                  <option value="Boat"></option>
-                                </datalist>
-                            </div>
-                          </div>
-                          <div class="col-4">
-                            <div class="form-group">
-                                <label for="asset_name">Asset Name</label>
-                                <input type="text" class="form-control" id="asset_name" value="<%= assets[j].asset_name %>">
-                            </div>
-                        </div>
-                            <div class="col-4">
-                                <div class="form-group">
-                                    <label for="vendor_name">Vendor Name</label>
-                                    <input type="text" class="form-control" id="vendor_name" value="<%= assets[j].vendor_name %>">
-                                </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                      <div class="col-4">
-                          <div class="form-group">
-                              <label for="tow_group">Tow Group</label>
-                              <input type="text" class="form-control" id="tow_group" value="<%= assets[j].tow_group %>">
-                          </div>
-                      </div>
-                      <div class="col-4">
-                        <div class="form-group">
-                            <label for="asset_start">Asset Start</label>
-                            <input type="text" class="form-control datetimepicker" id="asset_start" value="<%= moment(assets[j].asset_start).format('M/D/YY @ kk:mm') %>">
-                        </div>
-                    </div>
-                        <div class="col-4">
-                            <div class="form-group">
-                                <label for="asset_stop">Asset Stop</label>
-                                <input type="text" class="form-control datetimepicker" id="asset_stop" value="<%= moment(assets[j].asset_stop).format('M/D/YY @ kk:mm') %>">
-                            </div>
-                    </div>
-                </div>
-                <div class="row">
-                  <div class="col-4">
-                      <div class="form-group">
-                          <label for="asset_status">Asset Status</label>
-                          <input type="text" class="form-control" list="asset-status-list" id="asset_status" value="<%= assets[j].asset_status %>">
-                                <datalist id="asset-status-list">
-                                  <option value="Active"></option>
-                                  <option value="Inactive"></option>
-                                </datalist>
-                      </div>
-                  </div>
-            </div>
-          </div>
-                      <div class="modal-footer">
-                          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                          <button type="submit" class="btn btn-primary">Save Changes</button>
-                      </div>
-                  </form>
-    
-                  <!-- Edit Assets Form End -->
-    
-              </div>
-            </div>
-          </div>
-    
-          <!-- Edit Assets Modal End -->
-          <!-- Delete Asset Modal -->
-          <div class="modal fade" id="d<%= assets[j].asset_id %>" tabindex="-1" role="dialog" aria-labelledby="deleteAssetModalLable" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <h5 class="modal-title" id="deleteAssetModalID">Are you sure you want to delete asset <%= assets[j].asset_name %> from <%= assets[j].ordnbr %>? </h5>
-                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                  </button>
-                </div>
-                <div class="modal-body">
-                  Click DELETE to delete this job, or click Close to dismiss.
-                  <form class="deleteassetform">
-                    <div class="form-group">
-                      <label hidden for="did"></label>
-                      <input hidden type="text" class="form-control" id="did" placeholder="Order #" value="<%= assets[j].asset_id %>">
-                  </div>
-                </div>
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                  <button type="submit" class="btn btn-danger">DELETE THIS ASSET</button>
-                </div>
-              </form>
-              </div>
-            </div>
-          </div>
-          <!-- Delete Job Modal End -->
-                            </div>
-                          </td>
-                          <% } %>
-                          <% } %>
-                        </tr>
-                        <% } %>
-                        <% } %>
-                      </tbody>
-                      </table>
-                 </div>
-                </div>
-                <div class="card tow-card">
-                  <div class="card-header">Tow Group 2</div>
-                <div class="card-body tow-col">
-                  <table class="table table-sm table-borderless">
-                    <thead>
-                      <tr class="d-flex asset-row">
-                        <th class="col-2">Asset</th>
-                        <th class="col-2">Status</th>
-                        <th class="col-2">Location</th>
-                        <th class="col-2">ETA</th>
-                        <th class="col-2">Created At</th>
-                        <th class="col-2"></th>
-                      </tr>
-                    </thead>
-                    <tbody class="asset-tbody">
-                <% for (let j = 0; j < assets.length; j++) { %>
-                  <% if (assets[j].ordnbr === jobs[i].ordnbr && assets[j].tow_group === 2 && assets[j].asset_status === "Active") { %>
-                      <tr class="d-flex asset-row">
-                        <td class="col-2">
-                      <%= assets[j].asset_name %>
-                        </td>
-                      <% for (let k = 0; k < logs.length; k++) { %>
-                        <% if (assets[j].ordnbr === logs[k].ordnbr && assets[j].asset_name === logs[k].asset_name) { %>
-                          <td class="col-2">
-                            <%= logs[k].status %>
-                          </td>
-                          <td class="col-2">
-                            <%= logs[k].location %>
-                          </td>
-                          <td class="col-2">
-                            <%= moment(logs[k].dest_eta).format('M/D/YY @ kk:mm') %>
-                          </td>
-                          <td class="col-2">
-                            <%= moment(logs[k].created_dttm).format('M/D/YY @ kk:mm') %>
-                          </td>
-                          <td class="col-2">
-                            <div class="dropdown">
-                              <button class="btn btn-primary btn-sm dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                more
-                              </button>
-                              <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                <a class="dropdown-item" data-toggle="modal" data-target="#nae2<%= assets[j].asset_id %>">edit asset</a>
-                                <a class="dropdown-item" href="#">edit logs</a>
-                                <a class="dropdown-item" href="#">go to log view</a>
-                                <a class="dropdown-item" data-toggle="modal" data-target="#d2<%= assets[j].asset_id %>">delete asset</a>
-                              </div>
-                 <!-- Edit Assets Modal Begin -->
-            <div class="modal fade" id="nae2<%= assets[j].asset_id %>" tabindex="-1" role="dialog" aria-labelledby="newJobModalLabel" aria-hidden="true">
-              <div class="modal-dialog modal-lg" role="document">
-                <div class="modal-content">
-                  <div class="modal-header">
-                    <h5 class="modal-title" id="NewAssetModalLabel">Edit Asset <%= assets[j].asset_name %></h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                      <span aria-hidden="true">&times;</span>
-                    </button>
-                  </div>
-                  <div class="modal-body">
-                    <!-- Edit Assets Form Begin -->
-                    <form class="editassetform">
-                      <h5>Asset Information</h5>
-                      <div class="row">
-                          <div class="col-4">
-                            <div class="form-group">
-                              <label hidden for="asset_ordnbr"></label>
-                              <input hidden type="text" class="form-control" id="asset_ordnbr" placeholder="Order #" value="<%= assets[j].ordnbr %>">
-                              <label hidden for="asset_id"></label>
-                              <input hidden type="text" class="form-control" id="asset_id" placeholder="ID Number" value="<%= assets[j].asset_id %>">
-                              <label for="asset_type">Asset Type</label>
-                              <input type="text" class="form-control" list="asset-type-list" id="asset_type" value="<%= assets[j].asset_type %>">
-                                <datalist id="asset-type-list">
-                                  <option value="Barge"></option>
-                                  <option value="Boat"></option>
-                                </datalist>
-                            </div>
-                          </div>
-                          <div class="col-4">
-                            <div class="form-group">
-                                <label for="asset_name">Asset Name</label>
-                                <input type="text" class="form-control" id="asset_name" value="<%= assets[j].asset_name %>">
-                            </div>
-                        </div>
-                            <div class="col-4">
-                                <div class="form-group">
-                                    <label for="vendor_name">Vendor Name</label>
-                                    <input type="text" class="form-control" id="vendor_name" value="<%= assets[j].vendor_name %>">
-                                </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                      <div class="col-4">
-                          <div class="form-group">
-                              <label for="tow_group">Tow Group</label>
-                              <input type="text" class="form-control" id="tow_group" value="<%= assets[j].tow_group %>">
-                          </div>
-                      </div>
-                      <div class="col-4">
-                        <div class="form-group">
-                            <label for="asset_start">Asset Start</label>
-                            <input type="text" class="form-control datetimepicker" id="asset_start" value="<%= moment(assets[j].asset_start).format('M/D/YY @ kk:mm') %>">
-                        </div>
-                    </div>
-                        <div class="col-4">
-                            <div class="form-group">
-                                <label for="asset_stop">Asset Stop</label>
-                                <input type="text" class="form-control datetimepicker" id="asset_stop" value="<%= moment(assets[j].asset_stop).format('M/D/YY @ kk:mm') %>">
-                            </div>
-                    </div>
-                </div>
-                <div class="row">
-                  <div class="col-4">
-                      <div class="form-group">
-                          <label for="asset_status">Asset Status</label>
-                          <input type="text" class="form-control" list="asset-status-list" id="asset_status" value="<%= assets[j].asset_status %>">
-                                <datalist id="asset-status-list">
-                                  <option value="Active"></option>
-                                  <option value="Inactive"></option>
-                                </datalist>
-                      </div>
-                  </div>
-            </div>
-          </div>
-                      <div class="modal-footer">
-                          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                          <button type="submit" class="btn btn-primary">Save Changes</button>
-                      </div>
-                  </form>
-    
-                  <!-- Edit Assets Form End -->
-    
-              </div>
-            </div>
-          </div>
-    
-          <!-- Edit Assets Modal End -->
-          <!-- Delete Asset Modal -->
-          <div class="modal fade" id="d2<%= assets[j].asset_id %>" tabindex="-1" role="dialog" aria-labelledby="deleteAssetModalLable" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <h5 class="modal-title" id="deleteAssetModalID">Are you sure you want to delete asset <%= assets[j].asset_name %> from <%= assets[j].ordnbr %>? </h5>
-                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                  </button>
-                </div>
-                <div class="modal-body">
-                  Click DELETE to delete this job, or click Close to dismiss.
-                  <form class="deleteassetform">
-                    <div class="form-group">
-                      <label hidden for="did"></label>
-                      <input hidden type="text" class="form-control" id="did" placeholder="Order #" value="<%= assets[j].asset_id %>">
-                  </div>
-                </div>
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                  <button type="submit" class="btn btn-danger">DELETE THIS ASSET</button>
-                </div>
-              </form>
-              </div>
-            </div>
-          </div>
-          <!-- Delete Asset Modal End -->             
-                            </div>
-                          </td>
-                          <% } %>
-                          <% } %>
-                        </tr>
-                        <% } %>
-                        <% } %>
-                      </tbody>
-                      </table>
-                 </div>
-                  </div>
-              </div>
-          </div>
-          <div class="job-notes">
-            <ul><%= jobs[i].ord_notes %></ul>
-          </div>
           </div>
       </div>
-      </div></td>
-      </tr>
+    </td>
+    </tr>
+        </tbody>
+    <% } %>
       <% } %>
-      <% } %>
-          </tbody>
         </table>
       </div>
   </div>
     <!-- Active Tab Begin -->
       <!-- Completed Tab Begin -->
-  <div class="tab-pane fade" id="completed" role="tabpanel" aria-labelledby="completed-tab">
+      <div class="tab-pane fade" id="completed" role="tabpanel" aria-labelledby="completed-tab">
+        <div class="table">
+          <table class="table table-hover table-sm" data-toggle="table">
+            <thead>
+              <tr class="row m-0">
+                <th data-field="order_id" data-sortable="true" scope="col" class="d-inline-block col-1">Job</th>
+                <th data-sortable="true" scope="col" class="d-inline-block col-2 ">Customer</th>
+                <th data-sortable="true" scope="col" class="d-inline-block col-2">Origin</th>
+                <th data-sortable="true" scope="col" class="d-inline-block col-2">Destination</th>
+                <th data-sortable="true" scope="col" class="d-inline-block col-2">PM Assigned</th>
+                <th data-sortable="true" scope="col" class="d-inline-block col-1">Status</th>
+                <th data-sortable="true" scope="col" class="d-inline-block col-2">Est. Start</th>
+                <!-- <th scope="col" class="d-inline-block col-1">#</th> -->
+              </tr>
+            </thead>
+            <% for (let i = 0; i < jobs.length; i++) { %>
+              <% if (jobs[i].status  === "Completed") { %>
+            <tbody>
+              <tr class="accordion-toggle collapsed row m-0" id="accordion1" data-toggle="collapse" data-parent="#accordion1" href="#<%= jobs[i].ordnbr %>">
+                <td class="d-inline-block col-1"><%= jobs[i].ordnbr %></td>
+                <td class="d-inline-block col-2"><%= jobs[i].customer %></td>
+                <td class="d-inline-block col-2"><%= jobs[i].origin %></td>
+                <td class="d-inline-block col-2"><%= jobs[i].destination %></td>
+                <td class="d-inline-block col-2"><%= jobs[i].pm_assigned %></td>
+                <td class="d-inline-block col-1"><%= jobs[i].status %></td>
+                <td class="d-inline-block col-2"><%= moment(jobs[i].est_start_date).format('M/D/YY') %></td>
+                <!-- <td class="expand-button" class="d-inline-block col-1"></td> -->
+                </tr>
+                  
+          <tr class="hide-table-padding">
+          <td colspan="12">
+          <div class="collapse in col-sm head-div" id="<%= jobs[i].ordnbr %>">
+            <div class="card" id="tdcard">
+              <div class="card-body">
+                <div class="row">
+                <h5 class="card-title col align-self-center" id="cardtitle"><%= jobs[i].ordnbr %> - <%= jobs[i].customer %></h5>
+                <button type="button" class="btn col-1" id="edittripbutton" data-toggle="modal" data-target="#e<%= jobs[i].ordnbr %>">Edit</button>
+                <button type="button" class="btn col-1" data-toggle="modal" data-target="#d<%= jobs[i].ordnbr %>">Delete</button>
+              </div>
+        
+              <!-- Edit Job Modal -->
+              <div class="modal fade" id="e<%= jobs[i].ordnbr %>" tabindex="-1" role="dialog" aria-labelledby="editTripModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg" role="document">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="editTripModalLabel">Edit Trip Details</h5>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <div class="modal-body">
+                      <!-- Edit Job Form Begin -->
+                      <form class="edittripform">
+                        <h5>Job Information</h5>
+                        <div class="row">
+                            <div class="col-4">
+                                <div class="form-group">
+                                    <label hidden for="eid"></label>
+                                    <input hidden type="text" class="form-control" id="eid" placeholder="Order #" value="<%= jobs[i].order_id %>">
+                                    <label for="eJobNumberInput">Order #</label>
+                                    <input type="text" class="form-control" id="eJobNumberInput" placeholder="Order #" value="<%= jobs[i].ordnbr %>" readonly>
+                                </div>
+                            </div>
+                            <div class="col-4">
+                              <div class="form-group">
+                                  <label for="ejobStatus">Status</label>
+                                  <input type="text" class="form-control" id="ejobStatus" placeholder="Status" value="<%= jobs[i].status %>">
+                              </div>
+                          </div>
+                              <div class="col-4">
+                                  <div class="form-group">
+                                      <label for="epmAssigned">PM Assigned</label>
+                                      <input type="text" class="form-control" id="epmAssigned" placeholder="Origin" value="<%= jobs[i].pm_assigned %>">
+                                  </div>
+                          </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-4">
+                            <div class="form-group">
+                                <label for="eoriginInput">Origin</label>
+                                <input type="text" class="form-control" id="eoriginInput" placeholder="Origin" value="<%= jobs[i].origin %>">
+                            </div>
+                        </div>
+                        <div class="col-4">
+                          <div class="form-group">
+                              <label for="edestinationInput">Destination</label>
+                              <input type="text" class="form-control" id="edestinationInput" placeholder="Destination" value="<%= jobs[i].destination %>">
+                          </div>
+                      </div>
+                          <div class="col-4">
+                              <div class="form-group">
+                                  <label for="eestStartDate">Estimated Start Date</label>
+                                  <input type="date" class="form-control" id="eestStartDate" placeholder="Destination" value="<%= jobs[i].est_start_date %>">
+                              </div>
+                      </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-4">
+                        <div class="form-group">
+                            <label for="eoriginDesc">Origin Desc.</label>
+                            <input type="text" class="form-control" id="eoriginDesc" placeholder="Origin Desc." value="<%= jobs[i].origin_desc %>">
+                        </div>
+                    </div>
+                    <div class="col-4">
+                      <div class="form-group">
+                          <label for="edestDesc">Destination Desc.</label>
+                          <input type="text" class="form-control" id="edestDesc" placeholder="Destination Desc." value="<%= jobs[i].destination_desc %>">
+                      </div>
+                  </div>
+              </div>
+              <div class="row">
+                  <div class="col-12">
+                      <div class="form-group">
+                          <label for="ejobNotes">Job Notes</label>
+                          <textarea class="form-control" id="ejobNotes" rows="2" placeholder="Enter any general job notes here."><%= jobs[i].ord_notes %></textarea>
+                      </div>
+                  </div>
+            </div>
+            <h5>Customer Information</h5>
+              <div class="row">
+                  <div class="col-3">
+                      <div class="form-group">
+                          <label for="ecustomer">Customer</label>
+                          <input type="text" class="form-control" id="ecustomer" placeholder="Enter Customer Company" value="<%= jobs[i].customer %>">
+                      </div>
+                  </div>
+                  <div class="col-3">
+                    <div class="form-group">
+                        <label for="ecustomer_nm">Customer Contact</label>
+                        <input type="text" class="form-control" id="ecustomer_nm" placeholder="Enter Customer Contact Name" value="<%= jobs[i].customer_nm %>">
+                    </div>
+                </div>
+                    <div class="col-3">
+                        <div class="form-group">
+                            <label for="ecustomer_phone">Customer Phone</label>
+                            <input type="text" class="form-control" id="ecustomer_phone" placeholder="Enter Customer Phone" value="<%= jobs[i].customer_phone %>">
+                        </div>
+                </div>
+                <div class="col-3">
+                  <div class="form-group">
+                      <label for="ecustomer_email">Customer Email</label>
+                      <input type="text" class="form-control" id="ecustomer_email" placeholder="Enter Customer Email" value="<%= jobs[i].customer_email %>">
+                  </div>
+          </div>
+            </div>
+            <div class="row">
+              <div class="col-12">
+                  <div class="form-group">
+                      <label for="ecustomer_notes">Customer Notes</label>
+                      <textarea class="form-control" id="ecustomer_notes" rows="2" placeholder="Enter any customer notes here."><%= jobs[i].customer_notes %></textarea>
+                  </div>
+              </div>
+        </div>
+        <h5>Vendor Information</h5>
+              <div class="row">
+                  <div class="col-3">
+                      <div class="form-group">
+                          <label for="evendor">Vendor</label>
+                          <input type="text" class="form-control" id="evendor" placeholder="Enter Vendor Company" value="<%= jobs[i].vendor %>">
+                      </div>
+                  </div>
+                  <div class="col-3">
+                    <div class="form-group">
+                        <label for="evendor_nm">Vendor Contact</label>
+                        <input type="text" class="form-control" id="evendor_nm" placeholder="Enter Vendor Contact Name" value="<%= jobs[i].vendor_nm %>">
+                    </div>
+                </div>
+                    <div class="col-3">
+                        <div class="form-group">
+                            <label for="evendor_phone">Vendor Phone</label>
+                            <input type="text" class="form-control" id="evendor_phone" placeholder="Enter Vendor Phone" value="<%= jobs[i].vendor_phone %>">
+                        </div>
+                </div>
+                <div class="col-3">
+                  <div class="form-group">
+                      <label for="evendor_email">Vendor Email</label>
+                      <input type="text" class="form-control" id="evendor_email" placeholder="Enter Vendor Email" value="<%= jobs[i].vendor_email %>">
+                  </div>
+          </div>
+            </div>
+            <div class="row">
+              <div class="col-12">
+                  <div class="form-group">
+                      <label for="evendor_notes">Vendor Notes</label>
+                      <textarea class="form-control" id="evendor_notes" rows="2" placeholder="Enter any vendor notes here."><%= jobs[i].vendor_notes %></textarea>
+                  </div>
+              </div>
+        </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Save Changes</button>
+                        </div>
+                    </form>
+                    <!-- End Job Form End -->
+                  </div>
+                </div>
+              </div>
+              <!-- Edit Job Modal End -->
+        
+              <!-- Delete Job Modal -->
+              <div class="modal fade" id="d<%= jobs[i].ordnbr %>" tabindex="-1" role="dialog" aria-labelledby="deleteTripModalLable" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="exampleModalLabel">Are you sure you want to delete job <%= jobs[i].ordnbr %>? </h5>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <div class="modal-body">
+                      Click DELETE to delete this job, or click Close to dismiss.
+                      <form class="deletetripform">
+                        <div class="form-group">
+                          <label hidden for="did"></label>
+                          <input hidden type="text" class="form-control" id="did" placeholder="Order #" value="<%= jobs[i].ordnbr %>">
+                      </div>
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                      <button type="submit" class="btn btn-danger">DELETE THIS JOB</button>
+                    </div>
+                  </form>
+                  </div>
+                </div>
+              </div>
+              <!-- Delete Job Modal End -->
+        
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                </button>
+              </div>
+              <div class="horizontal-line">
+                <hr class="hr-line-line">
+              </div>
+              <div class="modal-body">
+                <div class="row">
+                <div class="card col-8 border-0" style="font-size:medium">
+                  <h6 class="card-header border">Trip Details</h6>
+                  <div class="card-body border">
+                <table class="table table-borderless">
+                    <tbody>
+                    <tr class="d-flex">
+                      <td class="col-3">Origin:</td>
+                      <td class="col-6"><%= jobs[i].origin %></td>
+                    </tr>
+                    <tr class="d-flex">
+                      <td class="col-3">Origin Desc.:</td>
+                      <td class="col-6"><%= jobs[i].origin_desc %></td>
+                    </tr>
+                    <tr class="d-flex">
+                      <td class="col-3">Destination:</td>
+                      <td class="col-6"><%= jobs[i].destination %></td>
+                    </tr>
+                    <tr class="d-flex">
+                      <td class="col-3">Destination Description:</td>
+                      <td class="col-6"><%= jobs[i].destination_desc %></td>
+                    </tr>
+                    <tr class="d-flex">
+                      <td class="col-3">Start Date:</td>
+                      <td class="col-6"><%= jobs[i].est_start_date %></td>
+                    </tr>
+                    <tr class="d-flex">
+                      <td class="col-3">PM Assigned:</td>
+                      <td class="col-6"><%= jobs[i].pm_assigned %></td>
+                    </tr>
+                    <tr class="d-flex">
+                      <td class="col-3">Status:</td>
+                      <td class="col-6"><%= jobs[i].status %></td>
+                    </tr>
+                    <tr class="d-flex">
+                      <td class="col-3">Trip Notes:</td>
+                      <td class="col-9"><%= jobs[i].ord_notes %></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              </div>
+              <div class="col-4">
+                <div class="row">
+                  <div class="card col-12 border-0" style="padding-right:15px">
+                <h6 class="job-note-headers card-header border">Customer Details</h6>
+                <div class="card-body border">
+              <table class="table table-borderless">
+                  <tbody>
+                  <tr class="d-flex">
+                    <td class="col-4">Customer:</td>
+                    <td class="col-6"><%= jobs[i].customer %></td>
+                  </tr>
+                  <tr class="d-flex">
+                    <td class="col-4">Customer Contact:</td>
+                    <td class="col-6"><%= jobs[i].customer_nm %></td>
+                  </tr>
+                  <tr class="d-flex">
+                    <td class="col-4">Customer Phone:</td>
+                    <td class="col-6"><%= jobs[i].customer_phone %></td>
+                  </tr>
+                  <tr class="d-flex">
+                    <td class="col-4">Customer Email:</td>
+                    <td class="col-6"><%= jobs[i].customer_email %></td>
+                  </tr>
+                  <tr class="d-flex">
+                    <td class="col-4">Notes:</td>
+                    <td class="col-6"><%= jobs[i].customer_notes %></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            </div>
+            </div>
+            <div class="row" style="line-height:5px"><br></div>
+            <div class="row">
+              <div class="card col-12 border-0" style="padding-right:15px">
+            <h6 class="job-note-headers card-header border">Vendor Details</h6>
+            <div class="card-body border">
+          <table class="table table-borderless">
+              <tbody>
+              <tr class="d-flex">
+                <td class="col-4">Vendor:</td>
+                <td class="col-6"><%= jobs[i].vendor %></td>
+              </tr>
+              <tr class="d-flex">
+                <td class="col-4">Vendor Contact:</td>
+                <td class="col-6"><%= jobs[i].vendor_nm %></td>
+              </tr>
+              <tr class="d-flex">
+                <td class="col-4">Vendor Phone:</td>
+                <td class="col-6"><%= jobs[i].vendor_phone %></td>
+              </tr>
+              <tr class="d-flex">
+                <td class="col-4">Vendor Email:</td>
+                <td class="col-6"><%= jobs[i].vendor_email %></td>
+              </tr>
+              <tr class="d-flex">
+                <td class="col-4">Notes:</td>
+                <td class="col-6"><%= jobs[i].vendor_notes %></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        </div>
+        </div>
+          </div>
+            </div>
+                </div>
+              </div>
+          </div>
+        </td>
+        </tr>
+            </tbody>
+        <% } %>
+          <% } %>
+            </table>
+          </div>
+      </div>
+  <!-- Completed Tab End -->
+  <!-- Archived Tab Begin -->
+  <div class="tab-pane fade" id="archived" role="tabpanel" aria-labelledby="archived-tab">
     <div class="table">
       <table class="table table-hover table-sm" data-toggle="table">
         <thead>
@@ -1564,11 +1230,11 @@ td {
           </tr>
         </thead>
         <% for (let i = 0; i < jobs.length; i++) { %>
-          <% if (jobs[i].status  === "Completed") { %>
+          <% if (jobs[i].status  === "Archived") { %>
         <tbody>
           <tr class="accordion-toggle collapsed row m-0" id="accordion1" data-toggle="collapse" data-parent="#accordion1" href="#<%= jobs[i].ordnbr %>">
             <td class="d-inline-block col-1"><%= jobs[i].ordnbr %></td>
-            <td class="d-inline-block col-2"><%= jobs[i].customer_nm %></td>
+            <td class="d-inline-block col-2"><%= jobs[i].customer %></td>
             <td class="d-inline-block col-2"><%= jobs[i].origin %></td>
             <td class="d-inline-block col-2"><%= jobs[i].destination %></td>
             <td class="d-inline-block col-2"><%= jobs[i].pm_assigned %></td>
@@ -1578,18 +1244,18 @@ td {
             </tr>
               
       <tr class="hide-table-padding">
-      <td colspan="6">
+      <td colspan="12">
       <div class="collapse in col-sm head-div" id="<%= jobs[i].ordnbr %>">
         <div class="card" id="tdcard">
           <div class="card-body">
             <div class="row">
-            <h5 class="card-title col align-self-center" id="cardtitle"><%= jobs[i].ordnbr %> - <%= jobs[i].customer_nm %></h5>
+            <h5 class="card-title col align-self-center" id="cardtitle"><%= jobs[i].ordnbr %> - <%= jobs[i].customer %></h5>
             <button type="button" class="btn col-1" id="edittripbutton" data-toggle="modal" data-target="#e<%= jobs[i].ordnbr %>">Edit</button>
-            <button type="button" class="btn col-1" data-toggle="modal" data-target="#d<%= jobs[i].ordnbr %>">Delete</button>
+            <!-- <button type="button" class="btn col-1" data-toggle="modal" data-target="#d<%= jobs[i].ordnbr %>">Delete</button> -->
           </div>
     
-           <!-- Edit Job Modal -->
-           <div class="modal fade" id="e<%= jobs[i].ordnbr %>" tabindex="-1" role="dialog" aria-labelledby="editTripModalLabel" aria-hidden="true">
+          <!-- Edit Job Modal -->
+          <div class="modal fade" id="e<%= jobs[i].ordnbr %>" tabindex="-1" role="dialog" aria-labelledby="editTripModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-lg" role="document">
               <div class="modal-content">
                 <div class="modal-header">
@@ -1620,7 +1286,7 @@ td {
                           <div class="col-4">
                               <div class="form-group">
                                   <label for="epmAssigned">PM Assigned</label>
-                                  <input type="text" class="form-control" id="eOriginInput" placeholder="Origin" value="<%= jobs[i].pm_assigned %>">
+                                  <input type="text" class="form-control" id="epmAssigned" placeholder="Origin" value="<%= jobs[i].pm_assigned %>">
                               </div>
                       </div>
                   </div>
@@ -1654,7 +1320,7 @@ td {
                 <div class="col-4">
                   <div class="form-group">
                       <label for="edestDesc">Destination Desc.</label>
-                      <input type="text" class="form-control" id="edestDesc" placeholder="Destination Desc." value="<%= jobs[i].destination_des %>">
+                      <input type="text" class="form-control" id="edestDesc" placeholder="Destination Desc." value="<%= jobs[i].destination_desc %>">
                   </div>
               </div>
           </div>
@@ -1662,7 +1328,7 @@ td {
               <div class="col-12">
                   <div class="form-group">
                       <label for="ejobNotes">Job Notes</label>
-                      <textarea class="form-control" id="ejobNotes" rows="2" placeholder="Enter any general job notes here." value="<%= jobs[i].ord_notes %>"></textarea>
+                      <textarea class="form-control" id="ejobNotes" rows="2" placeholder="Enter any general job notes here."><%= jobs[i].ord_notes %></textarea>
                   </div>
               </div>
         </div>
@@ -1697,7 +1363,7 @@ td {
           <div class="col-12">
               <div class="form-group">
                   <label for="ecustomer_notes">Customer Notes</label>
-                  <textarea class="form-control" id="ecustomer_notes" rows="2" placeholder="Enter any customer notes here." value="<%= jobs[i].customer_notes %>"></textarea>
+                  <textarea class="form-control" id="ecustomer_notes" rows="2" placeholder="Enter any customer notes here."><%= jobs[i].customer_notes %></textarea>
               </div>
           </div>
     </div>
@@ -1732,7 +1398,7 @@ td {
           <div class="col-12">
               <div class="form-group">
                   <label for="evendor_notes">Vendor Notes</label>
-                  <textarea class="form-control" id="evendor_notes" rows="2" placeholder="Enter any vendor notes here." value="<%= jobs[i].vendor_notes %>"></textarea>
+                  <textarea class="form-control" id="evendor_notes" rows="2" placeholder="Enter any vendor notes here."><%= jobs[i].vendor_notes %></textarea>
               </div>
           </div>
     </div>
@@ -1784,474 +1450,123 @@ td {
           </div>
           <div class="modal-body">
             <div class="row">
-              <div class="col-3"><h5>Trip Details</h5></div>
-              <div class="col-6"><h5>Tow Details</h5></div>
-              <div class="col-3"style="text-align:right">
-                <button class="btn btn-secondary" data-toggle="modal" data-target="#na<%= jobs[i].ordnbr %>">Add Asset</button>
-                
-              </div>
-            </div>
-    
-            <!-- Add Assets Modal Begin -->
-            <div class="modal fade" id="na<%= jobs[i].ordnbr %>" tabindex="-1" role="dialog" aria-labelledby="newJobModalLabel" aria-hidden="true">
-              <div class="modal-dialog modal-lg" role="document">
-                <div class="modal-content">
-                  <div class="modal-header">
-                    <h5 class="modal-title" id="NewAssetModalLabel">Add Asset to Job <%= jobs[i].ordnbr %></h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                      <span aria-hidden="true">&times;</span>
-                    </button>
-                  </div>
-                  <div class="modal-body">
-                    <!-- Add Assets Form Begin -->
-                    <form class="newassetform">
-                      <h5>Asset Information</h5>
-                      <div class="row">
-                          <div class="col-4">
-                            <div class="form-group">
-                              <label hidden for="asset_ordnbr"></label>
-                              <input hidden type="text" class="form-control" id="asset_ordnbr" placeholder="Order #" value="<%= jobs[i].ordnbr %>">
-                              <label for="asset_type">Asset Type</label>
-                              <input type="text" class="form-control" list="asset-type-list" id="asset_type"/>
-                                <datalist id="asset-type-list">
-                                  <option value="Barge"></option>
-                                  <option value="Boat"></option>
-                                </datalist>
-                            </div>
-                          </div>
-                          <div class="col-4">
-                            <div class="form-group">
-                                <label for="asset_name">Asset Name</label>
-                                <input type="text" class="form-control" id="asset_name" placeholder="Asset Name">
-                            </div>
-                        </div>
-                            <div class="col-4">
-                                <div class="form-group">
-                                    <label for="vendor_name">Vendor Name</label>
-                                    <input type="text" class="form-control" id="vendor_name" placeholder="Vendor Name">
-                                </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                      <div class="col-4">
-                          <div class="form-group">
-                              <label for="tow_group">Tow Group</label>
-                              <input type="text" class="form-control" id="tow_group" placeholder="Tow Group">
-                          </div>
-                      </div>
-                      <div class="col-4">
-                        <div class="form-group">
-                            <label for="asset_start">Asset Start</label>
-                            <input type="text" class="form-control datetimepicker" id="asset_start" placeholder="Start Time/Date">
-                        </div>
-                    </div>
-                        <div class="col-4">
-                            <div class="form-group">
-                                <label for="asset_stop">Asset Stop</label>
-                                <input type="text" class="form-control datetimepicker" id="asset_stop" placeholder="Stop Time/Date">
-                            </div>
-                    </div>
-                </div>
-                <div class="row">
-                  <div class="col-4">
-                      <div class="form-group">
-                          <label for="asset_status">Asset Status</label>
-                          <input type="text" class="form-control" list="asset-status-list" id="asset_status" placeholder="Active or Inactive">
-                                <datalist id="asset-status-list">
-                                  <option value="Active"></option>
-                                  <option value="Inactive"></option>
-                                </datalist>
-                      </div>
-                  </div>
-            </div>
+            <div class="card col-8 border-0" style="font-size:medium">
+              <h6 class="card-header border">Trip Details</h6>
+              <div class="card-body border">
+            <table class="table table-borderless">
+                <tbody>
+                <tr class="d-flex">
+                  <td class="col-3">Origin:</td>
+                  <td class="col-6"><%= jobs[i].origin %></td>
+                </tr>
+                <tr class="d-flex">
+                  <td class="col-3">Origin Desc.:</td>
+                  <td class="col-6"><%= jobs[i].origin_desc %></td>
+                </tr>
+                <tr class="d-flex">
+                  <td class="col-3">Destination:</td>
+                  <td class="col-6"><%= jobs[i].destination %></td>
+                </tr>
+                <tr class="d-flex">
+                  <td class="col-3">Destination Description:</td>
+                  <td class="col-6"><%= jobs[i].destination_desc %></td>
+                </tr>
+                <tr class="d-flex">
+                  <td class="col-3">Start Date:</td>
+                  <td class="col-6"><%= jobs[i].est_start_date %></td>
+                </tr>
+                <tr class="d-flex">
+                  <td class="col-3">PM Assigned:</td>
+                  <td class="col-6"><%= jobs[i].pm_assigned %></td>
+                </tr>
+                <tr class="d-flex">
+                  <td class="col-3">Status:</td>
+                  <td class="col-6"><%= jobs[i].status %></td>
+                </tr>
+                <tr class="d-flex">
+                  <td class="col-3">Trip Notes:</td>
+                  <td class="col-9"><%= jobs[i].ord_notes %></td>
+                </tr>
+              </tbody>
+            </table>
           </div>
-                      <div class="modal-footer">
-                          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                          <button type="submit" class="btn btn-primary">Add New Asset</button>
-                      </div>
-                  </form>
-    
-                  <!-- Add Assets Form End -->
-    
-              </div>
-            </div>
           </div>
-    
-          <!-- Add Assets Modal End -->
-            
-            
-            
+          <div class="col-4">
             <div class="row">
-            <div class="col-3 job-details">
-              Origin:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<%= jobs[i].origin_location %>
-              <br>
-              Destination:&nbsp;&nbsp;<%= jobs[i].dest_location %>
-              <br>
-              Customer:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<%= jobs[i].customer_nm %>
-             <br>
-              Notes:
+              <div class="card col-12 border-0" style="padding-right:15px">
+            <h6 class="job-note-headers card-header border">Customer Details</h6>
+            <div class="card-body border">
+          <table class="table table-borderless">
+              <tbody>
+              <tr class="d-flex">
+                <td class="col-4">Customer:</td>
+                <td class="col-6"><%= jobs[i].customer %></td>
+              </tr>
+              <tr class="d-flex">
+                <td class="col-4">Customer Contact:</td>
+                <td class="col-6"><%= jobs[i].customer_nm %></td>
+              </tr>
+              <tr class="d-flex">
+                <td class="col-4">Customer Phone:</td>
+                <td class="col-6"><%= jobs[i].customer_phone %></td>
+              </tr>
+              <tr class="d-flex">
+                <td class="col-4">Customer Email:</td>
+                <td class="col-6"><%= jobs[i].customer_email %></td>
+              </tr>
+              <tr class="d-flex">
+                <td class="col-4">Notes:</td>
+                <td class="col-6"><%= jobs[i].customer_notes %></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        </div>
+        </div>
+        <div class="row" style="line-height:5px"><br></div>
+        <div class="row">
+          <div class="card col-12 border-0" style="padding-right:15px">
+        <h6 class="job-note-headers card-header border">Vendor Details</h6>
+        <div class="card-body border">
+      <table class="table table-borderless">
+          <tbody>
+          <tr class="d-flex">
+            <td class="col-4">Vendor:</td>
+            <td class="col-6"><%= jobs[i].vendor %></td>
+          </tr>
+          <tr class="d-flex">
+            <td class="col-4">Vendor Contact:</td>
+            <td class="col-6"><%= jobs[i].vendor_nm %></td>
+          </tr>
+          <tr class="d-flex">
+            <td class="col-4">Vendor Phone:</td>
+            <td class="col-6"><%= jobs[i].vendor_phone %></td>
+          </tr>
+          <tr class="d-flex">
+            <td class="col-4">Vendor Email:</td>
+            <td class="col-6"><%= jobs[i].vendor_email %></td>
+          </tr>
+          <tr class="d-flex">
+            <td class="col-4">Notes:</td>
+            <td class="col-6"><%= jobs[i].vendor_notes %></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    </div>
+    </div>
+      </div>
+        </div>
             </div>
-            
-            
-              <div class="col-9">
-              <div class="card tow-card">
-                <div class="card-header">Tow Group 1</div>
-                <div class="card-body tow-col">
-                  <table class="table table-sm table-borderless">
-                    <thead>
-                      <tr class="d-flex asset-row">
-                        <th class="col-2">Asset</th>
-                        <th class="col-2">Status</th>
-                        <th class="col-2">Location</th>
-                        <th class="col-2">ETA</th>
-                        <th class="col-2">Created At</th>
-                        <th class="col-2"></th>
-                      </tr>
-                    </thead>
-                    <tbody class="asset-tbody">
-                <% for (let j = 0; j < assets.length; j++) { %>
-                  <% if (assets[j].ordnbr === jobs[i].ordnbr && assets[j].tow_group === 1 && assets[j].asset_status === "Active") { %>
-                      <tr class="d-flex asset-row">
-                        <td class="col-2">
-                      <%= assets[j].asset_name %>
-                        </td>
-                      <% for (let k = 0; k < logs.length; k++) { %>
-                        <% if (assets[j].ordnbr === logs[k].ordnbr && assets[j].asset_name === logs[k].asset_name) { %>
-                          <td class="col-2">
-                            <%= logs[k].status %>
-                          </td>
-                          <td class="col-2">
-                            <%= logs[k].location %>
-                          </td>
-                          <td class="col-2">
-                            <%= moment(logs[k].dest_eta).format('M/D/YY @ kk:mm') %>
-                          </td>
-                          <td class="col-2">
-                            <%= moment(logs[k].created_dttm).format('M/D/YY @ kk:mm') %>
-                          </td>
-                          <td class="col-2">
-                            <div class="dropdown">
-                              <button class="btn btn-primary btn-sm dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                more
-                              </button>
-                              <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                <a class="dropdown-item" data-toggle="modal" data-target="#nae<%= assets[j].asset_id %>">edit asset</a>
-                                <a class="dropdown-item" href="#">edit logs</a>
-                                <a class="dropdown-item" href="#">go to log view</a>
-                                <a class="dropdown-item" data-toggle="modal" data-target="#d<%= assets[j].asset_id %>">delete asset</a>
-                              </div>
-            <!-- Edit Assets Modal Begin -->
-            <div class="modal fade" id="nae<%= assets[j].asset_id %>" tabindex="-1" role="dialog" aria-labelledby="newJobModalLabel" aria-hidden="true">
-              <div class="modal-dialog modal-lg" role="document">
-                <div class="modal-content">
-                  <div class="modal-header">
-                    <h5 class="modal-title" id="NewAssetModalLabel">Edit Asset <%= assets[j].asset_name %></h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                      <span aria-hidden="true">&times;</span>
-                    </button>
-                  </div>
-                  <div class="modal-body">
-                    <!-- Edit Assets Form Begin -->
-                    <form class="editassetform">
-                      <h5>Asset Information</h5>
-                      <div class="row">
-                          <div class="col-4">
-                            <div class="form-group">
-                              <input hidden type="text" class="form-control" id="asset_ordnbr" placeholder="Order #" value="<%= assets[j].ordnbr %>">
-                              <label hidden for="asset_id"></label>
-                              <input hidden type="text" class="form-control" id="asset_id" placeholder="ID Number" value="<%= assets[j].asset_id %>">
-                              <label for="asset_type">Asset Type</label>
-                              <input type="text" class="form-control" list="asset-type-list" id="asset_type" value="<%= assets[j].asset_type %>">
-                                <datalist id="asset-type-list">
-                                  <option value="Barge"></option>
-                                  <option value="Boat"></option>
-                                </datalist>
-                            </div>
-                          </div>
-                          <div class="col-4">
-                            <div class="form-group">
-                                <label for="asset_name">Asset Name</label>
-                                <input type="text" class="form-control" id="asset_name" value="<%= assets[j].asset_name %>">
-                            </div>
-                        </div>
-                            <div class="col-4">
-                                <div class="form-group">
-                                    <label for="vendor_name">Vendor Name</label>
-                                    <input type="text" class="form-control" id="vendor_name" value="<%= assets[j].vendor_name %>">
-                                </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                      <div class="col-4">
-                          <div class="form-group">
-                              <label for="tow_group">Tow Group</label>
-                              <input type="text" class="form-control" id="tow_group" value="<%= assets[j].tow_group %>">
-                          </div>
-                      </div>
-                      <div class="col-4">
-                        <div class="form-group">
-                            <label for="asset_start">Asset Start</label>
-                            <input type="text" class="form-control datetimepicker" id="asset_start" value="<%= moment(assets[j].asset_start).format('M/D/YY @ kk:mm') %>">
-                        </div>
-                    </div>
-                        <div class="col-4">
-                            <div class="form-group">
-                                <label for="asset_stop">Asset Stop</label>
-                                <input type="text" class="form-control datetimepicker" id="asset_stop" value="<%= moment(assets[j].asset_stop).format('M/D/YY @ kk:mm') %>">
-                            </div>
-                    </div>
-                </div>
-                <div class="row">
-                  <div class="col-4">
-                      <div class="form-group">
-                          <label for="asset_status">Asset Status</label>
-                          <input type="text" class="form-control" list="asset-status-list" id="asset_status" value="<%= assets[j].asset_status %>">
-                                <datalist id="asset-status-list">
-                                  <option value="Active"></option>
-                                  <option value="Inactive"></option>
-                                </datalist>
-                      </div>
-                  </div>
-            </div>
-          </div>
-                      <div class="modal-footer">
-                          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                          <button type="submit" class="btn btn-primary">Save Changes</button>
-                      </div>
-                  </form>
-    
-                  <!-- Edit Assets Form End -->
-    
-              </div>
-            </div>
-          </div>
-    
-          <!-- Edit Assets Modal End -->
-          <!-- Delete Asset Modal -->
-          <div class="modal fade" id="d<%= assets[j].asset_id %>" tabindex="-1" role="dialog" aria-labelledby="deleteAssetModalLable" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <h5 class="modal-title" id="deleteAssetModalID">Are you sure you want to delete asset <%= assets[j].asset_name %> from <%= assets[j].ordnbr %>? </h5>
-                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                  </button>
-                </div>
-                <div class="modal-body">
-                  Click DELETE to delete this job, or click Close to dismiss.
-                  <form class="deleteassetform">
-                    <div class="form-group">
-                      <label hidden for="did"></label>
-                      <input hidden type="text" class="form-control" id="did" placeholder="Order #" value="<%= assets[j].asset_id %>">
-                  </div>
-                </div>
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                  <button type="submit" class="btn btn-danger">DELETE THIS ASSET</button>
-                </div>
-              </form>
-              </div>
-            </div>
-          </div>
-          <!-- Delete Job Modal End -->
-                            </div>
-                          </td>
-                          <% } %>
-                          <% } %>
-                        </tr>
-                        <% } %>
-                        <% } %>
-                      </tbody>
-                      </table>
-                 </div>
-                </div>
-                <div class="card tow-card">
-                  <div class="card-header">Tow Group 2</div>
-                <div class="card-body tow-col">
-                  <table class="table table-sm table-borderless">
-                    <thead>
-                      <tr class="d-flex asset-row">
-                        <th class="col-2">Asset</th>
-                        <th class="col-2">Status</th>
-                        <th class="col-2">Location</th>
-                        <th class="col-2">ETA</th>
-                        <th class="col-2">Created At</th>
-                        <th class="col-2"></th>
-                      </tr>
-                    </thead>
-                    <tbody class="asset-tbody">
-                <% for (let j = 0; j < assets.length; j++) { %>
-                  <% if (assets[j].ordnbr === jobs[i].ordnbr && assets[j].tow_group === 2 && assets[j].asset_status === "Active") { %>
-                      <tr class="d-flex asset-row">
-                        <td class="col-2">
-                      <%= assets[j].asset_name %>
-                        </td>
-                      <% for (let k = 0; k < logs.length; k++) { %>
-                        <% if (assets[j].ordnbr === logs[k].ordnbr && assets[j].asset_name === logs[k].asset_name) { %>
-                          <td class="col-2">
-                            <%= logs[k].status %>
-                          </td>
-                          <td class="col-2">
-                            <%= logs[k].location %>
-                          </td>
-                          <td class="col-2">
-                            <%= moment(logs[k].dest_eta).format('M/D/YY @ kk:mm') %>
-                          </td>
-                          <td class="col-2">
-                            <%= moment(logs[k].created_dttm).format('M/D/YY @ kk:mm') %>
-                          </td>
-                          <td class="col-2">
-                            <div class="dropdown">
-                              <button class="btn btn-primary btn-sm dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                more
-                              </button>
-                              <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                <a class="dropdown-item" data-toggle="modal" data-target="#nae2<%= assets[j].asset_id %>">edit asset</a>
-                                <a class="dropdown-item" href="#">edit logs</a>
-                                <a class="dropdown-item" href="#">go to log view</a>
-                                <a class="dropdown-item" data-toggle="modal" data-target="#d2<%= assets[j].asset_id %>">delete asset</a>
-                              </div>
-                 <!-- Edit Assets Modal Begin -->
-            <div class="modal fade" id="nae2<%= assets[j].asset_id %>" tabindex="-1" role="dialog" aria-labelledby="newJobModalLabel" aria-hidden="true">
-              <div class="modal-dialog modal-lg" role="document">
-                <div class="modal-content">
-                  <div class="modal-header">
-                    <h5 class="modal-title" id="NewAssetModalLabel">Edit Asset <%= assets[j].asset_name %></h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                      <span aria-hidden="true">&times;</span>
-                    </button>
-                  </div>
-                  <div class="modal-body">
-                    <!-- Edit Assets Form Begin -->
-                    <form class="editassetform">
-                      <h5>Asset Information</h5>
-                      <div class="row">
-                          <div class="col-4">
-                            <div class="form-group">
-                              <label hidden for="asset_ordnbr"></label>
-                              <input hidden type="text" class="form-control" id="asset_ordnbr" placeholder="Order #" value="<%= assets[j].ordnbr %>">
-                              <label hidden for="asset_id"></label>
-                              <input hidden type="text" class="form-control" id="asset_id" placeholder="ID Number" value="<%= assets[j].asset_id %>">
-                              <label for="asset_type">Asset Type</label>
-                              <input type="text" class="form-control" list="asset-type-list" id="asset_type" value="<%= assets[j].asset_type %>">
-                                <datalist id="asset-type-list">
-                                  <option value="Barge"></option>
-                                  <option value="Boat"></option>
-                                </datalist>
-                            </div>
-                          </div>
-                          <div class="col-4">
-                            <div class="form-group">
-                                <label for="asset_name">Asset Name</label>
-                                <input type="text" class="form-control" id="asset_name" value="<%= assets[j].asset_name %>">
-                            </div>
-                        </div>
-                            <div class="col-4">
-                                <div class="form-group">
-                                    <label for="vendor_name">Vendor Name</label>
-                                    <input type="text" class="form-control" id="vendor_name" value="<%= assets[j].vendor_name %>">
-                                </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                      <div class="col-4">
-                          <div class="form-group">
-                              <label for="tow_group">Tow Group</label>
-                              <input type="text" class="form-control" id="tow_group" value="<%= assets[j].tow_group %>">
-                          </div>
-                      </div>
-                      <div class="col-4">
-                        <div class="form-group">
-                            <label for="asset_start">Asset Start</label>
-                            <input type="text" class="form-control datetimepicker" id="asset_start" value="<%= moment(assets[j].asset_start).format('M/D/YY @ kk:mm') %>">
-                        </div>
-                    </div>
-                        <div class="col-4">
-                            <div class="form-group">
-                                <label for="asset_stop">Asset Stop</label>
-                                <input type="text" class="form-control datetimepicker" id="asset_stop" value="<%= moment(assets[j].asset_stop).format('M/D/YY @ kk:mm') %>">
-                            </div>
-                    </div>
-                </div>
-                <div class="row">
-                  <div class="col-4">
-                      <div class="form-group">
-                          <label for="asset_status">Asset Status</label>
-                          <input type="text" class="form-control" list="asset-status-list" id="asset_status" value="<%= assets[j].asset_status %>">
-                                <datalist id="asset-status-list">
-                                  <option value="Active"></option>
-                                  <option value="Inactive"></option>
-                                </datalist>
-                      </div>
-                  </div>
-            </div>
-          </div>
-                      <div class="modal-footer">
-                          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                          <button type="submit" class="btn btn-primary">Save Changes</button>
-                      </div>
-                  </form>
-    
-                  <!-- Edit Assets Form End -->
-    
-              </div>
-            </div>
-          </div>
-    
-          <!-- Edit Assets Modal End -->
-          <!-- Delete Asset Modal -->
-          <div class="modal fade" id="d2<%= assets[j].asset_id %>" tabindex="-1" role="dialog" aria-labelledby="deleteAssetModalLable" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <h5 class="modal-title" id="deleteAssetModalID">Are you sure you want to delete asset <%= assets[j].asset_name %> from <%= assets[j].ordnbr %>? </h5>
-                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                  </button>
-                </div>
-                <div class="modal-body">
-                  Click DELETE to delete this job, or click Close to dismiss.
-                  <form class="deleteassetform">
-                    <div class="form-group">
-                      <label hidden for="did"></label>
-                      <input hidden type="text" class="form-control" id="did" placeholder="Order #" value="<%= assets[j].asset_id %>">
-                  </div>
-                </div>
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                  <button type="submit" class="btn btn-danger">DELETE THIS ASSET</button>
-                </div>
-              </form>
-              </div>
-            </div>
-          </div>
-          <!-- Delete Asset Modal End -->             
-                            </div>
-                          </td>
-                          <% } %>
-                          <% } %>
-                        </tr>
-                        <% } %>
-                        <% } %>
-                      </tbody>
-                      </table>
-                 </div>
-                  </div>
-              </div>
-          </div>
-          <div class="job-notes">
-            <ul><%= jobs[i].ord_notes %></ul>
-          </div>
           </div>
       </div>
-      </div></td>
-      </tr>
+    </td>
+    </tr>
+        </tbody>
+    <% } %>
       <% } %>
-      <% } %>
-          </tbody>
         </table>
       </div>
   </div>
-  <!-- Completed Tab End -->
-  </div>
-  
+  <!-- Archived Tab End -->
+</div>

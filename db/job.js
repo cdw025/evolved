@@ -20,7 +20,7 @@ module.exports = {
     return knex('deckorderfil').where('order_id', order_id).update(job, '*');
   },
   delete: function(ordnbr) {
-    return knex('deckorderfil').where('ordnbr', ordnbr).del();
+    return knex('deckorderfil').where('ordnbr', ordnbr).update({status : 'Archived'});
   }
 }
 

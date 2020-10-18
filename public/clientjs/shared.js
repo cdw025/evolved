@@ -82,18 +82,18 @@ function getHostURL() {
     const origin = form.find('input[id=eoriginInput]').val();
     const destination = form.find('input[id=edestinationInput]').val();
     const est_start_date = form.find('input[id=eestStartDate]').val();
-    const origin_desc = form.find('textarea[id=eoriginDesc]').val();
-    const destination_desc = form.find('textarea[id=edestDesc]').val();
+    const origin_desc = form.find('input[id=eoriginDesc]').val();
+    const destination_desc = form.find('input[id=edestDesc]').val();
     const ord_notes = form.find('textarea[id=ejobNotes]').val();
-    const customer = form.find('textarea[id=ecustomer]').val();
-    const customer_nm = form.find('textarea[id=ecustomer_nm]').val();
-    const customer_phone = form.find('textarea[id=ecustomer_phone]').val();
-    const customer_email = form.find('textarea[id=ecustomer_email]').val();
+    const customer = form.find('input[id=ecustomer]').val();
+    const customer_nm = form.find('input[id=ecustomer_nm]').val();
+    const customer_phone = form.find('input[id=ecustomer_phone]').val();
+    const customer_email = form.find('input[id=ecustomer_email]').val();
     const customer_notes = form.find('textarea[id=ecustomer_notes]').val();
-    const vendor = form.find('textarea[id=evendor]').val();
-    const vendor_nm = form.find('textarea[id=evendor_nm]').val();
-    const vendor_phone = form.find('textarea[id=evendor_phone]').val();
-    const vendor_email = form.find('textarea[id=evendor_email]').val();
+    const vendor = form.find('input[id=evendor]').val();
+    const vendor_nm = form.find('input[id=evendor_nm]').val();
+    const vendor_phone = form.find('input[id=evendor_phone]').val();
+    const vendor_email = form.find('input[id=evendor_email]').val();
     const vendor_notes = form.find('textarea[id=evendor_notes]').val();
 
         const job = {
