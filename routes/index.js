@@ -73,12 +73,11 @@ router.get('/dashboard', authMiddleware.ensureLoggedIn, function(req, res) {
 
 
     // console.log(arrayFiltered);
-    res.render('dashboard', { title: 'Express', jobs: jobs, assets: assets
-    // , logs: arrayFiltered 
-  });
+    res.render('dashboard', { title: 'Express', jobs: jobs
+    // , logs: arrayFiltered });
   // });
   });
-    // });
+    });
 });
 
 
