@@ -1,7 +1,7 @@
 
 exports.up = function(knex) {
   return knex.schema.createTable('deckorderfil', table => {
-      table.increments('order_id');
+      table.integer('order_id').unique();
       table.string('ordnbr').primary();
       table.string('status');
       table.string('pm_assigned');
