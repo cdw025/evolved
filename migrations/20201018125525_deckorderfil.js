@@ -1,8 +1,8 @@
 
 exports.up = function(knex) {
   return knex.schema.createTable('deckorderfil', table => {
-      table.integer('order_id').unique().increment();
-      table.string('ordnbr').primary();
+      table.increments('order_id');
+      table.string('ordnbr').unique();
       table.string('status');
       table.string('pm_assigned');
       table.string('customer');
