@@ -1,5 +1,3 @@
-// Update with your config settings.
-
 require('dotenv').config();
 
 module.exports = {
@@ -8,9 +6,9 @@ module.exports = {
     client: 'pg',
     connection: 'postgres://postgres:postgres@localhost/cbctriptracker'
   },
+
   production: {
     client: 'pg',
     connection: process.env.DATABASE_URL + '?ssl=true'
   }
-
 };
