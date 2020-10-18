@@ -7,11 +7,11 @@ exports.up = function(knex) {
       table.string('pm_assigned');
       table.string('customer');
       table.string('customer_nm');
-      table.numeric('customer_phone');
+      table.bigInteger('customer_phone');
       table.string('customer_email');
       table.string('vendor');
       table.string('vendor_nm');
-      table.numeric('vendor_phone');
+      table.bigInteger('vendor_phone');
       table.string('vendor_email');
       table.string('origin');
       table.string('origin_desc');
