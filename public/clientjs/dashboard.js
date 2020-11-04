@@ -90,6 +90,28 @@ function deleteJob(job) {
     return $.delete(`${AUTH_URL}/dashboard/${job.ordnbr}`, job);
 }
 
+    // duplicate job form handler
+    $(document).delegate('.duplicatetripform', 'submit', function(event) {
+        event.preventDefault();
+        var form = $(this);
+        const job = getDuplicateJobFromForm(form);
+        console.log(job);
+        duplicateJob(job)
+        .then(result => {
+            console.log(result);
+            window.location = `dashboard`;
+        }).catch(error => {
+            console.error(error);
+            showErrorMessage(error.responseJSON.message);
+        });
+    });
+
+    // routes duplicate job to duplicate route
+
+    function duplicateJob(job) {
+        return $.post(`${AUTH_URL}/duplicatejob`, job);
+    }
+
     // if no assets in group, then hide group
 
     $(".asset-tbody").filter(function() {

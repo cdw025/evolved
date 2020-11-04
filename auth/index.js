@@ -146,6 +146,14 @@ router.post('/newjob', (req, res, next) => {
                         origin_desc : req.body.origin_desc,
                         destination : req.body.destination,
                         destination_desc : req.body.destination_desc,
+                        contract_signed : req.body.contract_signed,
+                        kickoff_meeting : req.body.kickoff_meeting,
+                        lump_sum_amount : req.body.lump_sum_amount,
+                        lump_sum_paid : req.body.lump_sum_paid,
+                        proforma_amount : '0',
+                        proforma_paid : 'unsent',
+                        barge_name : req.body.barge_name,
+                        tug_name : req.body.tug_name,
                         est_start_date : req.body.est_start_date,
                         ord_notes : req.body.ord_notes,
                         customer : req.body.customer,
@@ -191,6 +199,68 @@ router.put('/dashboard/:order_id', (req, res, next) => {
             next(new Error('invalid job neal'));
         }
 });
+
+
+router.post('/duplicatejob', (req, res, next) => {
+    if(validJob(req.body)) {
+        Job
+        .getOneByJobNumber(req.body.ordnbr)
+        .then(job => {
+            console.log('job', job);
+            //If trip not found
+            if(!job) {
+                //this is a unique trip
+                    const job = {
+                        ordnbr : req.body.ordnbr,
+                        status : req.body.status,
+                        pm_assigned : req.body.pm_assigned,
+                        origin : req.body.origin,
+                        origin_desc : req.body.origin_desc,
+                        destination : req.body.destination,
+                        destination_desc : req.body.destination_desc,
+                        contract_signed : req.body.contract_signed,
+                        kickoff_meeting : req.body.kickoff_meeting,
+                        lump_sum_amount : req.body.lump_sum_amount,
+                        lump_sum_paid : req.body.lump_sum_paid,
+                        proforma_amount : req.body.proforma_amount,
+                        proforma_paid : req.body.proforma_paid,
+                        barge_name : req.body.barge_name,
+                        tug_name : req.body.tug_name,
+                        est_start_date : req.body.est_start_date,
+                        ord_notes : req.body.ord_notes,
+                        customer : req.body.customer,
+                        customer_nm : req.body.customer_nm,
+                        customer_phone : req.body.customer_phone,
+                        customer_email : req.body.customer_email,
+                        customer_notes : req.body.customer_notes,
+                        vendor : req.body.vendor,
+                        vendor_nm : req.body.vendor_nm,
+                        vendor_phone : req.body.vendor_phone,
+                        vendor_email : req.body.vendor_email,
+                        vendor_notes : req.body.vendor_notes,
+                        created_by: 'Neal White',
+                        last_modified_by: 'Neal White',
+                        created_dttm: new Date(),
+                        modified_dttm: new Date(),
+                    };
+
+                    Job
+                    .create(job)
+                    .then(id => {
+                // redirect
+                res.json({
+                    id,
+                    message: 'trip duplicated'
+                });
+                    });
+                } else {
+                    // existing trip
+                    console.log('trip ID already exists');
+                }
+            });
+        }
+    });
+
 
 router.delete('/dashboard/:order_id', (req, res, next) => {
         Job

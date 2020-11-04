@@ -1,3 +1,4 @@
+const { transform } = require("lodash");
 
 exports.up = function(knex) {
   return knex.schema.createTable('deckorderfil', table => {
@@ -17,6 +18,14 @@ exports.up = function(knex) {
       table.string('origin_desc');
       table.string('destination');
       table.string('destination_desc');
+      table.bigInteger('lump_sum_amount');
+      table.string('lump_sum_paid');
+      table.bigInteger('proforma_amount');
+      table.string('proforma_paid');
+      table.string('contract_signed');
+      table.string('kickoff_meeting');
+      table.string('barge_name');
+      table.string('tug_name');
       table.string('est_start_date');
       table.string('ord_notes');
       table.string('customer_notes');

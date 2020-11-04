@@ -26,7 +26,15 @@ exports.seed = (knex, Promise) => {
               created_by: 'Neal White',
               last_modified_by: 'Neal White',
               created_dttm: new Date(),
-              modified_dttm: new Date()
+              modified_dttm: new Date(),
+              lump_sum_amount: '400000',
+              lump_sum_paid: 'sent',
+              contract_signed: 'Yes',
+              kickoff_meeting: 'Yes',
+              proforma_amount : '0',
+              proforma_paid : 'unsent',
+              barge_name : 'CBC4509',
+              tug_name : "M/V Lonnie Bell"
             },
             {
               order_id: '2',
@@ -35,7 +43,7 @@ exports.seed = (knex, Promise) => {
               pm_assigned: 'Andrew D.',
               origin: 'Houston, TX',
               destination: 'Houston, TX',
-              est_start_date: '2020-12-1',
+              est_start_date: '2020-12-01',
               origin_desc: 'City Docks',
               destination_desc: 'Barbours Cut',
               ord_notes: 'Day rate job, multiple back and forths.',
@@ -52,7 +60,15 @@ exports.seed = (knex, Promise) => {
               created_by: 'Neal White',
               last_modified_by: 'Neal White',
               created_dttm: new Date(),
-              modified_dttm: new Date()
+              modified_dttm: new Date(),
+              lump_sum_amount: '400000',
+              lump_sum_paid: 'sent',
+              contract_signed: 'Yes',
+              kickoff_meeting: 'Yes',
+              proforma_amount : '0',
+              proforma_paid : 'unsent',
+              barge_name : 'CBC4509',
+              tug_name : "M/V Lonnie Bell"
             },
             {
               order_id: '3',
@@ -78,7 +94,15 @@ exports.seed = (knex, Promise) => {
               created_by: 'Neal White',
               last_modified_by: 'Neal White',
               created_dttm: new Date(),
-              modified_dttm: new Date()
+              modified_dttm: new Date(),
+              lump_sum_amount: '400000',
+              lump_sum_paid: 'sent',
+              contract_signed: 'Yes',
+              kickoff_meeting: 'Yes',
+              proforma_amount : '0',
+              proforma_paid : 'unsent',
+              barge_name : 'CBC4509',
+              tug_name : "M/V Lonnie Bell"
             },
             {
               order_id: '4',
@@ -104,7 +128,15 @@ exports.seed = (knex, Promise) => {
               created_by: 'Neal White',
               last_modified_by: 'Neal White',
               created_dttm: new Date(),
-              modified_dttm: new Date()
+              modified_dttm: new Date(),
+              lump_sum_amount: '400000',
+              lump_sum_paid: 'sent',
+              contract_signed: 'Yes',
+              kickoff_meeting: 'Yes',
+              proforma_amount : '0',
+              proforma_paid : 'unsent',
+              barge_name : 'CBC4509',
+              tug_name : "M/V Lonnie Bell"
             },
             {
               order_id: '5',
@@ -130,7 +162,15 @@ exports.seed = (knex, Promise) => {
               created_by: 'Neal White',
               last_modified_by: 'Neal White',
               created_dttm: new Date(),
-              modified_dttm: new Date()
+              modified_dttm: new Date(),
+              lump_sum_amount: '400000',
+              lump_sum_paid: 'sent',
+              contract_signed: 'Yes',
+              kickoff_meeting: 'Yes',
+              proforma_amount : '0',
+              proforma_paid : 'unsent',
+              barge_name : 'CBC4509',
+              tug_name : "M/V Lonnie Bell"
             },
             {
               order_id: '6',
@@ -156,7 +196,15 @@ exports.seed = (knex, Promise) => {
               created_by: 'Neal White',
               last_modified_by: 'Neal White',
               created_dttm: new Date(),
-              modified_dttm: new Date()
+              modified_dttm: new Date(),
+              lump_sum_amount: '400000',
+              lump_sum_paid: 'sent',
+              contract_signed: 'Yes',
+              kickoff_meeting: 'Yes',
+              proforma_amount : '0',
+              proforma_paid : 'unsent',
+              barge_name : 'CBC4509',
+              tug_name : "M/V Lonnie Bell"
             }
            ];
         return knex('deckorderfil').insert(orders)

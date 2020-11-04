@@ -122,6 +122,10 @@ td {
     float: right;
 }
 
+.bold {
+  font-weight: bold;
+}
+
 </style>
 <script type="text/javascript">
   window.addEventListener('keydown',function(e){if(e.keyIdentifier=='U+000A'||e.keyIdentifier=='Enter'||e.keyCode==13){if(e.target.nodeName=='INPUT'&&e.target.type=='text'){e.preventDefault();return false;}}},true);
@@ -182,12 +186,13 @@ td {
             <div class="row">
             <h5 class="card-title col align-self-center" id="cardtitle"><%= jobs[i].ordnbr %> - <%= jobs[i].customer %></h5>
             <button type="button" class="btn col-1" id="edittripbutton" data-toggle="modal" data-target="#e<%= jobs[i].ordnbr %>">Edit</button>
+            <button type="button" class="btn col-1" id="duplicatetripbutton" data-toggle="modal" data-target="#du<%= jobs[i].ordnbr %>">Duplicate</button>
             <button type="button" class="btn col-1" data-toggle="modal" data-target="#d<%= jobs[i].ordnbr %>">Delete</button>
           </div>
     
           <!-- Edit Job Modal -->
           <div class="modal fade" id="e<%= jobs[i].ordnbr %>" tabindex="-1" role="dialog" aria-labelledby="editTripModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-dialog modal-xl" role="document">
               <div class="modal-content">
                 <div class="modal-header">
                   <h5 class="modal-title" id="editTripModalLabel">Edit Trip Details</h5>
@@ -212,10 +217,10 @@ td {
                           <div class="form-group">
                             <label for="ejobStatus">Status</label>
                             <select class="form-control" id="ejobStatus" value="<%= jobs[i].status %>">
-                              <option>Upcoming</option>
-                              <option>Active</option>
-                              <option>Completed</option>
-                              <option>Archived</option>
+                              <option value="Upcoming" <%= jobs[i].status == 'Upcoming' ? 'selected' : ''%>>Upcoming</option>
+                              <option value="Active" <%= jobs[i].status == 'Active' ? 'selected' : ''%>>Active</option>
+                              <option value="Completed" <%= jobs[i].status == 'Completed' ? 'selected' : ''%>>Completed</option>
+                              <option value="Archived" <%= jobs[i].status == 'Archived' ? 'selected' : ''%>>Archived</option>
                             </select>
                           </div>
                       </div>
@@ -259,7 +264,83 @@ td {
                       <input type="text" class="form-control" id="edestDesc" placeholder="Destination Desc." value="<%= jobs[i].destination_desc %>">
                   </div>
               </div>
+              <div class="col-4">
+                <div class="form-group">
+                    <label for="econtractSigned">Contract Signed?</label>
+                    <select class="form-control" id="econtractSigned">
+                      <option value="No" <%= jobs[i].contract_signed == 'No' ? 'selected' : ''%>>No</option>
+                      <option value="Yes" <%= jobs[i].contract_signed == 'Yes' ? 'selected' : ''%>>Yes</option>
+                    </select>
+                  </div>
+            </div>
           </div>
+          <div class="row">
+            <div class="col-4">
+                <div class="form-group">
+                    <label for="elumpSumAmount">Lump Sum Amount</label>
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text">$</span>
+                        </div>
+                        <input type="text" class="form-control" id="elumpSumAmount" value="<%= jobs[i].lump_sum_amount %>">
+                      </div>
+                </div>
+            </div>
+            <div class="col-4">
+                <div class="form-group">
+                    <label for="elumpSumPaid">Lump Sum Sent to Billing?</label>
+                    <select class="form-control" id="elumpSumPaid" value="<%= jobs[i].lump_sum_paid %>">
+                      <option value="unsent" <%= jobs[i].lump_sum_paid == 'unsent' ? 'selected' : ''%>>unsent</option>
+                      <option value="sent" <%= jobs[i].lump_sum_paid == 'sent' ? 'selected' : ''%>>sent</option>
+                    </select>
+                  </div>
+          </div>
+          <div class="col-4">
+            <div class="form-group">
+                <label for="ekickoffMeeting">Kickoff Meeting?</label>
+                <select class="form-control" id="ekickoffMeeting" value="<%= jobs[i].kickoff_meeting %>">
+                  <option value="No" <%= jobs[i].kickoff_meeting == 'No' ? 'selected' : ''%>>No</option>
+                  <option value="Yes" <%= jobs[i].kickoff_meeting == 'Yes' ? 'selected' : ''%>>Yes</option>
+                </select>
+              </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-4">
+            <div class="form-group">
+                <label for="eproformaAmount">Proforma Amount</label>
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text">$</span>
+                    </div>
+                    <input type="text" class="form-control" id="eproformaAmount" value="<%= jobs[i].proforma_amount %>">
+                  </div>
+            </div>
+        </div>
+        <div class="col-4">
+            <div class="form-group">
+                <label for="eproformaPaid">Proforma Sent to Billing?</label>
+                <select class="form-control" id="eproformaPaid" value="<%= jobs[i].proforma_paid %>">
+                  <option value="unsent" <%= jobs[i].proforma_paid == 'unsent' ? 'selected' : ''%>>unsent</option>
+                  <option value="sent" <%= jobs[i].proforma_paid == 'sent' ? 'selected' : ''%>>sent</option>
+                </select>
+              </div>
+      </div>
+  </div>
+      <div class="row">
+        <div class="col-4">
+            <div class="form-group">
+                <label for="ebargeName">Barge(s)</label>
+                <input type="text" class="form-control" id="ebargeName" value="<%= jobs[i].barge_name %>">
+            </div>
+        </div>
+        <div class="col-4">
+          <div class="form-group">
+              <label for="etugName">Tug(s)</label>
+              <input type="text" class="form-control" id="etugName" value="<%= jobs[i].tug_name %>">
+          </div>
+      </div>
+  </div>
           <div class="row">
               <div class="col-12">
                   <div class="form-group">
@@ -349,7 +430,249 @@ td {
             </div>
           </div>
           <!-- Edit Job Modal End -->
-    
+
+          <!-- Duplicate Job Modal Begin -->
+          <div class="modal fade" id="du<%= jobs[i].ordnbr %>" tabindex="-1" role="dialog" aria-labelledby="duplicateTripModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-xl" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="editTripModalLabel">Duplicating Job <%= jobs[i].ordnbr %></h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <!-- Duplicate Job Form Begin -->
+                  <form class="duplicatetripform">
+                    <h5>Job Information</h5>
+                    <div class="row">
+                      <div class="col-4">
+                          <div class="form-group">
+                              <label for="duJobNumberInput">Enter New Order #</label>
+                              <input type="text" class="form-control" id="duJobNumberInput" placeholder="Enter New Order #">
+                          </div>
+                      </div>
+                    </div>
+                    <div class="d-none">
+                    <div class="row">
+                        <div class="col-4">
+                          <div class="form-group">
+                            <label for="ejobStatus">Status</label>
+                            <select class="form-control" id="ejobStatus" value="<%= jobs[i].status %>">
+                              <option value="Upcoming" <%= jobs[i].status == 'Upcoming' ? 'selected' : ''%>>Upcoming</option>
+                              <option value="Active" <%= jobs[i].status == 'Active' ? 'selected' : ''%>>Active</option>
+                              <option value="Completed" <%= jobs[i].status == 'Completed' ? 'selected' : ''%>>Completed</option>
+                              <option value="Archived" <%= jobs[i].status == 'Archived' ? 'selected' : ''%>>Archived</option>
+                            </select>
+                          </div>
+                      </div>
+                          <div class="col-4">
+                              <div class="form-group">
+                                  <label for="epmAssigned">PM Assigned</label>
+                                  <input type="text" class="form-control" id="epmAssigned" placeholder="Origin" value="<%= jobs[i].pm_assigned %>">
+                              </div>
+                      </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-4">
+                        <div class="form-group">
+                            <label for="eoriginInput">Origin</label>
+                            <input type="text" class="form-control" id="eoriginInput" placeholder="Origin" value="<%= jobs[i].origin %>">
+                        </div>
+                    </div>
+                    <div class="col-4">
+                      <div class="form-group">
+                          <label for="edestinationInput">Destination</label>
+                          <input type="text" class="form-control" id="edestinationInput" placeholder="Destination" value="<%= jobs[i].destination %>">
+                      </div>
+                  </div>
+                      <div class="col-4">
+                          <div class="form-group">
+                              <label for="eestStartDate">Estimated Start Date</label>
+                              <input type="date" class="form-control" id="eestStartDate" placeholder="Destination" value="<%= jobs[i].est_start_date %>">
+                          </div>
+                  </div>
+              </div>
+              <div class="row">
+                <div class="col-4">
+                    <div class="form-group">
+                        <label for="eoriginDesc">Origin Desc.</label>
+                        <input type="text" class="form-control" id="eoriginDesc" placeholder="Origin Desc." value="<%= jobs[i].origin_desc %>">
+                    </div>
+                </div>
+                <div class="col-4">
+                  <div class="form-group">
+                      <label for="edestDesc">Destination Desc.</label>
+                      <input type="text" class="form-control" id="edestDesc" placeholder="Destination Desc." value="<%= jobs[i].destination_desc %>">
+                  </div>
+              </div>
+              <div class="col-4">
+                <div class="form-group">
+                    <label for="econtractSigned">Contract Signed?</label>
+                    <select class="form-control" id="econtractSigned">
+                      <option value="No" <%= jobs[i].contract_signed == 'No' ? 'selected' : ''%>>No</option>
+                      <option value="Yes" <%= jobs[i].contract_signed == 'Yes' ? 'selected' : ''%>>Yes</option>
+                    </select>
+                  </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-4">
+                <div class="form-group">
+                    <label for="elumpSumAmount">Lump Sum Amount</label>
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text">$</span>
+                        </div>
+                        <input type="text" class="form-control" id="elumpSumAmount" value="<%= jobs[i].lump_sum_amount %>">
+                      </div>
+                </div>
+            </div>
+            <div class="col-4">
+                <div class="form-group">
+                    <label for="elumpSumPaid">Lump Sum Sent to Billing?</label>
+                    <select class="form-control" id="elumpSumPaid" value="<%= jobs[i].lump_sum_paid %>">
+                      <option value="unsent" <%= jobs[i].lump_sum_paid == 'unsent' ? 'selected' : ''%>>unsent</option>
+                      <option value="sent" <%= jobs[i].lump_sum_paid == 'sent' ? 'selected' : ''%>>sent</option>
+                    </select>
+                  </div>
+          </div>
+          <div class="col-4">
+            <div class="form-group">
+                <label for="ekickoffMeeting">Kickoff Meeting?</label>
+                <select class="form-control" id="ekickoffMeeting" value="<%= jobs[i].kickoff_meeting %>">
+                  <option value="No" <%= jobs[i].kickoff_meeting == 'No' ? 'selected' : ''%>>No</option>
+                  <option value="Yes" <%= jobs[i].kickoff_meeting == 'Yes' ? 'selected' : ''%>>Yes</option>
+                </select>
+              </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-4">
+            <div class="form-group">
+                <label for="eproformaAmount">Proforma Amount</label>
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text">$</span>
+                    </div>
+                    <input type="text" class="form-control" id="eproformaAmount" value="<%= jobs[i].proforma_amount %>">
+                  </div>
+            </div>
+        </div>
+        <div class="col-4">
+            <div class="form-group">
+                <label for="eproformaPaid">Proforma Sent to Billing?</label>
+                <select class="form-control" id="eproformaPaid" value="<%= jobs[i].proforma_paid %>">
+                  <option value="unsent" <%= jobs[i].proforma_paid == 'unsent' ? 'selected' : ''%>>unsent</option>
+                  <option value="sent" <%= jobs[i].proforma_paid == 'sent' ? 'selected' : ''%>>sent</option>
+                </select>
+              </div>
+      </div>
+  </div>
+      <div class="row">
+        <div class="col-4">
+            <div class="form-group">
+                <label for="ebargeName">Barge(s)</label>
+                <input type="text" class="form-control" id="ebargeName" value="<%= jobs[i].barge_name %>">
+            </div>
+        </div>
+        <div class="col-4">
+          <div class="form-group">
+              <label for="etugName">Tug(s)</label>
+              <input type="text" class="form-control" id="etugName" value="<%= jobs[i].tug_name %>">
+          </div>
+      </div>
+  </div>
+          <div class="row">
+              <div class="col-12">
+                  <div class="form-group">
+                      <label for="ejobNotes">Job Notes</label>
+                      <textarea class="form-control" id="ejobNotes" rows="2" placeholder="Enter any general job notes here."><%= jobs[i].ord_notes %></textarea>
+                  </div>
+              </div>
+        </div>
+        <h5>Customer Information</h5>
+          <div class="row">
+              <div class="col-3">
+                  <div class="form-group">
+                      <label for="ecustomer">Customer</label>
+                      <input type="text" class="form-control" id="ecustomer" placeholder="Enter Customer Company" value="<%= jobs[i].customer %>">
+                  </div>
+              </div>
+              <div class="col-3">
+                <div class="form-group">
+                    <label for="ecustomer_nm">Customer Contact</label>
+                    <input type="text" class="form-control" id="ecustomer_nm" placeholder="Enter Customer Contact Name" value="<%= jobs[i].customer_nm %>">
+                </div>
+            </div>
+                <div class="col-3">
+                    <div class="form-group">
+                        <label for="ecustomer_phone">Customer Phone</label>
+                        <input type="text" class="form-control" id="ecustomer_phone" placeholder="Enter Customer Phone" value="<%= jobs[i].customer_phone %>">
+                    </div>
+            </div>
+            <div class="col-3">
+              <div class="form-group">
+                  <label for="ecustomer_email">Customer Email</label>
+                  <input type="text" class="form-control" id="ecustomer_email" placeholder="Enter Customer Email" value="<%= jobs[i].customer_email %>">
+              </div>
+      </div>
+        </div>
+        <div class="row">
+          <div class="col-12">
+              <div class="form-group">
+                  <label for="ecustomer_notes">Customer Notes</label>
+                  <textarea class="form-control" id="ecustomer_notes" rows="2" placeholder="Enter any customer notes here."><%= jobs[i].customer_notes %></textarea>
+              </div>
+          </div>
+    </div>
+    <h5>Vendor Information</h5>
+          <div class="row">
+              <div class="col-3">
+                  <div class="form-group">
+                      <label for="evendor">Vendor</label>
+                      <input type="text" class="form-control" id="evendor" placeholder="Enter Vendor Company" value="<%= jobs[i].vendor %>">
+                  </div>
+              </div>
+              <div class="col-3">
+                <div class="form-group">
+                    <label for="evendor_nm">Vendor Contact</label>
+                    <input type="text" class="form-control" id="evendor_nm" placeholder="Enter Vendor Contact Name" value="<%= jobs[i].vendor_nm %>">
+                </div>
+            </div>
+                <div class="col-3">
+                    <div class="form-group">
+                        <label for="evendor_phone">Vendor Phone</label>
+                        <input type="text" class="form-control" id="evendor_phone" placeholder="Enter Vendor Phone" value="<%= jobs[i].vendor_phone %>">
+                    </div>
+            </div>
+            <div class="col-3">
+              <div class="form-group">
+                  <label for="evendor_email">Vendor Email</label>
+                  <input type="text" class="form-control" id="evendor_email" placeholder="Enter Vendor Email" value="<%= jobs[i].vendor_email %>">
+              </div>
+      </div>
+        </div>
+        <div class="row">
+          <div class="col-12">
+              <div class="form-group">
+                  <label for="evendor_notes">Vendor Notes</label>
+                  <textarea class="form-control" id="evendor_notes" rows="2" placeholder="Enter any vendor notes here."><%= jobs[i].vendor_notes %></textarea>
+              </div>
+          </div>
+    </div>
+  </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Save Changes</button>
+                    </div>
+                </form>
+                <!-- End Job Form End -->
+              </div>
+            </div>
+          </div>
+          <!-- Duplicate Job Modal End -->
           <!-- Delete Job Modal -->
           <div class="modal fade" id="d<%= jobs[i].ordnbr %>" tabindex="-1" role="dialog" aria-labelledby="deleteTripModalLable" aria-hidden="true">
             <div class="modal-dialog" role="document">
@@ -377,7 +700,6 @@ td {
             </div>
           </div>
           <!-- Delete Job Modal End -->
-    
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             </button>
           </div>
@@ -391,36 +713,52 @@ td {
               <div class="card-body border">
             <table class="table table-borderless">
                 <tbody>
-                <tr class="d-flex">
-                  <td class="col-3">Origin:</td>
-                  <td class="col-6"><%= jobs[i].origin %></td>
+                  <tr class="d-flex">
+                  <td class="col-3 bold">Origin:</td>
+                  <td class="col-4"><%= jobs[i].origin %></td>
+                  <td class="col-2 bold">Lump Sum:</td>
+                  <td class="col-3">$<%= Intl.NumberFormat().format(jobs[i].lump_sum_amount) %> <a>(<%= jobs[i].lump_sum_paid %>)</a></td>
                 </tr>
                 <tr class="d-flex">
-                  <td class="col-3">Origin Desc.:</td>
-                  <td class="col-6"><%= jobs[i].origin_desc %></td>
+                  <td class="col-3 bold">Origin Desc.:</td>
+                  <td class="col-4"><%= jobs[i].origin_desc %></td>
+                  <td class="col-2 bold">Contract Signed:</td>
+                  <td class="col-3"><%= jobs[i].contract_signed %></td>
                 </tr>
                 <tr class="d-flex">
-                  <td class="col-3">Destination:</td>
-                  <td class="col-6"><%= jobs[i].destination %></td>
+                  <td class="col-3 bold">Destination:</td>
+                  <td class="col-4"><%= jobs[i].destination %></td>
+                  <td class="col-2 bold">Kickoff Meeting:</td>
+                  <td class="col-3"><%= jobs[i].kickoff_meeting %></td>
                 </tr>
                 <tr class="d-flex">
-                  <td class="col-3">Destination Description:</td>
-                  <td class="col-6"><%= jobs[i].destination_desc %></td>
+                  <td class="col-3 bold">Destination Description:</td>
+                  <td class="col-4"><%= jobs[i].destination_desc %></td>
+                  <td class="col-2 bold">Proforma:</td>
+                  <td class="col-3">$<%= Intl.NumberFormat().format(jobs[i].proforma_amount) %> <a>(<%= jobs[i].proforma_paid %>)</a></td>
                 </tr>
                 <tr class="d-flex">
-                  <td class="col-3">Start Date:</td>
+                  <td class="col-3 bold">Start Date:</td>
                   <td class="col-6"><%= moment(jobs[i].est_start_date).format('M/D/YY') %></td>
                 </tr>
                 <tr class="d-flex">
-                  <td class="col-3">PM Assigned:</td>
+                  <td class="col-3 bold">PM Assigned:</td>
                   <td class="col-6"><%= jobs[i].pm_assigned %></td>
                 </tr>
                 <tr class="d-flex">
-                  <td class="col-3">Status:</td>
+                  <td class="col-3 bold">Status:</td>
                   <td class="col-6"><%= jobs[i].status %></td>
                 </tr>
                 <tr class="d-flex">
-                  <td class="col-3">Trip Notes:</td>
+                  <td class="col-3 bold">Barge(s):</td>
+                  <td class="col-6"><%= jobs[i].barge_name %></td>
+                </tr>
+                <tr class="d-flex">
+                  <td class="col-3 bold">Tug(s):</td>
+                  <td class="col-6"><%= jobs[i].tug_name %></td>
+                </tr>
+                <tr class="d-flex">
+                  <td class="col-3 bold">Trip Notes:</td>
                   <td class="col-9" style="white-space: pre-wrap"><%= jobs[i].ord_notes %></td>
                 </tr>
               </tbody>
@@ -523,367 +861,6 @@ td {
         </thead>
         <% for (let i = 0; i < jobs.length; i++) { %>
           <% if (jobs[i].status  === "Active") { %>
-        <tbody>
-          <tr class="accordion-toggle collapsed row m-0" id="accordion1" data-toggle="collapse" data-parent="#accordion1" href="#<%= jobs[i].ordnbr %>">
-            <td class="d-inline-block col-1"><%= jobs[i].ordnbr %></td>
-            <td class="d-inline-block col-2"><%= jobs[i].customer %></td>
-            <td class="d-inline-block col-2"><%= jobs[i].origin %></td>
-            <td class="d-inline-block col-2"><%= jobs[i].destination %></td>
-            <td class="d-inline-block col-2"><%= jobs[i].pm_assigned %></td>
-            <td class="d-inline-block col-1"><%= jobs[i].status %></td>
-            <td class="d-inline-block col-2"><%= moment(jobs[i].est_start_date).format('M/D/YY') %></td>
-            <!-- <td class="expand-button" class="d-inline-block col-1"></td> -->
-            </tr>
-              
-      <tr class="hide-table-padding">
-      <td colspan="12">
-      <div class="collapse in col-sm head-div" id="<%= jobs[i].ordnbr %>">
-        <div class="card" id="tdcard">
-          <div class="card-body">
-            <div class="row">
-            <h5 class="card-title col align-self-center" id="cardtitle"><%= jobs[i].ordnbr %> - <%= jobs[i].customer %></h5>
-            <button type="button" class="btn col-1" id="edittripbutton" data-toggle="modal" data-target="#e<%= jobs[i].ordnbr %>">Edit</button>
-            <button type="button" class="btn col-1" data-toggle="modal" data-target="#d<%= jobs[i].ordnbr %>">Delete</button>
-          </div>
-    
-          <!-- Edit Job Modal -->
-          <div class="modal fade" id="e<%= jobs[i].ordnbr %>" tabindex="-1" role="dialog" aria-labelledby="editTripModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-lg" role="document">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <h5 class="modal-title" id="editTripModalLabel">Edit Trip Details</h5>
-                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                  </button>
-                </div>
-                <div class="modal-body">
-                  <!-- Edit Job Form Begin -->
-                  <form class="edittripform">
-                    <h5>Job Information</h5>
-                    <div class="row">
-                        <div class="col-4">
-                            <div class="form-group">
-                                <label hidden for="eid"></label>
-                                <input hidden type="text" class="form-control" id="eid" placeholder="Order #" value="<%= jobs[i].order_id %>">
-                                <label for="eJobNumberInput">Order #</label>
-                                <input type="text" class="form-control" id="eJobNumberInput" placeholder="Order #" value="<%= jobs[i].ordnbr %>" readonly>
-                            </div>
-                        </div>
-                        <div class="col-4">
-                          <div class="form-group">
-                            <label for="ejobStatus">Status</label>
-                            <select class="form-control" id="ejobStatus" value="<%= jobs[i].status %>">
-                              <option>Active</option>
-                              <option>Completed</option>
-                              <option>Upcoming</option>
-                              <option>Archived</option>
-                            </select>
-                          </div>
-                      </div>
-                          <div class="col-4">
-                              <div class="form-group">
-                                  <label for="epmAssigned">PM Assigned</label>
-                                  <input type="text" class="form-control" id="epmAssigned" placeholder="Origin" value="<%= jobs[i].pm_assigned %>">
-                              </div>
-                      </div>
-                  </div>
-                  <div class="row">
-                    <div class="col-4">
-                        <div class="form-group">
-                            <label for="eoriginInput">Origin</label>
-                            <input type="text" class="form-control" id="eoriginInput" placeholder="Origin" value="<%= jobs[i].origin %>">
-                        </div>
-                    </div>
-                    <div class="col-4">
-                      <div class="form-group">
-                          <label for="edestinationInput">Destination</label>
-                          <input type="text" class="form-control" id="edestinationInput" placeholder="Destination" value="<%= jobs[i].destination %>">
-                      </div>
-                  </div>
-                      <div class="col-4">
-                          <div class="form-group">
-                              <label for="eestStartDate">Estimated Start Date</label>
-                              <input type="date" class="form-control" id="eestStartDate" placeholder="Destination" value="<%= jobs[i].est_start_date %>">
-                          </div>
-                  </div>
-              </div>
-              <div class="row">
-                <div class="col-4">
-                    <div class="form-group">
-                        <label for="eoriginDesc">Origin Desc.</label>
-                        <input type="text" class="form-control" id="eoriginDesc" placeholder="Origin Desc." value="<%= jobs[i].origin_desc %>">
-                    </div>
-                </div>
-                <div class="col-4">
-                  <div class="form-group">
-                      <label for="edestDesc">Destination Desc.</label>
-                      <input type="text" class="form-control" id="edestDesc" placeholder="Destination Desc." value="<%= jobs[i].destination_desc %>">
-                  </div>
-              </div>
-          </div>
-          <div class="row">
-              <div class="col-12">
-                  <div class="form-group">
-                      <label for="ejobNotes">Job Notes</label>
-                      <textarea class="form-control" id="ejobNotes" rows="2" placeholder="Enter any general job notes here."><%= jobs[i].ord_notes %></textarea>
-                  </div>
-              </div>
-        </div>
-        <h5>Customer Information</h5>
-          <div class="row">
-              <div class="col-3">
-                  <div class="form-group">
-                      <label for="ecustomer">Customer</label>
-                      <input type="text" class="form-control" id="ecustomer" placeholder="Enter Customer Company" value="<%= jobs[i].customer %>">
-                  </div>
-              </div>
-              <div class="col-3">
-                <div class="form-group">
-                    <label for="ecustomer_nm">Customer Contact</label>
-                    <input type="text" class="form-control" id="ecustomer_nm" placeholder="Enter Customer Contact Name" value="<%= jobs[i].customer_nm %>">
-                </div>
-            </div>
-                <div class="col-3">
-                    <div class="form-group">
-                        <label for="ecustomer_phone">Customer Phone</label>
-                        <input type="text" class="form-control" id="ecustomer_phone" placeholder="Enter Customer Phone" value="<%= jobs[i].customer_phone %>">
-                    </div>
-            </div>
-            <div class="col-3">
-              <div class="form-group">
-                  <label for="ecustomer_email">Customer Email</label>
-                  <input type="text" class="form-control" id="ecustomer_email" placeholder="Enter Customer Email" value="<%= jobs[i].customer_email %>">
-              </div>
-      </div>
-        </div>
-        <div class="row">
-          <div class="col-12">
-              <div class="form-group">
-                  <label for="ecustomer_notes">Customer Notes</label>
-                  <textarea class="form-control" id="ecustomer_notes" rows="2" placeholder="Enter any customer notes here."><%= jobs[i].customer_notes %></textarea>
-              </div>
-          </div>
-    </div>
-    <h5>Vendor Information</h5>
-          <div class="row">
-              <div class="col-3">
-                  <div class="form-group">
-                      <label for="evendor">Vendor</label>
-                      <input type="text" class="form-control" id="evendor" placeholder="Enter Vendor Company" value="<%= jobs[i].vendor %>">
-                  </div>
-              </div>
-              <div class="col-3">
-                <div class="form-group">
-                    <label for="evendor_nm">Vendor Contact</label>
-                    <input type="text" class="form-control" id="evendor_nm" placeholder="Enter Vendor Contact Name" value="<%= jobs[i].vendor_nm %>">
-                </div>
-            </div>
-                <div class="col-3">
-                    <div class="form-group">
-                        <label for="evendor_phone">Vendor Phone</label>
-                        <input type="text" class="form-control" id="evendor_phone" placeholder="Enter Vendor Phone" value="<%= jobs[i].vendor_phone %>">
-                    </div>
-            </div>
-            <div class="col-3">
-              <div class="form-group">
-                  <label for="evendor_email">Vendor Email</label>
-                  <input type="text" class="form-control" id="evendor_email" placeholder="Enter Vendor Email" value="<%= jobs[i].vendor_email %>">
-              </div>
-      </div>
-        </div>
-        <div class="row">
-          <div class="col-12">
-              <div class="form-group">
-                  <label for="evendor_notes">Vendor Notes</label>
-                  <textarea class="form-control" id="evendor_notes" rows="2" placeholder="Enter any vendor notes here."><%= jobs[i].vendor_notes %></textarea>
-              </div>
-          </div>
-    </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary">Save Changes</button>
-                    </div>
-                </form>
-                <!-- End Job Form End -->
-              </div>
-            </div>
-          </div>
-          <!-- Edit Job Modal End -->
-    
-          <!-- Delete Job Modal -->
-          <div class="modal fade" id="d<%= jobs[i].ordnbr %>" tabindex="-1" role="dialog" aria-labelledby="deleteTripModalLable" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <h5 class="modal-title" id="exampleModalLabel">Are you sure you want to delete job <%= jobs[i].ordnbr %>? </h5>
-                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                  </button>
-                </div>
-                <div class="modal-body">
-                  Click DELETE to delete this job, or click Close to dismiss.
-                  <form class="deletetripform">
-                    <div class="form-group">
-                      <label hidden for="did"></label>
-                      <input hidden type="text" class="form-control" id="did" placeholder="Order #" value="<%= jobs[i].ordnbr %>">
-                  </div>
-                </div>
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                  <button type="submit" class="btn btn-danger">DELETE THIS JOB</button>
-                </div>
-              </form>
-              </div>
-            </div>
-          </div>
-          <!-- Delete Job Modal End -->
-    
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            </button>
-          </div>
-          <div class="horizontal-line">
-            <hr class="hr-line-line">
-          </div>
-          <div class="modal-body">
-            <div class="row">
-            <div class="card col-8 border-0" style="font-size:medium">
-              <h6 class="card-header border">Trip Details</h6>
-              <div class="card-body border">
-            <table class="table table-borderless">
-                <tbody>
-                <tr class="d-flex">
-                  <td class="col-3">Origin:</td>
-                  <td class="col-6"><%= jobs[i].origin %></td>
-                </tr>
-                <tr class="d-flex">
-                  <td class="col-3">Origin Desc.:</td>
-                  <td class="col-6"><%= jobs[i].origin_desc %></td>
-                </tr>
-                <tr class="d-flex">
-                  <td class="col-3">Destination:</td>
-                  <td class="col-6"><%= jobs[i].destination %></td>
-                </tr>
-                <tr class="d-flex">
-                  <td class="col-3">Destination Description:</td>
-                  <td class="col-6"><%= jobs[i].destination_desc %></td>
-                </tr>
-                <tr class="d-flex">
-                  <td class="col-3">Start Date:</td>
-                  <td class="col-6"><%= moment(jobs[i].est_start_date).format('M/D/YY') %></td>
-                </tr>
-                <tr class="d-flex">
-                  <td class="col-3">PM Assigned:</td>
-                  <td class="col-6"><%= jobs[i].pm_assigned %></td>
-                </tr>
-                <tr class="d-flex">
-                  <td class="col-3">Status:</td>
-                  <td class="col-6"><%= jobs[i].status %></td>
-                </tr>
-                <tr class="d-flex">
-                  <td class="col-3">Trip Notes:</td>
-                  <td class="col-9" style="white-space: pre-wrap"><%= jobs[i].ord_notes %></td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-          </div>
-          <div class="col-4">
-            <div class="row">
-              <div class="card col-12 border-0" style="padding-right:15px">
-            <h6 class="job-note-headers card-header border">Customer Details</h6>
-            <div class="card-body border">
-          <table class="table table-borderless">
-              <tbody>
-              <tr class="d-flex">
-                <td class="col-4">Customer:</td>
-                <td class="col-6"><%= jobs[i].customer %></td>
-              </tr>
-              <tr class="d-flex">
-                <td class="col-4">Customer Contact:</td>
-                <td class="col-6"><%= jobs[i].customer_nm %></td>
-              </tr>
-              <tr class="d-flex">
-                <td class="col-4">Customer Phone:</td>
-                <td class="col-6"><%= jobs[i].customer_phone %></td>
-              </tr>
-              <tr class="d-flex">
-                <td class="col-4">Customer Email:</td>
-                <td class="col-6"><%= jobs[i].customer_email %></td>
-              </tr>
-              <tr class="d-flex">
-                <td class="col-4">Notes:</td>
-                <td class="col-6" style="white-space: pre-wrap"><%= jobs[i].customer_notes %></td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-        </div>
-        </div>
-        <div class="row" style="line-height:5px"><br></div>
-        <div class="row">
-          <div class="card col-12 border-0" style="padding-right:15px">
-        <h6 class="job-note-headers card-header border">Vendor Details</h6>
-        <div class="card-body border">
-      <table class="table table-borderless">
-          <tbody>
-          <tr class="d-flex">
-            <td class="col-4">Vendor:</td>
-            <td class="col-6"><%= jobs[i].vendor %></td>
-          </tr>
-          <tr class="d-flex">
-            <td class="col-4">Vendor Contact:</td>
-            <td class="col-6"><%= jobs[i].vendor_nm %></td>
-          </tr>
-          <tr class="d-flex">
-            <td class="col-4">Vendor Phone:</td>
-            <td class="col-6"><%= jobs[i].vendor_phone %></td>
-          </tr>
-          <tr class="d-flex">
-            <td class="col-4">Vendor Email:</td>
-            <td class="col-6"><%= jobs[i].vendor_email %></td>
-          </tr>
-          <tr class="d-flex">
-            <td class="col-4">Notes:</td>
-            <td class="col-6" style="white-space: pre-wrap"><%= jobs[i].vendor_notes %></td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-    </div>
-    </div>
-      </div>
-        </div>
-            </div>
-          </div>
-      </div>
-    </td>
-    </tr>
-        </tbody>
-    <% } %>
-      <% } %>
-        </table>
-      </div>
-  </div>
-    <!-- Active Tab Begin -->
-      <!-- Completed Tab Begin -->
-      <div class="tab-pane fade" id="completed" role="tabpanel" aria-labelledby="completed-tab">
-        <div class="table">
-          <table class="table table-hover table-sm" data-toggle="table">
-            <thead>
-              <tr class="row m-0">
-                <th data-field="order_id" data-sortable="true" scope="col" class="d-inline-block col-1">Job</th>
-                <th data-sortable="true" scope="col" class="d-inline-block col-2 ">Customer</th>
-                <th data-sortable="true" scope="col" class="d-inline-block col-2">Origin</th>
-                <th data-sortable="true" scope="col" class="d-inline-block col-2">Destination</th>
-                <th data-sortable="true" scope="col" class="d-inline-block col-2">PM Assigned</th>
-                <th data-sortable="true" scope="col" class="d-inline-block col-1">Status</th>
-                <th data-sortable="true" scope="col" class="d-inline-block col-2">Est. Start</th>
-                <!-- <th scope="col" class="d-inline-block col-1">#</th> -->
-              </tr>
-            </thead>
-            <% for (let i = 0; i < jobs.length; i++) { %>
-              <% if (jobs[i].status  === "Completed") { %>
             <tbody>
               <tr class="accordion-toggle collapsed row m-0" id="accordion1" data-toggle="collapse" data-parent="#accordion1" href="#<%= jobs[i].ordnbr %>">
                 <td class="d-inline-block col-1"><%= jobs[i].ordnbr %></td>
@@ -904,12 +881,13 @@ td {
                 <div class="row">
                 <h5 class="card-title col align-self-center" id="cardtitle"><%= jobs[i].ordnbr %> - <%= jobs[i].customer %></h5>
                 <button type="button" class="btn col-1" id="edittripbutton" data-toggle="modal" data-target="#e<%= jobs[i].ordnbr %>">Edit</button>
+                <button type="button" class="btn col-1" id="duplicatetripbutton" data-toggle="modal" data-target="#du<%= jobs[i].ordnbr %>">Duplicate</button>
                 <button type="button" class="btn col-1" data-toggle="modal" data-target="#d<%= jobs[i].ordnbr %>">Delete</button>
               </div>
         
               <!-- Edit Job Modal -->
               <div class="modal fade" id="e<%= jobs[i].ordnbr %>" tabindex="-1" role="dialog" aria-labelledby="editTripModalLabel" aria-hidden="true">
-                <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-dialog modal-xl" role="document">
                   <div class="modal-content">
                     <div class="modal-header">
                       <h5 class="modal-title" id="editTripModalLabel">Edit Trip Details</h5>
@@ -934,10 +912,10 @@ td {
                               <div class="form-group">
                                 <label for="ejobStatus">Status</label>
                                 <select class="form-control" id="ejobStatus" value="<%= jobs[i].status %>">
-                                  <option>Completed</option>
-                                  <option>Upcoming</option>
-                                  <option>Active</option>
-                                  <option>Archived</option>
+                                  <option value="Upcoming" <%= jobs[i].status == 'Upcoming' ? 'selected' : ''%>>Upcoming</option>
+                                  <option value="Active" <%= jobs[i].status == 'Active' ? 'selected' : ''%>>Active</option>
+                                  <option value="Completed" <%= jobs[i].status == 'Completed' ? 'selected' : ''%>>Completed</option>
+                                  <option value="Archived" <%= jobs[i].status == 'Archived' ? 'selected' : ''%>>Archived</option>
                                 </select>
                               </div>
                           </div>
@@ -981,7 +959,83 @@ td {
                           <input type="text" class="form-control" id="edestDesc" placeholder="Destination Desc." value="<%= jobs[i].destination_desc %>">
                       </div>
                   </div>
+                  <div class="col-4">
+                    <div class="form-group">
+                        <label for="econtractSigned">Contract Signed?</label>
+                        <select class="form-control" id="econtractSigned">
+                          <option value="No" <%= jobs[i].contract_signed == 'No' ? 'selected' : ''%>>No</option>
+                          <option value="Yes" <%= jobs[i].contract_signed == 'Yes' ? 'selected' : ''%>>Yes</option>
+                        </select>
+                      </div>
+                </div>
               </div>
+              <div class="row">
+                <div class="col-4">
+                    <div class="form-group">
+                        <label for="elumpSumAmount">Lump Sum Amount</label>
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                              <span class="input-group-text">$</span>
+                            </div>
+                            <input type="text" class="form-control" id="elumpSumAmount" value="<%= jobs[i].lump_sum_amount %>">
+                          </div>
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="form-group">
+                        <label for="elumpSumPaid">Lump Sum Sent to Billing?</label>
+                        <select class="form-control" id="elumpSumPaid" value="<%= jobs[i].lump_sum_paid %>">
+                          <option value="unsent" <%= jobs[i].lump_sum_paid == 'unsent' ? 'selected' : ''%>>unsent</option>
+                          <option value="sent" <%= jobs[i].lump_sum_paid == 'sent' ? 'selected' : ''%>>sent</option>
+                        </select>
+                      </div>
+              </div>
+              <div class="col-4">
+                <div class="form-group">
+                    <label for="ekickoffMeeting">Kickoff Meeting?</label>
+                    <select class="form-control" id="ekickoffMeeting" value="<%= jobs[i].kickoff_meeting %>">
+                      <option value="No" <%= jobs[i].kickoff_meeting == 'No' ? 'selected' : ''%>>No</option>
+                      <option value="Yes" <%= jobs[i].kickoff_meeting == 'Yes' ? 'selected' : ''%>>Yes</option>
+                    </select>
+                  </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-4">
+                <div class="form-group">
+                    <label for="eproformaAmount">Proforma Amount</label>
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text">$</span>
+                        </div>
+                        <input type="text" class="form-control" id="eproformaAmount" value="<%= jobs[i].proforma_amount %>">
+                      </div>
+                </div>
+            </div>
+            <div class="col-4">
+                <div class="form-group">
+                    <label for="eproformaPaid">Proforma Sent to Billing?</label>
+                    <select class="form-control" id="eproformaPaid" value="<%= jobs[i].proforma_paid %>">
+                      <option value="unsent" <%= jobs[i].proforma_paid == 'unsent' ? 'selected' : ''%>>unsent</option>
+                      <option value="sent" <%= jobs[i].proforma_paid == 'sent' ? 'selected' : ''%>>sent</option>
+                    </select>
+                  </div>
+          </div>
+      </div>
+          <div class="row">
+            <div class="col-4">
+                <div class="form-group">
+                    <label for="ebargeName">Barge(s)</label>
+                    <input type="text" class="form-control" id="ebargeName" value="<%= jobs[i].barge_name %>">
+                </div>
+            </div>
+            <div class="col-4">
+              <div class="form-group">
+                  <label for="etugName">Tug(s)</label>
+                  <input type="text" class="form-control" id="etugName" value="<%= jobs[i].tug_name %>">
+              </div>
+          </div>
+      </div>
               <div class="row">
                   <div class="col-12">
                       <div class="form-group">
@@ -1071,7 +1125,249 @@ td {
                 </div>
               </div>
               <!-- Edit Job Modal End -->
-        
+    
+              <!-- Duplicate Job Modal Begin -->
+              <div class="modal fade" id="du<%= jobs[i].ordnbr %>" tabindex="-1" role="dialog" aria-labelledby="duplicateTripModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-xl" role="document">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="editTripModalLabel">Duplicating Job <%= jobs[i].ordnbr %></h5>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <div class="modal-body">
+                      <!-- Duplicate Job Form Begin -->
+                      <form class="duplicatetripform">
+                        <h5>Job Information</h5>
+                        <div class="row">
+                          <div class="col-4">
+                              <div class="form-group">
+                                  <label for="duJobNumberInput">Enter New Order #</label>
+                                  <input type="text" class="form-control" id="duJobNumberInput" placeholder="Enter New Order #">
+                              </div>
+                          </div>
+                        </div>
+                        <div class="d-none">
+                        <div class="row">
+                            <div class="col-4">
+                              <div class="form-group">
+                                <label for="ejobStatus">Status</label>
+                                <select class="form-control" id="ejobStatus" value="<%= jobs[i].status %>">
+                                  <option value="Upcoming" <%= jobs[i].status == 'Upcoming' ? 'selected' : ''%>>Upcoming</option>
+                                  <option value="Active" <%= jobs[i].status == 'Active' ? 'selected' : ''%>>Active</option>
+                                  <option value="Completed" <%= jobs[i].status == 'Completed' ? 'selected' : ''%>>Completed</option>
+                                  <option value="Archived" <%= jobs[i].status == 'Archived' ? 'selected' : ''%>>Archived</option>
+                                </select>
+                              </div>
+                          </div>
+                              <div class="col-4">
+                                  <div class="form-group">
+                                      <label for="epmAssigned">PM Assigned</label>
+                                      <input type="text" class="form-control" id="epmAssigned" placeholder="Origin" value="<%= jobs[i].pm_assigned %>">
+                                  </div>
+                          </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-4">
+                            <div class="form-group">
+                                <label for="eoriginInput">Origin</label>
+                                <input type="text" class="form-control" id="eoriginInput" placeholder="Origin" value="<%= jobs[i].origin %>">
+                            </div>
+                        </div>
+                        <div class="col-4">
+                          <div class="form-group">
+                              <label for="edestinationInput">Destination</label>
+                              <input type="text" class="form-control" id="edestinationInput" placeholder="Destination" value="<%= jobs[i].destination %>">
+                          </div>
+                      </div>
+                          <div class="col-4">
+                              <div class="form-group">
+                                  <label for="eestStartDate">Estimated Start Date</label>
+                                  <input type="date" class="form-control" id="eestStartDate" placeholder="Destination" value="<%= jobs[i].est_start_date %>">
+                              </div>
+                      </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-4">
+                        <div class="form-group">
+                            <label for="eoriginDesc">Origin Desc.</label>
+                            <input type="text" class="form-control" id="eoriginDesc" placeholder="Origin Desc." value="<%= jobs[i].origin_desc %>">
+                        </div>
+                    </div>
+                    <div class="col-4">
+                      <div class="form-group">
+                          <label for="edestDesc">Destination Desc.</label>
+                          <input type="text" class="form-control" id="edestDesc" placeholder="Destination Desc." value="<%= jobs[i].destination_desc %>">
+                      </div>
+                  </div>
+                  <div class="col-4">
+                    <div class="form-group">
+                        <label for="econtractSigned">Contract Signed?</label>
+                        <select class="form-control" id="econtractSigned">
+                          <option value="No" <%= jobs[i].contract_signed == 'No' ? 'selected' : ''%>>No</option>
+                          <option value="Yes" <%= jobs[i].contract_signed == 'Yes' ? 'selected' : ''%>>Yes</option>
+                        </select>
+                      </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-4">
+                    <div class="form-group">
+                        <label for="elumpSumAmount">Lump Sum Amount</label>
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                              <span class="input-group-text">$</span>
+                            </div>
+                            <input type="text" class="form-control" id="elumpSumAmount" value="<%= jobs[i].lump_sum_amount %>">
+                          </div>
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="form-group">
+                        <label for="elumpSumPaid">Lump Sum Sent to Billing?</label>
+                        <select class="form-control" id="elumpSumPaid" value="<%= jobs[i].lump_sum_paid %>">
+                          <option value="unsent" <%= jobs[i].lump_sum_paid == 'unsent' ? 'selected' : ''%>>unsent</option>
+                          <option value="sent" <%= jobs[i].lump_sum_paid == 'sent' ? 'selected' : ''%>>sent</option>
+                        </select>
+                      </div>
+              </div>
+              <div class="col-4">
+                <div class="form-group">
+                    <label for="ekickoffMeeting">Kickoff Meeting?</label>
+                    <select class="form-control" id="ekickoffMeeting" value="<%= jobs[i].kickoff_meeting %>">
+                      <option value="No" <%= jobs[i].kickoff_meeting == 'No' ? 'selected' : ''%>>No</option>
+                      <option value="Yes" <%= jobs[i].kickoff_meeting == 'Yes' ? 'selected' : ''%>>Yes</option>
+                    </select>
+                  </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-4">
+                <div class="form-group">
+                    <label for="eproformaAmount">Proforma Amount</label>
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text">$</span>
+                        </div>
+                        <input type="text" class="form-control" id="eproformaAmount" value="<%= jobs[i].proforma_amount %>">
+                      </div>
+                </div>
+            </div>
+            <div class="col-4">
+                <div class="form-group">
+                    <label for="eproformaPaid">Proforma Sent to Billing?</label>
+                    <select class="form-control" id="eproformaPaid" value="<%= jobs[i].proforma_paid %>">
+                      <option value="unsent" <%= jobs[i].proforma_paid == 'unsent' ? 'selected' : ''%>>unsent</option>
+                      <option value="sent" <%= jobs[i].proforma_paid == 'sent' ? 'selected' : ''%>>sent</option>
+                    </select>
+                  </div>
+          </div>
+      </div>
+          <div class="row">
+            <div class="col-4">
+                <div class="form-group">
+                    <label for="ebargeName">Barge(s)</label>
+                    <input type="text" class="form-control" id="ebargeName" value="<%= jobs[i].barge_name %>">
+                </div>
+            </div>
+            <div class="col-4">
+              <div class="form-group">
+                  <label for="etugName">Tug(s)</label>
+                  <input type="text" class="form-control" id="etugName" value="<%= jobs[i].tug_name %>">
+              </div>
+          </div>
+      </div>
+              <div class="row">
+                  <div class="col-12">
+                      <div class="form-group">
+                          <label for="ejobNotes">Job Notes</label>
+                          <textarea class="form-control" id="ejobNotes" rows="2" placeholder="Enter any general job notes here."><%= jobs[i].ord_notes %></textarea>
+                      </div>
+                  </div>
+            </div>
+            <h5>Customer Information</h5>
+              <div class="row">
+                  <div class="col-3">
+                      <div class="form-group">
+                          <label for="ecustomer">Customer</label>
+                          <input type="text" class="form-control" id="ecustomer" placeholder="Enter Customer Company" value="<%= jobs[i].customer %>">
+                      </div>
+                  </div>
+                  <div class="col-3">
+                    <div class="form-group">
+                        <label for="ecustomer_nm">Customer Contact</label>
+                        <input type="text" class="form-control" id="ecustomer_nm" placeholder="Enter Customer Contact Name" value="<%= jobs[i].customer_nm %>">
+                    </div>
+                </div>
+                    <div class="col-3">
+                        <div class="form-group">
+                            <label for="ecustomer_phone">Customer Phone</label>
+                            <input type="text" class="form-control" id="ecustomer_phone" placeholder="Enter Customer Phone" value="<%= jobs[i].customer_phone %>">
+                        </div>
+                </div>
+                <div class="col-3">
+                  <div class="form-group">
+                      <label for="ecustomer_email">Customer Email</label>
+                      <input type="text" class="form-control" id="ecustomer_email" placeholder="Enter Customer Email" value="<%= jobs[i].customer_email %>">
+                  </div>
+          </div>
+            </div>
+            <div class="row">
+              <div class="col-12">
+                  <div class="form-group">
+                      <label for="ecustomer_notes">Customer Notes</label>
+                      <textarea class="form-control" id="ecustomer_notes" rows="2" placeholder="Enter any customer notes here."><%= jobs[i].customer_notes %></textarea>
+                  </div>
+              </div>
+        </div>
+        <h5>Vendor Information</h5>
+              <div class="row">
+                  <div class="col-3">
+                      <div class="form-group">
+                          <label for="evendor">Vendor</label>
+                          <input type="text" class="form-control" id="evendor" placeholder="Enter Vendor Company" value="<%= jobs[i].vendor %>">
+                      </div>
+                  </div>
+                  <div class="col-3">
+                    <div class="form-group">
+                        <label for="evendor_nm">Vendor Contact</label>
+                        <input type="text" class="form-control" id="evendor_nm" placeholder="Enter Vendor Contact Name" value="<%= jobs[i].vendor_nm %>">
+                    </div>
+                </div>
+                    <div class="col-3">
+                        <div class="form-group">
+                            <label for="evendor_phone">Vendor Phone</label>
+                            <input type="text" class="form-control" id="evendor_phone" placeholder="Enter Vendor Phone" value="<%= jobs[i].vendor_phone %>">
+                        </div>
+                </div>
+                <div class="col-3">
+                  <div class="form-group">
+                      <label for="evendor_email">Vendor Email</label>
+                      <input type="text" class="form-control" id="evendor_email" placeholder="Enter Vendor Email" value="<%= jobs[i].vendor_email %>">
+                  </div>
+          </div>
+            </div>
+            <div class="row">
+              <div class="col-12">
+                  <div class="form-group">
+                      <label for="evendor_notes">Vendor Notes</label>
+                      <textarea class="form-control" id="evendor_notes" rows="2" placeholder="Enter any vendor notes here."><%= jobs[i].vendor_notes %></textarea>
+                  </div>
+              </div>
+        </div>
+      </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Save Changes</button>
+                        </div>
+                    </form>
+                    <!-- End Job Form End -->
+                  </div>
+                </div>
+              </div>
+              <!-- Duplicate Job Modal End -->
               <!-- Delete Job Modal -->
               <div class="modal fade" id="d<%= jobs[i].ordnbr %>" tabindex="-1" role="dialog" aria-labelledby="deleteTripModalLable" aria-hidden="true">
                 <div class="modal-dialog" role="document">
@@ -1099,7 +1395,6 @@ td {
                 </div>
               </div>
               <!-- Delete Job Modal End -->
-        
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 </button>
               </div>
@@ -1113,36 +1408,52 @@ td {
                   <div class="card-body border">
                 <table class="table table-borderless">
                     <tbody>
-                    <tr class="d-flex">
-                      <td class="col-3">Origin:</td>
-                      <td class="col-6"><%= jobs[i].origin %></td>
+                      <tr class="d-flex">
+                      <td class="col-3 bold">Origin:</td>
+                      <td class="col-4"><%= jobs[i].origin %></td>
+                      <td class="col-2 bold">Lump Sum:</td>
+                      <td class="col-3">$<%= Intl.NumberFormat().format(jobs[i].lump_sum_amount) %> <a>(<%= jobs[i].lump_sum_paid %>)</a></td>
                     </tr>
                     <tr class="d-flex">
-                      <td class="col-3">Origin Desc.:</td>
-                      <td class="col-6"><%= jobs[i].origin_desc %></td>
+                      <td class="col-3 bold">Origin Desc.:</td>
+                      <td class="col-4"><%= jobs[i].origin_desc %></td>
+                      <td class="col-2 bold">Contract Signed:</td>
+                      <td class="col-3"><%= jobs[i].contract_signed %></td>
                     </tr>
                     <tr class="d-flex">
-                      <td class="col-3">Destination:</td>
-                      <td class="col-6"><%= jobs[i].destination %></td>
+                      <td class="col-3 bold">Destination:</td>
+                      <td class="col-4"><%= jobs[i].destination %></td>
+                      <td class="col-2 bold">Kickoff Meeting:</td>
+                      <td class="col-3"><%= jobs[i].kickoff_meeting %></td>
                     </tr>
                     <tr class="d-flex">
-                      <td class="col-3">Destination Description:</td>
-                      <td class="col-6"><%= jobs[i].destination_desc %></td>
+                      <td class="col-3 bold">Destination Description:</td>
+                      <td class="col-4"><%= jobs[i].destination_desc %></td>
+                      <td class="col-2 bold">Proforma:</td>
+                      <td class="col-3">$<%= Intl.NumberFormat().format(jobs[i].proforma_amount) %> <a>(<%= jobs[i].proforma_paid %>)</a></td>
                     </tr>
                     <tr class="d-flex">
-                      <td class="col-3">Start Date:</td>
+                      <td class="col-3 bold">Start Date:</td>
                       <td class="col-6"><%= moment(jobs[i].est_start_date).format('M/D/YY') %></td>
                     </tr>
                     <tr class="d-flex">
-                      <td class="col-3">PM Assigned:</td>
+                      <td class="col-3 bold">PM Assigned:</td>
                       <td class="col-6"><%= jobs[i].pm_assigned %></td>
                     </tr>
                     <tr class="d-flex">
-                      <td class="col-3">Status:</td>
+                      <td class="col-3 bold">Status:</td>
                       <td class="col-6"><%= jobs[i].status %></td>
                     </tr>
                     <tr class="d-flex">
-                      <td class="col-3">Trip Notes:</td>
+                      <td class="col-3 bold">Barge(s):</td>
+                      <td class="col-6"><%= jobs[i].barge_name %></td>
+                    </tr>
+                    <tr class="d-flex">
+                      <td class="col-3 bold">Tug(s):</td>
+                      <td class="col-6"><%= jobs[i].tug_name %></td>
+                    </tr>
+                    <tr class="d-flex">
+                      <td class="col-3 bold">Trip Notes:</td>
                       <td class="col-9" style="white-space: pre-wrap"><%= jobs[i].ord_notes %></td>
                     </tr>
                   </tbody>
@@ -1221,6 +1532,701 @@ td {
         </td>
         </tr>
             </tbody>
+    <% } %>
+      <% } %>
+        </table>
+      </div>
+  </div>
+    <!-- Active Tab End -->
+      <!-- Completed Tab Begin -->
+      <div class="tab-pane fade" id="completed" role="tabpanel" aria-labelledby="completed-tab">
+        <div class="table">
+          <table class="table table-hover table-sm" data-toggle="table">
+            <thead>
+              <tr class="row m-0">
+                <th data-field="order_id" data-sortable="true" scope="col" class="d-inline-block col-1">Job</th>
+                <th data-sortable="true" scope="col" class="d-inline-block col-2 ">Customer</th>
+                <th data-sortable="true" scope="col" class="d-inline-block col-2">Origin</th>
+                <th data-sortable="true" scope="col" class="d-inline-block col-2">Destination</th>
+                <th data-sortable="true" scope="col" class="d-inline-block col-2">PM Assigned</th>
+                <th data-sortable="true" scope="col" class="d-inline-block col-1">Status</th>
+                <th data-sortable="true" scope="col" class="d-inline-block col-2">Est. Start</th>
+                <!-- <th scope="col" class="d-inline-block col-1">#</th> -->
+              </tr>
+            </thead>
+            <% for (let i = 0; i < jobs.length; i++) { %>
+              <% if (jobs[i].status  === "Completed") { %>
+                <tbody>
+                  <tr class="accordion-toggle collapsed row m-0" id="accordion1" data-toggle="collapse" data-parent="#accordion1" href="#<%= jobs[i].ordnbr %>">
+                    <td class="d-inline-block col-1"><%= jobs[i].ordnbr %></td>
+                    <td class="d-inline-block col-2"><%= jobs[i].customer %></td>
+                    <td class="d-inline-block col-2"><%= jobs[i].origin %></td>
+                    <td class="d-inline-block col-2"><%= jobs[i].destination %></td>
+                    <td class="d-inline-block col-2"><%= jobs[i].pm_assigned %></td>
+                    <td class="d-inline-block col-1"><%= jobs[i].status %></td>
+                    <td class="d-inline-block col-2"><%= moment(jobs[i].est_start_date).format('M/D/YY') %></td>
+                    <!-- <td class="expand-button" class="d-inline-block col-1"></td> -->
+                    </tr>
+                      
+              <tr class="hide-table-padding">
+              <td colspan="12">
+              <div class="collapse in col-sm head-div" id="<%= jobs[i].ordnbr %>">
+                <div class="card" id="tdcard">
+                  <div class="card-body">
+                    <div class="row">
+                    <h5 class="card-title col align-self-center" id="cardtitle"><%= jobs[i].ordnbr %> - <%= jobs[i].customer %></h5>
+                    <button type="button" class="btn col-1" id="edittripbutton" data-toggle="modal" data-target="#e<%= jobs[i].ordnbr %>">Edit</button>
+                    <button type="button" class="btn col-1" id="duplicatetripbutton" data-toggle="modal" data-target="#du<%= jobs[i].ordnbr %>">Duplicate</button>
+                    <button type="button" class="btn col-1" data-toggle="modal" data-target="#d<%= jobs[i].ordnbr %>">Delete</button>
+                  </div>
+            
+                  <!-- Edit Job Modal -->
+                  <div class="modal fade" id="e<%= jobs[i].ordnbr %>" tabindex="-1" role="dialog" aria-labelledby="editTripModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-xl" role="document">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h5 class="modal-title" id="editTripModalLabel">Edit Trip Details</h5>
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                        </div>
+                        <div class="modal-body">
+                          <!-- Edit Job Form Begin -->
+                          <form class="edittripform">
+                            <h5>Job Information</h5>
+                            <div class="row">
+                                <div class="col-4">
+                                    <div class="form-group">
+                                        <label hidden for="eid"></label>
+                                        <input hidden type="text" class="form-control" id="eid" placeholder="Order #" value="<%= jobs[i].order_id %>">
+                                        <label for="eJobNumberInput">Order #</label>
+                                        <input type="text" class="form-control" id="eJobNumberInput" placeholder="Order #" value="<%= jobs[i].ordnbr %>" readonly>
+                                    </div>
+                                </div>
+                                <div class="col-4">
+                                  <div class="form-group">
+                                    <label for="ejobStatus">Status</label>
+                                    <select class="form-control" id="ejobStatus" value="<%= jobs[i].status %>">
+                                      <option value="Upcoming" <%= jobs[i].status == 'Upcoming' ? 'selected' : ''%>>Upcoming</option>
+                                      <option value="Active" <%= jobs[i].status == 'Active' ? 'selected' : ''%>>Active</option>
+                                      <option value="Completed" <%= jobs[i].status == 'Completed' ? 'selected' : ''%>>Completed</option>
+                                      <option value="Archived" <%= jobs[i].status == 'Archived' ? 'selected' : ''%>>Archived</option>
+                                    </select>
+                                  </div>
+                              </div>
+                                  <div class="col-4">
+                                      <div class="form-group">
+                                          <label for="epmAssigned">PM Assigned</label>
+                                          <input type="text" class="form-control" id="epmAssigned" placeholder="Origin" value="<%= jobs[i].pm_assigned %>">
+                                      </div>
+                              </div>
+                          </div>
+                          <div class="row">
+                            <div class="col-4">
+                                <div class="form-group">
+                                    <label for="eoriginInput">Origin</label>
+                                    <input type="text" class="form-control" id="eoriginInput" placeholder="Origin" value="<%= jobs[i].origin %>">
+                                </div>
+                            </div>
+                            <div class="col-4">
+                              <div class="form-group">
+                                  <label for="edestinationInput">Destination</label>
+                                  <input type="text" class="form-control" id="edestinationInput" placeholder="Destination" value="<%= jobs[i].destination %>">
+                              </div>
+                          </div>
+                              <div class="col-4">
+                                  <div class="form-group">
+                                      <label for="eestStartDate">Estimated Start Date</label>
+                                      <input type="date" class="form-control" id="eestStartDate" placeholder="Destination" value="<%= jobs[i].est_start_date %>">
+                                  </div>
+                          </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-4">
+                            <div class="form-group">
+                                <label for="eoriginDesc">Origin Desc.</label>
+                                <input type="text" class="form-control" id="eoriginDesc" placeholder="Origin Desc." value="<%= jobs[i].origin_desc %>">
+                            </div>
+                        </div>
+                        <div class="col-4">
+                          <div class="form-group">
+                              <label for="edestDesc">Destination Desc.</label>
+                              <input type="text" class="form-control" id="edestDesc" placeholder="Destination Desc." value="<%= jobs[i].destination_desc %>">
+                          </div>
+                      </div>
+                      <div class="col-4">
+                        <div class="form-group">
+                            <label for="econtractSigned">Contract Signed?</label>
+                            <select class="form-control" id="econtractSigned">
+                              <option value="No" <%= jobs[i].contract_signed == 'No' ? 'selected' : ''%>>No</option>
+                              <option value="Yes" <%= jobs[i].contract_signed == 'Yes' ? 'selected' : ''%>>Yes</option>
+                            </select>
+                          </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-4">
+                        <div class="form-group">
+                            <label for="elumpSumAmount">Lump Sum Amount</label>
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                  <span class="input-group-text">$</span>
+                                </div>
+                                <input type="text" class="form-control" id="elumpSumAmount" value="<%= jobs[i].lump_sum_amount %>">
+                              </div>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="form-group">
+                            <label for="elumpSumPaid">Lump Sum Sent to Billing?</label>
+                            <select class="form-control" id="elumpSumPaid" value="<%= jobs[i].lump_sum_paid %>">
+                              <option value="unsent" <%= jobs[i].lump_sum_paid == 'unsent' ? 'selected' : ''%>>unsent</option>
+                              <option value="sent" <%= jobs[i].lump_sum_paid == 'sent' ? 'selected' : ''%>>sent</option>
+                            </select>
+                          </div>
+                  </div>
+                  <div class="col-4">
+                    <div class="form-group">
+                        <label for="ekickoffMeeting">Kickoff Meeting?</label>
+                        <select class="form-control" id="ekickoffMeeting" value="<%= jobs[i].kickoff_meeting %>">
+                          <option value="No" <%= jobs[i].kickoff_meeting == 'No' ? 'selected' : ''%>>No</option>
+                          <option value="Yes" <%= jobs[i].kickoff_meeting == 'Yes' ? 'selected' : ''%>>Yes</option>
+                        </select>
+                      </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-4">
+                    <div class="form-group">
+                        <label for="eproformaAmount">Proforma Amount</label>
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                              <span class="input-group-text">$</span>
+                            </div>
+                            <input type="text" class="form-control" id="eproformaAmount" value="<%= jobs[i].proforma_amount %>">
+                          </div>
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="form-group">
+                        <label for="eproformaPaid">Proforma Sent to Billing?</label>
+                        <select class="form-control" id="eproformaPaid" value="<%= jobs[i].proforma_paid %>">
+                          <option value="unsent" <%= jobs[i].proforma_paid == 'unsent' ? 'selected' : ''%>>unsent</option>
+                          <option value="sent" <%= jobs[i].proforma_paid == 'sent' ? 'selected' : ''%>>sent</option>
+                        </select>
+                      </div>
+              </div>
+          </div>
+              <div class="row">
+                <div class="col-4">
+                    <div class="form-group">
+                        <label for="ebargeName">Barge(s)</label>
+                        <input type="text" class="form-control" id="ebargeName" value="<%= jobs[i].barge_name %>">
+                    </div>
+                </div>
+                <div class="col-4">
+                  <div class="form-group">
+                      <label for="etugName">Tug(s)</label>
+                      <input type="text" class="form-control" id="etugName" value="<%= jobs[i].tug_name %>">
+                  </div>
+              </div>
+          </div>
+                  <div class="row">
+                      <div class="col-12">
+                          <div class="form-group">
+                              <label for="ejobNotes">Job Notes</label>
+                              <textarea class="form-control" id="ejobNotes" rows="2" placeholder="Enter any general job notes here."><%= jobs[i].ord_notes %></textarea>
+                          </div>
+                      </div>
+                </div>
+                <h5>Customer Information</h5>
+                  <div class="row">
+                      <div class="col-3">
+                          <div class="form-group">
+                              <label for="ecustomer">Customer</label>
+                              <input type="text" class="form-control" id="ecustomer" placeholder="Enter Customer Company" value="<%= jobs[i].customer %>">
+                          </div>
+                      </div>
+                      <div class="col-3">
+                        <div class="form-group">
+                            <label for="ecustomer_nm">Customer Contact</label>
+                            <input type="text" class="form-control" id="ecustomer_nm" placeholder="Enter Customer Contact Name" value="<%= jobs[i].customer_nm %>">
+                        </div>
+                    </div>
+                        <div class="col-3">
+                            <div class="form-group">
+                                <label for="ecustomer_phone">Customer Phone</label>
+                                <input type="text" class="form-control" id="ecustomer_phone" placeholder="Enter Customer Phone" value="<%= jobs[i].customer_phone %>">
+                            </div>
+                    </div>
+                    <div class="col-3">
+                      <div class="form-group">
+                          <label for="ecustomer_email">Customer Email</label>
+                          <input type="text" class="form-control" id="ecustomer_email" placeholder="Enter Customer Email" value="<%= jobs[i].customer_email %>">
+                      </div>
+              </div>
+                </div>
+                <div class="row">
+                  <div class="col-12">
+                      <div class="form-group">
+                          <label for="ecustomer_notes">Customer Notes</label>
+                          <textarea class="form-control" id="ecustomer_notes" rows="2" placeholder="Enter any customer notes here."><%= jobs[i].customer_notes %></textarea>
+                      </div>
+                  </div>
+            </div>
+            <h5>Vendor Information</h5>
+                  <div class="row">
+                      <div class="col-3">
+                          <div class="form-group">
+                              <label for="evendor">Vendor</label>
+                              <input type="text" class="form-control" id="evendor" placeholder="Enter Vendor Company" value="<%= jobs[i].vendor %>">
+                          </div>
+                      </div>
+                      <div class="col-3">
+                        <div class="form-group">
+                            <label for="evendor_nm">Vendor Contact</label>
+                            <input type="text" class="form-control" id="evendor_nm" placeholder="Enter Vendor Contact Name" value="<%= jobs[i].vendor_nm %>">
+                        </div>
+                    </div>
+                        <div class="col-3">
+                            <div class="form-group">
+                                <label for="evendor_phone">Vendor Phone</label>
+                                <input type="text" class="form-control" id="evendor_phone" placeholder="Enter Vendor Phone" value="<%= jobs[i].vendor_phone %>">
+                            </div>
+                    </div>
+                    <div class="col-3">
+                      <div class="form-group">
+                          <label for="evendor_email">Vendor Email</label>
+                          <input type="text" class="form-control" id="evendor_email" placeholder="Enter Vendor Email" value="<%= jobs[i].vendor_email %>">
+                      </div>
+              </div>
+                </div>
+                <div class="row">
+                  <div class="col-12">
+                      <div class="form-group">
+                          <label for="evendor_notes">Vendor Notes</label>
+                          <textarea class="form-control" id="evendor_notes" rows="2" placeholder="Enter any vendor notes here."><%= jobs[i].vendor_notes %></textarea>
+                      </div>
+                  </div>
+            </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-primary">Save Changes</button>
+                            </div>
+                        </form>
+                        <!-- End Job Form End -->
+                      </div>
+                    </div>
+                  </div>
+                  <!-- Edit Job Modal End -->
+        
+                  <!-- Duplicate Job Modal Begin -->
+                  <div class="modal fade" id="du<%= jobs[i].ordnbr %>" tabindex="-1" role="dialog" aria-labelledby="duplicateTripModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-xl" role="document">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h5 class="modal-title" id="editTripModalLabel">Duplicating Job <%= jobs[i].ordnbr %></h5>
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                        </div>
+                        <div class="modal-body">
+                          <!-- Duplicate Job Form Begin -->
+                          <form class="duplicatetripform">
+                            <h5>Job Information</h5>
+                            <div class="row">
+                              <div class="col-4">
+                                  <div class="form-group">
+                                      <label for="duJobNumberInput">Enter New Order #</label>
+                                      <input type="text" class="form-control" id="duJobNumberInput" placeholder="Enter New Order #">
+                                  </div>
+                              </div>
+                            </div>
+                            <div class="d-none">
+                            <div class="row">
+                                <div class="col-4">
+                                  <div class="form-group">
+                                    <label for="ejobStatus">Status</label>
+                                    <select class="form-control" id="ejobStatus" value="<%= jobs[i].status %>">
+                                      <option value="Upcoming" <%= jobs[i].status == 'Upcoming' ? 'selected' : ''%>>Upcoming</option>
+                                      <option value="Active" <%= jobs[i].status == 'Active' ? 'selected' : ''%>>Active</option>
+                                      <option value="Completed" <%= jobs[i].status == 'Completed' ? 'selected' : ''%>>Completed</option>
+                                      <option value="Archived" <%= jobs[i].status == 'Archived' ? 'selected' : ''%>>Archived</option>
+                                    </select>
+                                  </div>
+                              </div>
+                                  <div class="col-4">
+                                      <div class="form-group">
+                                          <label for="epmAssigned">PM Assigned</label>
+                                          <input type="text" class="form-control" id="epmAssigned" placeholder="Origin" value="<%= jobs[i].pm_assigned %>">
+                                      </div>
+                              </div>
+                          </div>
+                          <div class="row">
+                            <div class="col-4">
+                                <div class="form-group">
+                                    <label for="eoriginInput">Origin</label>
+                                    <input type="text" class="form-control" id="eoriginInput" placeholder="Origin" value="<%= jobs[i].origin %>">
+                                </div>
+                            </div>
+                            <div class="col-4">
+                              <div class="form-group">
+                                  <label for="edestinationInput">Destination</label>
+                                  <input type="text" class="form-control" id="edestinationInput" placeholder="Destination" value="<%= jobs[i].destination %>">
+                              </div>
+                          </div>
+                              <div class="col-4">
+                                  <div class="form-group">
+                                      <label for="eestStartDate">Estimated Start Date</label>
+                                      <input type="date" class="form-control" id="eestStartDate" placeholder="Destination" value="<%= jobs[i].est_start_date %>">
+                                  </div>
+                          </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-4">
+                            <div class="form-group">
+                                <label for="eoriginDesc">Origin Desc.</label>
+                                <input type="text" class="form-control" id="eoriginDesc" placeholder="Origin Desc." value="<%= jobs[i].origin_desc %>">
+                            </div>
+                        </div>
+                        <div class="col-4">
+                          <div class="form-group">
+                              <label for="edestDesc">Destination Desc.</label>
+                              <input type="text" class="form-control" id="edestDesc" placeholder="Destination Desc." value="<%= jobs[i].destination_desc %>">
+                          </div>
+                      </div>
+                      <div class="col-4">
+                        <div class="form-group">
+                            <label for="econtractSigned">Contract Signed?</label>
+                            <select class="form-control" id="econtractSigned">
+                              <option value="No" <%= jobs[i].contract_signed == 'No' ? 'selected' : ''%>>No</option>
+                              <option value="Yes" <%= jobs[i].contract_signed == 'Yes' ? 'selected' : ''%>>Yes</option>
+                            </select>
+                          </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-4">
+                        <div class="form-group">
+                            <label for="elumpSumAmount">Lump Sum Amount</label>
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                  <span class="input-group-text">$</span>
+                                </div>
+                                <input type="text" class="form-control" id="elumpSumAmount" value="<%= jobs[i].lump_sum_amount %>">
+                              </div>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="form-group">
+                            <label for="elumpSumPaid">Lump Sum Sent to Billing?</label>
+                            <select class="form-control" id="elumpSumPaid" value="<%= jobs[i].lump_sum_paid %>">
+                              <option value="unsent" <%= jobs[i].lump_sum_paid == 'unsent' ? 'selected' : ''%>>unsent</option>
+                              <option value="sent" <%= jobs[i].lump_sum_paid == 'sent' ? 'selected' : ''%>>sent</option>
+                            </select>
+                          </div>
+                  </div>
+                  <div class="col-4">
+                    <div class="form-group">
+                        <label for="ekickoffMeeting">Kickoff Meeting?</label>
+                        <select class="form-control" id="ekickoffMeeting" value="<%= jobs[i].kickoff_meeting %>">
+                          <option value="No" <%= jobs[i].kickoff_meeting == 'No' ? 'selected' : ''%>>No</option>
+                          <option value="Yes" <%= jobs[i].kickoff_meeting == 'Yes' ? 'selected' : ''%>>Yes</option>
+                        </select>
+                      </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-4">
+                    <div class="form-group">
+                        <label for="eproformaAmount">Proforma Amount</label>
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                              <span class="input-group-text">$</span>
+                            </div>
+                            <input type="text" class="form-control" id="eproformaAmount" value="<%= jobs[i].proforma_amount %>">
+                          </div>
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="form-group">
+                        <label for="eproformaPaid">Proforma Sent to Billing?</label>
+                        <select class="form-control" id="eproformaPaid" value="<%= jobs[i].proforma_paid %>">
+                          <option value="unsent" <%= jobs[i].proforma_paid == 'unsent' ? 'selected' : ''%>>unsent</option>
+                          <option value="sent" <%= jobs[i].proforma_paid == 'sent' ? 'selected' : ''%>>sent</option>
+                        </select>
+                      </div>
+              </div>
+          </div>
+              <div class="row">
+                <div class="col-4">
+                    <div class="form-group">
+                        <label for="ebargeName">Barge(s)</label>
+                        <input type="text" class="form-control" id="ebargeName" value="<%= jobs[i].barge_name %>">
+                    </div>
+                </div>
+                <div class="col-4">
+                  <div class="form-group">
+                      <label for="etugName">Tug(s)</label>
+                      <input type="text" class="form-control" id="etugName" value="<%= jobs[i].tug_name %>">
+                  </div>
+              </div>
+          </div>
+                  <div class="row">
+                      <div class="col-12">
+                          <div class="form-group">
+                              <label for="ejobNotes">Job Notes</label>
+                              <textarea class="form-control" id="ejobNotes" rows="2" placeholder="Enter any general job notes here."><%= jobs[i].ord_notes %></textarea>
+                          </div>
+                      </div>
+                </div>
+                <h5>Customer Information</h5>
+                  <div class="row">
+                      <div class="col-3">
+                          <div class="form-group">
+                              <label for="ecustomer">Customer</label>
+                              <input type="text" class="form-control" id="ecustomer" placeholder="Enter Customer Company" value="<%= jobs[i].customer %>">
+                          </div>
+                      </div>
+                      <div class="col-3">
+                        <div class="form-group">
+                            <label for="ecustomer_nm">Customer Contact</label>
+                            <input type="text" class="form-control" id="ecustomer_nm" placeholder="Enter Customer Contact Name" value="<%= jobs[i].customer_nm %>">
+                        </div>
+                    </div>
+                        <div class="col-3">
+                            <div class="form-group">
+                                <label for="ecustomer_phone">Customer Phone</label>
+                                <input type="text" class="form-control" id="ecustomer_phone" placeholder="Enter Customer Phone" value="<%= jobs[i].customer_phone %>">
+                            </div>
+                    </div>
+                    <div class="col-3">
+                      <div class="form-group">
+                          <label for="ecustomer_email">Customer Email</label>
+                          <input type="text" class="form-control" id="ecustomer_email" placeholder="Enter Customer Email" value="<%= jobs[i].customer_email %>">
+                      </div>
+              </div>
+                </div>
+                <div class="row">
+                  <div class="col-12">
+                      <div class="form-group">
+                          <label for="ecustomer_notes">Customer Notes</label>
+                          <textarea class="form-control" id="ecustomer_notes" rows="2" placeholder="Enter any customer notes here."><%= jobs[i].customer_notes %></textarea>
+                      </div>
+                  </div>
+            </div>
+            <h5>Vendor Information</h5>
+                  <div class="row">
+                      <div class="col-3">
+                          <div class="form-group">
+                              <label for="evendor">Vendor</label>
+                              <input type="text" class="form-control" id="evendor" placeholder="Enter Vendor Company" value="<%= jobs[i].vendor %>">
+                          </div>
+                      </div>
+                      <div class="col-3">
+                        <div class="form-group">
+                            <label for="evendor_nm">Vendor Contact</label>
+                            <input type="text" class="form-control" id="evendor_nm" placeholder="Enter Vendor Contact Name" value="<%= jobs[i].vendor_nm %>">
+                        </div>
+                    </div>
+                        <div class="col-3">
+                            <div class="form-group">
+                                <label for="evendor_phone">Vendor Phone</label>
+                                <input type="text" class="form-control" id="evendor_phone" placeholder="Enter Vendor Phone" value="<%= jobs[i].vendor_phone %>">
+                            </div>
+                    </div>
+                    <div class="col-3">
+                      <div class="form-group">
+                          <label for="evendor_email">Vendor Email</label>
+                          <input type="text" class="form-control" id="evendor_email" placeholder="Enter Vendor Email" value="<%= jobs[i].vendor_email %>">
+                      </div>
+              </div>
+                </div>
+                <div class="row">
+                  <div class="col-12">
+                      <div class="form-group">
+                          <label for="evendor_notes">Vendor Notes</label>
+                          <textarea class="form-control" id="evendor_notes" rows="2" placeholder="Enter any vendor notes here."><%= jobs[i].vendor_notes %></textarea>
+                      </div>
+                  </div>
+            </div>
+          </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-primary">Save Changes</button>
+                            </div>
+                        </form>
+                        <!-- End Job Form End -->
+                      </div>
+                    </div>
+                  </div>
+                  <!-- Duplicate Job Modal End -->
+                  <!-- Delete Job Modal -->
+                  <div class="modal fade" id="d<%= jobs[i].ordnbr %>" tabindex="-1" role="dialog" aria-labelledby="deleteTripModalLable" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h5 class="modal-title" id="exampleModalLabel">Are you sure you want to delete job <%= jobs[i].ordnbr %>? </h5>
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                        </div>
+                        <div class="modal-body">
+                          Click DELETE to delete this job, or click Close to dismiss.
+                          <form class="deletetripform">
+                            <div class="form-group">
+                              <label hidden for="did"></label>
+                              <input hidden type="text" class="form-control" id="did" placeholder="Order #" value="<%= jobs[i].ordnbr %>">
+                          </div>
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                          <button type="submit" class="btn btn-danger">DELETE THIS JOB</button>
+                        </div>
+                      </form>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- Delete Job Modal End -->
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    </button>
+                  </div>
+                  <div class="horizontal-line">
+                    <hr class="hr-line-line">
+                  </div>
+                  <div class="modal-body">
+                    <div class="row">
+                    <div class="card col-8 border-0" style="font-size:medium">
+                      <h6 class="card-header border">Trip Details</h6>
+                      <div class="card-body border">
+                    <table class="table table-borderless">
+                        <tbody>
+                          <tr class="d-flex">
+                          <td class="col-3 bold">Origin:</td>
+                          <td class="col-4"><%= jobs[i].origin %></td>
+                          <td class="col-2 bold">Lump Sum:</td>
+                          <td class="col-3">$<%= Intl.NumberFormat().format(jobs[i].lump_sum_amount) %> <a>(<%= jobs[i].lump_sum_paid %>)</a></td>
+                        </tr>
+                        <tr class="d-flex">
+                          <td class="col-3 bold">Origin Desc.:</td>
+                          <td class="col-4"><%= jobs[i].origin_desc %></td>
+                          <td class="col-2 bold">Contract Signed:</td>
+                          <td class="col-3"><%= jobs[i].contract_signed %></td>
+                        </tr>
+                        <tr class="d-flex">
+                          <td class="col-3 bold">Destination:</td>
+                          <td class="col-4"><%= jobs[i].destination %></td>
+                          <td class="col-2 bold">Kickoff Meeting:</td>
+                          <td class="col-3"><%= jobs[i].kickoff_meeting %></td>
+                        </tr>
+                        <tr class="d-flex">
+                          <td class="col-3 bold">Destination Description:</td>
+                          <td class="col-4"><%= jobs[i].destination_desc %></td>
+                          <td class="col-2 bold">Proforma:</td>
+                          <td class="col-3">$<%= Intl.NumberFormat().format(jobs[i].proforma_amount) %> <a>(<%= jobs[i].proforma_paid %>)</a></td>
+                        </tr>
+                        <tr class="d-flex">
+                          <td class="col-3 bold">Start Date:</td>
+                          <td class="col-6"><%= moment(jobs[i].est_start_date).format('M/D/YY') %></td>
+                        </tr>
+                        <tr class="d-flex">
+                          <td class="col-3 bold">PM Assigned:</td>
+                          <td class="col-6"><%= jobs[i].pm_assigned %></td>
+                        </tr>
+                        <tr class="d-flex">
+                          <td class="col-3 bold">Status:</td>
+                          <td class="col-6"><%= jobs[i].status %></td>
+                        </tr>
+                        <tr class="d-flex">
+                          <td class="col-3 bold">Barge(s):</td>
+                          <td class="col-6"><%= jobs[i].barge_name %></td>
+                        </tr>
+                        <tr class="d-flex">
+                          <td class="col-3 bold">Tug(s):</td>
+                          <td class="col-6"><%= jobs[i].tug_name %></td>
+                        </tr>
+                        <tr class="d-flex">
+                          <td class="col-3 bold">Trip Notes:</td>
+                          <td class="col-9" style="white-space: pre-wrap"><%= jobs[i].ord_notes %></td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                  </div>
+                  <div class="col-4">
+                    <div class="row">
+                      <div class="card col-12 border-0" style="padding-right:15px">
+                    <h6 class="job-note-headers card-header border">Customer Details</h6>
+                    <div class="card-body border">
+                  <table class="table table-borderless">
+                      <tbody>
+                      <tr class="d-flex">
+                        <td class="col-4">Customer:</td>
+                        <td class="col-6"><%= jobs[i].customer %></td>
+                      </tr>
+                      <tr class="d-flex">
+                        <td class="col-4">Customer Contact:</td>
+                        <td class="col-6"><%= jobs[i].customer_nm %></td>
+                      </tr>
+                      <tr class="d-flex">
+                        <td class="col-4">Customer Phone:</td>
+                        <td class="col-6"><%= jobs[i].customer_phone %></td>
+                      </tr>
+                      <tr class="d-flex">
+                        <td class="col-4">Customer Email:</td>
+                        <td class="col-6"><%= jobs[i].customer_email %></td>
+                      </tr>
+                      <tr class="d-flex">
+                        <td class="col-4">Notes:</td>
+                        <td class="col-6" style="white-space: pre-wrap"><%= jobs[i].customer_notes %></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                </div>
+                </div>
+                <div class="row" style="line-height:5px"><br></div>
+                <div class="row">
+                  <div class="card col-12 border-0" style="padding-right:15px">
+                <h6 class="job-note-headers card-header border">Vendor Details</h6>
+                <div class="card-body border">
+              <table class="table table-borderless">
+                  <tbody>
+                  <tr class="d-flex">
+                    <td class="col-4">Vendor:</td>
+                    <td class="col-6"><%= jobs[i].vendor %></td>
+                  </tr>
+                  <tr class="d-flex">
+                    <td class="col-4">Vendor Contact:</td>
+                    <td class="col-6"><%= jobs[i].vendor_nm %></td>
+                  </tr>
+                  <tr class="d-flex">
+                    <td class="col-4">Vendor Phone:</td>
+                    <td class="col-6"><%= jobs[i].vendor_phone %></td>
+                  </tr>
+                  <tr class="d-flex">
+                    <td class="col-4">Vendor Email:</td>
+                    <td class="col-6"><%= jobs[i].vendor_email %></td>
+                  </tr>
+                  <tr class="d-flex">
+                    <td class="col-4">Notes:</td>
+                    <td class="col-6" style="white-space: pre-wrap"><%= jobs[i].vendor_notes %></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            </div>
+            </div>
+              </div>
+                </div>
+                    </div>
+                  </div>
+              </div>
+            </td>
+            </tr>
+                </tbody>
         <% } %>
           <% } %>
             </table>
@@ -1245,343 +2251,677 @@ td {
         </thead>
         <% for (let i = 0; i < jobs.length; i++) { %>
           <% if (jobs[i].status  === "Archived") { %>
-        <tbody>
-          <tr class="accordion-toggle collapsed row m-0" id="accordion1" data-toggle="collapse" data-parent="#accordion1" href="#<%= jobs[i].ordnbr %>">
-            <td class="d-inline-block col-1"><%= jobs[i].ordnbr %></td>
-            <td class="d-inline-block col-2"><%= jobs[i].customer %></td>
-            <td class="d-inline-block col-2"><%= jobs[i].origin %></td>
-            <td class="d-inline-block col-2"><%= jobs[i].destination %></td>
-            <td class="d-inline-block col-2"><%= jobs[i].pm_assigned %></td>
-            <td class="d-inline-block col-1"><%= jobs[i].status %></td>
-            <td class="d-inline-block col-2"><%= moment(jobs[i].est_start_date).format('M/D/YY') %></td>
-            <!-- <td class="expand-button" class="d-inline-block col-1"></td> -->
-            </tr>
-              
-      <tr class="hide-table-padding">
-      <td colspan="12">
-      <div class="collapse in col-sm head-div" id="<%= jobs[i].ordnbr %>">
-        <div class="card" id="tdcard">
-          <div class="card-body">
-            <div class="row">
-            <h5 class="card-title col align-self-center" id="cardtitle"><%= jobs[i].ordnbr %> - <%= jobs[i].customer %></h5>
-            <button type="button" class="btn col-1" id="edittripbutton" data-toggle="modal" data-target="#e<%= jobs[i].ordnbr %>">Edit</button>
-            <!-- <button type="button" class="btn col-1" data-toggle="modal" data-target="#d<%= jobs[i].ordnbr %>">Delete</button> -->
-          </div>
-    
-          <!-- Edit Job Modal -->
-          <div class="modal fade" id="e<%= jobs[i].ordnbr %>" tabindex="-1" role="dialog" aria-labelledby="editTripModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-lg" role="document">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <h5 class="modal-title" id="editTripModalLabel">Edit Trip Details</h5>
-                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                  </button>
-                </div>
-                <div class="modal-body">
-                  <!-- Edit Job Form Begin -->
-                  <form class="edittripform">
-                    <h5>Job Information</h5>
-                    <div class="row">
+            <tbody>
+              <tr class="accordion-toggle collapsed row m-0" id="accordion1" data-toggle="collapse" data-parent="#accordion1" href="#<%= jobs[i].ordnbr %>">
+                <td class="d-inline-block col-1"><%= jobs[i].ordnbr %></td>
+                <td class="d-inline-block col-2"><%= jobs[i].customer %></td>
+                <td class="d-inline-block col-2"><%= jobs[i].origin %></td>
+                <td class="d-inline-block col-2"><%= jobs[i].destination %></td>
+                <td class="d-inline-block col-2"><%= jobs[i].pm_assigned %></td>
+                <td class="d-inline-block col-1"><%= jobs[i].status %></td>
+                <td class="d-inline-block col-2"><%= moment(jobs[i].est_start_date).format('M/D/YY') %></td>
+                <!-- <td class="expand-button" class="d-inline-block col-1"></td> -->
+                </tr>
+                  
+          <tr class="hide-table-padding">
+          <td colspan="12">
+          <div class="collapse in col-sm head-div" id="<%= jobs[i].ordnbr %>">
+            <div class="card" id="tdcard">
+              <div class="card-body">
+                <div class="row">
+                <h5 class="card-title col align-self-center" id="cardtitle"><%= jobs[i].ordnbr %> - <%= jobs[i].customer %></h5>
+                <button type="button" class="btn col-1" id="edittripbutton" data-toggle="modal" data-target="#e<%= jobs[i].ordnbr %>">Edit</button>
+                <button type="button" class="btn col-1" id="duplicatetripbutton" data-toggle="modal" data-target="#du<%= jobs[i].ordnbr %>">Duplicate</button>
+                <button type="button" class="btn col-1" data-toggle="modal" data-target="#d<%= jobs[i].ordnbr %>">Delete</button>
+              </div>
+        
+              <!-- Edit Job Modal -->
+              <div class="modal fade" id="e<%= jobs[i].ordnbr %>" tabindex="-1" role="dialog" aria-labelledby="editTripModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-xl" role="document">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="editTripModalLabel">Edit Trip Details</h5>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <div class="modal-body">
+                      <!-- Edit Job Form Begin -->
+                      <form class="edittripform">
+                        <h5>Job Information</h5>
+                        <div class="row">
+                            <div class="col-4">
+                                <div class="form-group">
+                                    <label hidden for="eid"></label>
+                                    <input hidden type="text" class="form-control" id="eid" placeholder="Order #" value="<%= jobs[i].order_id %>">
+                                    <label for="eJobNumberInput">Order #</label>
+                                    <input type="text" class="form-control" id="eJobNumberInput" placeholder="Order #" value="<%= jobs[i].ordnbr %>" readonly>
+                                </div>
+                            </div>
+                            <div class="col-4">
+                              <div class="form-group">
+                                <label for="ejobStatus">Status</label>
+                                <select class="form-control" id="ejobStatus" value="<%= jobs[i].status %>">
+                                  <option value="Upcoming" <%= jobs[i].status == 'Upcoming' ? 'selected' : ''%>>Upcoming</option>
+                                  <option value="Active" <%= jobs[i].status == 'Active' ? 'selected' : ''%>>Active</option>
+                                  <option value="Completed" <%= jobs[i].status == 'Completed' ? 'selected' : ''%>>Completed</option>
+                                  <option value="Archived" <%= jobs[i].status == 'Archived' ? 'selected' : ''%>>Archived</option>
+                                </select>
+                              </div>
+                          </div>
+                              <div class="col-4">
+                                  <div class="form-group">
+                                      <label for="epmAssigned">PM Assigned</label>
+                                      <input type="text" class="form-control" id="epmAssigned" placeholder="Origin" value="<%= jobs[i].pm_assigned %>">
+                                  </div>
+                          </div>
+                      </div>
+                      <div class="row">
                         <div class="col-4">
                             <div class="form-group">
-                                <label hidden for="eid"></label>
-                                <input hidden type="text" class="form-control" id="eid" placeholder="Order #" value="<%= jobs[i].order_id %>">
-                                <label for="eJobNumberInput">Order #</label>
-                                <input type="text" class="form-control" id="eJobNumberInput" placeholder="Order #" value="<%= jobs[i].ordnbr %>" readonly>
+                                <label for="eoriginInput">Origin</label>
+                                <input type="text" class="form-control" id="eoriginInput" placeholder="Origin" value="<%= jobs[i].origin %>">
                             </div>
                         </div>
                         <div class="col-4">
                           <div class="form-group">
-                            <label for="ejobStatus">Status</label>
-                            <select class="form-control" id="ejobStatus" value="<%= jobs[i].status %>">
-                              <option>Archived</option>
-                              <option>Upcoming</option>
-                              <option>Active</option>
-                              <option>Completed</option>
-                            </select>
+                              <label for="edestinationInput">Destination</label>
+                              <input type="text" class="form-control" id="edestinationInput" placeholder="Destination" value="<%= jobs[i].destination %>">
                           </div>
                       </div>
                           <div class="col-4">
                               <div class="form-group">
-                                  <label for="epmAssigned">PM Assigned</label>
-                                  <input type="text" class="form-control" id="epmAssigned" placeholder="Origin" value="<%= jobs[i].pm_assigned %>">
+                                  <label for="eestStartDate">Estimated Start Date</label>
+                                  <input type="date" class="form-control" id="eestStartDate" placeholder="Destination" value="<%= jobs[i].est_start_date %>">
                               </div>
                       </div>
                   </div>
                   <div class="row">
                     <div class="col-4">
                         <div class="form-group">
-                            <label for="eoriginInput">Origin</label>
-                            <input type="text" class="form-control" id="eoriginInput" placeholder="Origin" value="<%= jobs[i].origin %>">
+                            <label for="eoriginDesc">Origin Desc.</label>
+                            <input type="text" class="form-control" id="eoriginDesc" placeholder="Origin Desc." value="<%= jobs[i].origin_desc %>">
                         </div>
                     </div>
                     <div class="col-4">
                       <div class="form-group">
-                          <label for="edestinationInput">Destination</label>
-                          <input type="text" class="form-control" id="edestinationInput" placeholder="Destination" value="<%= jobs[i].destination %>">
+                          <label for="edestDesc">Destination Desc.</label>
+                          <input type="text" class="form-control" id="edestDesc" placeholder="Destination Desc." value="<%= jobs[i].destination_desc %>">
                       </div>
                   </div>
-                      <div class="col-4">
-                          <div class="form-group">
-                              <label for="eestStartDate">Estimated Start Date</label>
-                              <input type="date" class="form-control" id="eestStartDate" placeholder="Destination" value="<%= jobs[i].est_start_date %>">
-                          </div>
-                  </div>
+                  <div class="col-4">
+                    <div class="form-group">
+                        <label for="econtractSigned">Contract Signed?</label>
+                        <select class="form-control" id="econtractSigned">
+                          <option value="No" <%= jobs[i].contract_signed == 'No' ? 'selected' : ''%>>No</option>
+                          <option value="Yes" <%= jobs[i].contract_signed == 'Yes' ? 'selected' : ''%>>Yes</option>
+                        </select>
+                      </div>
+                </div>
               </div>
               <div class="row">
                 <div class="col-4">
                     <div class="form-group">
-                        <label for="eoriginDesc">Origin Desc.</label>
-                        <input type="text" class="form-control" id="eoriginDesc" placeholder="Origin Desc." value="<%= jobs[i].origin_desc %>">
+                        <label for="elumpSumAmount">Lump Sum Amount</label>
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                              <span class="input-group-text">$</span>
+                            </div>
+                            <input type="text" class="form-control" id="elumpSumAmount" value="<%= jobs[i].lump_sum_amount %>">
+                          </div>
                     </div>
                 </div>
                 <div class="col-4">
-                  <div class="form-group">
-                      <label for="edestDesc">Destination Desc.</label>
-                      <input type="text" class="form-control" id="edestDesc" placeholder="Destination Desc." value="<%= jobs[i].destination_desc %>">
-                  </div>
+                    <div class="form-group">
+                        <label for="elumpSumPaid">Lump Sum Sent to Billing?</label>
+                        <select class="form-control" id="elumpSumPaid" value="<%= jobs[i].lump_sum_paid %>">
+                          <option value="unsent" <%= jobs[i].lump_sum_paid == 'unsent' ? 'selected' : ''%>>unsent</option>
+                          <option value="sent" <%= jobs[i].lump_sum_paid == 'sent' ? 'selected' : ''%>>sent</option>
+                        </select>
+                      </div>
               </div>
+              <div class="col-4">
+                <div class="form-group">
+                    <label for="ekickoffMeeting">Kickoff Meeting?</label>
+                    <select class="form-control" id="ekickoffMeeting" value="<%= jobs[i].kickoff_meeting %>">
+                      <option value="No" <%= jobs[i].kickoff_meeting == 'No' ? 'selected' : ''%>>No</option>
+                      <option value="Yes" <%= jobs[i].kickoff_meeting == 'Yes' ? 'selected' : ''%>>Yes</option>
+                    </select>
+                  </div>
+            </div>
           </div>
           <div class="row">
+            <div class="col-4">
+                <div class="form-group">
+                    <label for="eproformaAmount">Proforma Amount</label>
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text">$</span>
+                        </div>
+                        <input type="text" class="form-control" id="eproformaAmount" value="<%= jobs[i].proforma_amount %>">
+                      </div>
+                </div>
+            </div>
+            <div class="col-4">
+                <div class="form-group">
+                    <label for="eproformaPaid">Proforma Sent to Billing?</label>
+                    <select class="form-control" id="eproformaPaid" value="<%= jobs[i].proforma_paid %>">
+                      <option value="unsent" <%= jobs[i].proforma_paid == 'unsent' ? 'selected' : ''%>>unsent</option>
+                      <option value="sent" <%= jobs[i].proforma_paid == 'sent' ? 'selected' : ''%>>sent</option>
+                    </select>
+                  </div>
+          </div>
+      </div>
+          <div class="row">
+            <div class="col-4">
+                <div class="form-group">
+                    <label for="ebargeName">Barge(s)</label>
+                    <input type="text" class="form-control" id="ebargeName" value="<%= jobs[i].barge_name %>">
+                </div>
+            </div>
+            <div class="col-4">
+              <div class="form-group">
+                  <label for="etugName">Tug(s)</label>
+                  <input type="text" class="form-control" id="etugName" value="<%= jobs[i].tug_name %>">
+              </div>
+          </div>
+      </div>
+              <div class="row">
+                  <div class="col-12">
+                      <div class="form-group">
+                          <label for="ejobNotes">Job Notes</label>
+                          <textarea class="form-control" id="ejobNotes" rows="2" placeholder="Enter any general job notes here."><%= jobs[i].ord_notes %></textarea>
+                      </div>
+                  </div>
+            </div>
+            <h5>Customer Information</h5>
+              <div class="row">
+                  <div class="col-3">
+                      <div class="form-group">
+                          <label for="ecustomer">Customer</label>
+                          <input type="text" class="form-control" id="ecustomer" placeholder="Enter Customer Company" value="<%= jobs[i].customer %>">
+                      </div>
+                  </div>
+                  <div class="col-3">
+                    <div class="form-group">
+                        <label for="ecustomer_nm">Customer Contact</label>
+                        <input type="text" class="form-control" id="ecustomer_nm" placeholder="Enter Customer Contact Name" value="<%= jobs[i].customer_nm %>">
+                    </div>
+                </div>
+                    <div class="col-3">
+                        <div class="form-group">
+                            <label for="ecustomer_phone">Customer Phone</label>
+                            <input type="text" class="form-control" id="ecustomer_phone" placeholder="Enter Customer Phone" value="<%= jobs[i].customer_phone %>">
+                        </div>
+                </div>
+                <div class="col-3">
+                  <div class="form-group">
+                      <label for="ecustomer_email">Customer Email</label>
+                      <input type="text" class="form-control" id="ecustomer_email" placeholder="Enter Customer Email" value="<%= jobs[i].customer_email %>">
+                  </div>
+          </div>
+            </div>
+            <div class="row">
               <div class="col-12">
                   <div class="form-group">
-                      <label for="ejobNotes">Job Notes</label>
-                      <textarea class="form-control" id="ejobNotes" rows="2" placeholder="Enter any general job notes here."><%= jobs[i].ord_notes %></textarea>
+                      <label for="ecustomer_notes">Customer Notes</label>
+                      <textarea class="form-control" id="ecustomer_notes" rows="2" placeholder="Enter any customer notes here."><%= jobs[i].customer_notes %></textarea>
                   </div>
               </div>
         </div>
-        <h5>Customer Information</h5>
-          <div class="row">
-              <div class="col-3">
+        <h5>Vendor Information</h5>
+              <div class="row">
+                  <div class="col-3">
+                      <div class="form-group">
+                          <label for="evendor">Vendor</label>
+                          <input type="text" class="form-control" id="evendor" placeholder="Enter Vendor Company" value="<%= jobs[i].vendor %>">
+                      </div>
+                  </div>
+                  <div class="col-3">
+                    <div class="form-group">
+                        <label for="evendor_nm">Vendor Contact</label>
+                        <input type="text" class="form-control" id="evendor_nm" placeholder="Enter Vendor Contact Name" value="<%= jobs[i].vendor_nm %>">
+                    </div>
+                </div>
+                    <div class="col-3">
+                        <div class="form-group">
+                            <label for="evendor_phone">Vendor Phone</label>
+                            <input type="text" class="form-control" id="evendor_phone" placeholder="Enter Vendor Phone" value="<%= jobs[i].vendor_phone %>">
+                        </div>
+                </div>
+                <div class="col-3">
                   <div class="form-group">
-                      <label for="ecustomer">Customer</label>
-                      <input type="text" class="form-control" id="ecustomer" placeholder="Enter Customer Company" value="<%= jobs[i].customer %>">
+                      <label for="evendor_email">Vendor Email</label>
+                      <input type="text" class="form-control" id="evendor_email" placeholder="Enter Vendor Email" value="<%= jobs[i].vendor_email %>">
+                  </div>
+          </div>
+            </div>
+            <div class="row">
+              <div class="col-12">
+                  <div class="form-group">
+                      <label for="evendor_notes">Vendor Notes</label>
+                      <textarea class="form-control" id="evendor_notes" rows="2" placeholder="Enter any vendor notes here."><%= jobs[i].vendor_notes %></textarea>
                   </div>
               </div>
-              <div class="col-3">
+        </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Save Changes</button>
+                        </div>
+                    </form>
+                    <!-- End Job Form End -->
+                  </div>
+                </div>
+              </div>
+              <!-- Edit Job Modal End -->
+    
+              <!-- Duplicate Job Modal Begin -->
+              <div class="modal fade" id="du<%= jobs[i].ordnbr %>" tabindex="-1" role="dialog" aria-labelledby="duplicateTripModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-xl" role="document">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="editTripModalLabel">Duplicating Job <%= jobs[i].ordnbr %></h5>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <div class="modal-body">
+                      <!-- Duplicate Job Form Begin -->
+                      <form class="duplicatetripform">
+                        <h5>Job Information</h5>
+                        <div class="row">
+                          <div class="col-4">
+                              <div class="form-group">
+                                  <label for="duJobNumberInput">Enter New Order #</label>
+                                  <input type="text" class="form-control" id="duJobNumberInput" placeholder="Enter New Order #">
+                              </div>
+                          </div>
+                        </div>
+                        <div class="d-none">
+                        <div class="row">
+                            <div class="col-4">
+                              <div class="form-group">
+                                <label for="ejobStatus">Status</label>
+                                <select class="form-control" id="ejobStatus" value="<%= jobs[i].status %>">
+                                  <option value="Upcoming" <%= jobs[i].status == 'Upcoming' ? 'selected' : ''%>>Upcoming</option>
+                                  <option value="Active" <%= jobs[i].status == 'Active' ? 'selected' : ''%>>Active</option>
+                                  <option value="Completed" <%= jobs[i].status == 'Completed' ? 'selected' : ''%>>Completed</option>
+                                  <option value="Archived" <%= jobs[i].status == 'Archived' ? 'selected' : ''%>>Archived</option>
+                                </select>
+                              </div>
+                          </div>
+                              <div class="col-4">
+                                  <div class="form-group">
+                                      <label for="epmAssigned">PM Assigned</label>
+                                      <input type="text" class="form-control" id="epmAssigned" placeholder="Origin" value="<%= jobs[i].pm_assigned %>">
+                                  </div>
+                          </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-4">
+                            <div class="form-group">
+                                <label for="eoriginInput">Origin</label>
+                                <input type="text" class="form-control" id="eoriginInput" placeholder="Origin" value="<%= jobs[i].origin %>">
+                            </div>
+                        </div>
+                        <div class="col-4">
+                          <div class="form-group">
+                              <label for="edestinationInput">Destination</label>
+                              <input type="text" class="form-control" id="edestinationInput" placeholder="Destination" value="<%= jobs[i].destination %>">
+                          </div>
+                      </div>
+                          <div class="col-4">
+                              <div class="form-group">
+                                  <label for="eestStartDate">Estimated Start Date</label>
+                                  <input type="date" class="form-control" id="eestStartDate" placeholder="Destination" value="<%= jobs[i].est_start_date %>">
+                              </div>
+                      </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-4">
+                        <div class="form-group">
+                            <label for="eoriginDesc">Origin Desc.</label>
+                            <input type="text" class="form-control" id="eoriginDesc" placeholder="Origin Desc." value="<%= jobs[i].origin_desc %>">
+                        </div>
+                    </div>
+                    <div class="col-4">
+                      <div class="form-group">
+                          <label for="edestDesc">Destination Desc.</label>
+                          <input type="text" class="form-control" id="edestDesc" placeholder="Destination Desc." value="<%= jobs[i].destination_desc %>">
+                      </div>
+                  </div>
+                  <div class="col-4">
+                    <div class="form-group">
+                        <label for="econtractSigned">Contract Signed?</label>
+                        <select class="form-control" id="econtractSigned">
+                          <option value="No" <%= jobs[i].contract_signed == 'No' ? 'selected' : ''%>>No</option>
+                          <option value="Yes" <%= jobs[i].contract_signed == 'Yes' ? 'selected' : ''%>>Yes</option>
+                        </select>
+                      </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-4">
+                    <div class="form-group">
+                        <label for="elumpSumAmount">Lump Sum Amount</label>
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                              <span class="input-group-text">$</span>
+                            </div>
+                            <input type="text" class="form-control" id="elumpSumAmount" value="<%= jobs[i].lump_sum_amount %>">
+                          </div>
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="form-group">
+                        <label for="elumpSumPaid">Lump Sum Sent to Billing?</label>
+                        <select class="form-control" id="elumpSumPaid" value="<%= jobs[i].lump_sum_paid %>">
+                          <option value="unsent" <%= jobs[i].lump_sum_paid == 'unsent' ? 'selected' : ''%>>unsent</option>
+                          <option value="sent" <%= jobs[i].lump_sum_paid == 'sent' ? 'selected' : ''%>>sent</option>
+                        </select>
+                      </div>
+              </div>
+              <div class="col-4">
                 <div class="form-group">
-                    <label for="ecustomer_nm">Customer Contact</label>
-                    <input type="text" class="form-control" id="ecustomer_nm" placeholder="Enter Customer Contact Name" value="<%= jobs[i].customer_nm %>">
+                    <label for="ekickoffMeeting">Kickoff Meeting?</label>
+                    <select class="form-control" id="ekickoffMeeting" value="<%= jobs[i].kickoff_meeting %>">
+                      <option value="No" <%= jobs[i].kickoff_meeting == 'No' ? 'selected' : ''%>>No</option>
+                      <option value="Yes" <%= jobs[i].kickoff_meeting == 'Yes' ? 'selected' : ''%>>Yes</option>
+                    </select>
+                  </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-4">
+                <div class="form-group">
+                    <label for="eproformaAmount">Proforma Amount</label>
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text">$</span>
+                        </div>
+                        <input type="text" class="form-control" id="eproformaAmount" value="<%= jobs[i].proforma_amount %>">
+                      </div>
                 </div>
             </div>
-                <div class="col-3">
-                    <div class="form-group">
-                        <label for="ecustomer_phone">Customer Phone</label>
-                        <input type="text" class="form-control" id="ecustomer_phone" placeholder="Enter Customer Phone" value="<%= jobs[i].customer_phone %>">
-                    </div>
-            </div>
-            <div class="col-3">
-              <div class="form-group">
-                  <label for="ecustomer_email">Customer Email</label>
-                  <input type="text" class="form-control" id="ecustomer_email" placeholder="Enter Customer Email" value="<%= jobs[i].customer_email %>">
-              </div>
-      </div>
-        </div>
-        <div class="row">
-          <div class="col-12">
-              <div class="form-group">
-                  <label for="ecustomer_notes">Customer Notes</label>
-                  <textarea class="form-control" id="ecustomer_notes" rows="2" placeholder="Enter any customer notes here."><%= jobs[i].customer_notes %></textarea>
-              </div>
-          </div>
-    </div>
-    <h5>Vendor Information</h5>
-          <div class="row">
-              <div class="col-3">
-                  <div class="form-group">
-                      <label for="evendor">Vendor</label>
-                      <input type="text" class="form-control" id="evendor" placeholder="Enter Vendor Company" value="<%= jobs[i].vendor %>">
-                  </div>
-              </div>
-              <div class="col-3">
+            <div class="col-4">
                 <div class="form-group">
-                    <label for="evendor_nm">Vendor Contact</label>
-                    <input type="text" class="form-control" id="evendor_nm" placeholder="Enter Vendor Contact Name" value="<%= jobs[i].vendor_nm %>">
+                    <label for="eproformaPaid">Proforma Sent to Billing?</label>
+                    <select class="form-control" id="eproformaPaid" value="<%= jobs[i].proforma_paid %>">
+                      <option value="unsent" <%= jobs[i].proforma_paid == 'unsent' ? 'selected' : ''%>>unsent</option>
+                      <option value="sent" <%= jobs[i].proforma_paid == 'sent' ? 'selected' : ''%>>sent</option>
+                    </select>
+                  </div>
+          </div>
+      </div>
+          <div class="row">
+            <div class="col-4">
+                <div class="form-group">
+                    <label for="ebargeName">Barge(s)</label>
+                    <input type="text" class="form-control" id="ebargeName" value="<%= jobs[i].barge_name %>">
                 </div>
             </div>
-                <div class="col-3">
-                    <div class="form-group">
-                        <label for="evendor_phone">Vendor Phone</label>
-                        <input type="text" class="form-control" id="evendor_phone" placeholder="Enter Vendor Phone" value="<%= jobs[i].vendor_phone %>">
-                    </div>
-            </div>
-            <div class="col-3">
+            <div class="col-4">
               <div class="form-group">
-                  <label for="evendor_email">Vendor Email</label>
-                  <input type="text" class="form-control" id="evendor_email" placeholder="Enter Vendor Email" value="<%= jobs[i].vendor_email %>">
-              </div>
-      </div>
-        </div>
-        <div class="row">
-          <div class="col-12">
-              <div class="form-group">
-                  <label for="evendor_notes">Vendor Notes</label>
-                  <textarea class="form-control" id="evendor_notes" rows="2" placeholder="Enter any vendor notes here."><%= jobs[i].vendor_notes %></textarea>
+                  <label for="etugName">Tug(s)</label>
+                  <input type="text" class="form-control" id="etugName" value="<%= jobs[i].tug_name %>">
               </div>
           </div>
-    </div>
+      </div>
+              <div class="row">
+                  <div class="col-12">
+                      <div class="form-group">
+                          <label for="ejobNotes">Job Notes</label>
+                          <textarea class="form-control" id="ejobNotes" rows="2" placeholder="Enter any general job notes here."><%= jobs[i].ord_notes %></textarea>
+                      </div>
+                  </div>
+            </div>
+            <h5>Customer Information</h5>
+              <div class="row">
+                  <div class="col-3">
+                      <div class="form-group">
+                          <label for="ecustomer">Customer</label>
+                          <input type="text" class="form-control" id="ecustomer" placeholder="Enter Customer Company" value="<%= jobs[i].customer %>">
+                      </div>
+                  </div>
+                  <div class="col-3">
+                    <div class="form-group">
+                        <label for="ecustomer_nm">Customer Contact</label>
+                        <input type="text" class="form-control" id="ecustomer_nm" placeholder="Enter Customer Contact Name" value="<%= jobs[i].customer_nm %>">
+                    </div>
+                </div>
+                    <div class="col-3">
+                        <div class="form-group">
+                            <label for="ecustomer_phone">Customer Phone</label>
+                            <input type="text" class="form-control" id="ecustomer_phone" placeholder="Enter Customer Phone" value="<%= jobs[i].customer_phone %>">
+                        </div>
+                </div>
+                <div class="col-3">
+                  <div class="form-group">
+                      <label for="ecustomer_email">Customer Email</label>
+                      <input type="text" class="form-control" id="ecustomer_email" placeholder="Enter Customer Email" value="<%= jobs[i].customer_email %>">
+                  </div>
+          </div>
+            </div>
+            <div class="row">
+              <div class="col-12">
+                  <div class="form-group">
+                      <label for="ecustomer_notes">Customer Notes</label>
+                      <textarea class="form-control" id="ecustomer_notes" rows="2" placeholder="Enter any customer notes here."><%= jobs[i].customer_notes %></textarea>
+                  </div>
+              </div>
+        </div>
+        <h5>Vendor Information</h5>
+              <div class="row">
+                  <div class="col-3">
+                      <div class="form-group">
+                          <label for="evendor">Vendor</label>
+                          <input type="text" class="form-control" id="evendor" placeholder="Enter Vendor Company" value="<%= jobs[i].vendor %>">
+                      </div>
+                  </div>
+                  <div class="col-3">
+                    <div class="form-group">
+                        <label for="evendor_nm">Vendor Contact</label>
+                        <input type="text" class="form-control" id="evendor_nm" placeholder="Enter Vendor Contact Name" value="<%= jobs[i].vendor_nm %>">
+                    </div>
+                </div>
+                    <div class="col-3">
+                        <div class="form-group">
+                            <label for="evendor_phone">Vendor Phone</label>
+                            <input type="text" class="form-control" id="evendor_phone" placeholder="Enter Vendor Phone" value="<%= jobs[i].vendor_phone %>">
+                        </div>
+                </div>
+                <div class="col-3">
+                  <div class="form-group">
+                      <label for="evendor_email">Vendor Email</label>
+                      <input type="text" class="form-control" id="evendor_email" placeholder="Enter Vendor Email" value="<%= jobs[i].vendor_email %>">
+                  </div>
+          </div>
+            </div>
+            <div class="row">
+              <div class="col-12">
+                  <div class="form-group">
+                      <label for="evendor_notes">Vendor Notes</label>
+                      <textarea class="form-control" id="evendor_notes" rows="2" placeholder="Enter any vendor notes here."><%= jobs[i].vendor_notes %></textarea>
+                  </div>
+              </div>
+        </div>
+      </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Save Changes</button>
+                        </div>
+                    </form>
+                    <!-- End Job Form End -->
+                  </div>
+                </div>
+              </div>
+              <!-- Duplicate Job Modal End -->
+              <!-- Delete Job Modal -->
+              <div class="modal fade" id="d<%= jobs[i].ordnbr %>" tabindex="-1" role="dialog" aria-labelledby="deleteTripModalLable" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="exampleModalLabel">Are you sure you want to delete job <%= jobs[i].ordnbr %>? </h5>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <div class="modal-body">
+                      Click DELETE to delete this job, or click Close to dismiss.
+                      <form class="deletetripform">
+                        <div class="form-group">
+                          <label hidden for="did"></label>
+                          <input hidden type="text" class="form-control" id="did" placeholder="Order #" value="<%= jobs[i].ordnbr %>">
+                      </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary">Save Changes</button>
+                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                      <button type="submit" class="btn btn-danger">DELETE THIS JOB</button>
                     </div>
-                </form>
-                <!-- End Job Form End -->
-              </div>
-            </div>
-          </div>
-          <!-- Edit Job Modal End -->
-    
-          <!-- Delete Job Modal -->
-          <div class="modal fade" id="d<%= jobs[i].ordnbr %>" tabindex="-1" role="dialog" aria-labelledby="deleteTripModalLable" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <h5 class="modal-title" id="exampleModalLabel">Are you sure you want to delete job <%= jobs[i].ordnbr %>? </h5>
-                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                  </button>
-                </div>
-                <div class="modal-body">
-                  Click DELETE to delete this job, or click Close to dismiss.
-                  <form class="deletetripform">
-                    <div class="form-group">
-                      <label hidden for="did"></label>
-                      <input hidden type="text" class="form-control" id="did" placeholder="Order #" value="<%= jobs[i].ordnbr %>">
+                  </form>
                   </div>
                 </div>
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                  <button type="submit" class="btn btn-danger">DELETE THIS JOB</button>
-                </div>
-              </form>
               </div>
+              <!-- Delete Job Modal End -->
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                </button>
+              </div>
+              <div class="horizontal-line">
+                <hr class="hr-line-line">
+              </div>
+              <div class="modal-body">
+                <div class="row">
+                <div class="card col-8 border-0" style="font-size:medium">
+                  <h6 class="card-header border">Trip Details</h6>
+                  <div class="card-body border">
+                <table class="table table-borderless">
+                    <tbody>
+                      <tr class="d-flex">
+                      <td class="col-3 bold">Origin:</td>
+                      <td class="col-4"><%= jobs[i].origin %></td>
+                      <td class="col-2 bold">Lump Sum:</td>
+                      <td class="col-3">$<%= Intl.NumberFormat().format(jobs[i].lump_sum_amount) %> <a>(<%= jobs[i].lump_sum_paid %>)</a></td>
+                    </tr>
+                    <tr class="d-flex">
+                      <td class="col-3 bold">Origin Desc.:</td>
+                      <td class="col-4"><%= jobs[i].origin_desc %></td>
+                      <td class="col-2 bold">Contract Signed:</td>
+                      <td class="col-3"><%= jobs[i].contract_signed %></td>
+                    </tr>
+                    <tr class="d-flex">
+                      <td class="col-3 bold">Destination:</td>
+                      <td class="col-4"><%= jobs[i].destination %></td>
+                      <td class="col-2 bold">Kickoff Meeting:</td>
+                      <td class="col-3"><%= jobs[i].kickoff_meeting %></td>
+                    </tr>
+                    <tr class="d-flex">
+                      <td class="col-3 bold">Destination Description:</td>
+                      <td class="col-4"><%= jobs[i].destination_desc %></td>
+                      <td class="col-2 bold">Proforma:</td>
+                      <td class="col-3">$<%= Intl.NumberFormat().format(jobs[i].proforma_amount) %> <a>(<%= jobs[i].proforma_paid %>)</a></td>
+                    </tr>
+                    <tr class="d-flex">
+                      <td class="col-3 bold">Start Date:</td>
+                      <td class="col-6"><%= moment(jobs[i].est_start_date).format('M/D/YY') %></td>
+                    </tr>
+                    <tr class="d-flex">
+                      <td class="col-3 bold">PM Assigned:</td>
+                      <td class="col-6"><%= jobs[i].pm_assigned %></td>
+                    </tr>
+                    <tr class="d-flex">
+                      <td class="col-3 bold">Status:</td>
+                      <td class="col-6"><%= jobs[i].status %></td>
+                    </tr>
+                    <tr class="d-flex">
+                      <td class="col-3 bold">Barge(s):</td>
+                      <td class="col-6"><%= jobs[i].barge_name %></td>
+                    </tr>
+                    <tr class="d-flex">
+                      <td class="col-3 bold">Tug(s):</td>
+                      <td class="col-6"><%= jobs[i].tug_name %></td>
+                    </tr>
+                    <tr class="d-flex">
+                      <td class="col-3 bold">Trip Notes:</td>
+                      <td class="col-9" style="white-space: pre-wrap"><%= jobs[i].ord_notes %></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              </div>
+              <div class="col-4">
+                <div class="row">
+                  <div class="card col-12 border-0" style="padding-right:15px">
+                <h6 class="job-note-headers card-header border">Customer Details</h6>
+                <div class="card-body border">
+              <table class="table table-borderless">
+                  <tbody>
+                  <tr class="d-flex">
+                    <td class="col-4">Customer:</td>
+                    <td class="col-6"><%= jobs[i].customer %></td>
+                  </tr>
+                  <tr class="d-flex">
+                    <td class="col-4">Customer Contact:</td>
+                    <td class="col-6"><%= jobs[i].customer_nm %></td>
+                  </tr>
+                  <tr class="d-flex">
+                    <td class="col-4">Customer Phone:</td>
+                    <td class="col-6"><%= jobs[i].customer_phone %></td>
+                  </tr>
+                  <tr class="d-flex">
+                    <td class="col-4">Customer Email:</td>
+                    <td class="col-6"><%= jobs[i].customer_email %></td>
+                  </tr>
+                  <tr class="d-flex">
+                    <td class="col-4">Notes:</td>
+                    <td class="col-6" style="white-space: pre-wrap"><%= jobs[i].customer_notes %></td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
-          </div>
-          <!-- Delete Job Modal End -->
-    
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            </button>
-          </div>
-          <div class="horizontal-line">
-            <hr class="hr-line-line">
-          </div>
-          <div class="modal-body">
-            <div class="row">
-            <div class="card col-8 border-0" style="font-size:medium">
-              <h6 class="card-header border">Trip Details</h6>
-              <div class="card-body border">
-            <table class="table table-borderless">
-                <tbody>
-                <tr class="d-flex">
-                  <td class="col-3">Origin:</td>
-                  <td class="col-6"><%= jobs[i].origin %></td>
-                </tr>
-                <tr class="d-flex">
-                  <td class="col-3">Origin Desc.:</td>
-                  <td class="col-6"><%= jobs[i].origin_desc %></td>
-                </tr>
-                <tr class="d-flex">
-                  <td class="col-3">Destination:</td>
-                  <td class="col-6"><%= jobs[i].destination %></td>
-                </tr>
-                <tr class="d-flex">
-                  <td class="col-3">Destination Description:</td>
-                  <td class="col-6"><%= jobs[i].destination_desc %></td>
-                </tr>
-                <tr class="d-flex">
-                  <td class="col-3">Start Date:</td>
-                  <td class="col-6"><%= moment(jobs[i].est_start_date).format('M/D/YY') %></td>
-                </tr>
-                <tr class="d-flex">
-                  <td class="col-3">PM Assigned:</td>
-                  <td class="col-6"><%= jobs[i].pm_assigned %></td>
-                </tr>
-                <tr class="d-flex">
-                  <td class="col-3">Status:</td>
-                  <td class="col-6"><%= jobs[i].status %></td>
-                </tr>
-                <tr class="d-flex">
-                  <td class="col-3">Trip Notes:</td>
-                  <td class="col-9" style="white-space: pre-wrap"><%= jobs[i].ord_notes %></td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-          </div>
-          <div class="col-4">
+            </div>
+            </div>
+            <div class="row" style="line-height:5px"><br></div>
             <div class="row">
               <div class="card col-12 border-0" style="padding-right:15px">
-            <h6 class="job-note-headers card-header border">Customer Details</h6>
+            <h6 class="job-note-headers card-header border">Vendor Details</h6>
             <div class="card-body border">
           <table class="table table-borderless">
               <tbody>
               <tr class="d-flex">
-                <td class="col-4">Customer:</td>
-                <td class="col-6"><%= jobs[i].customer %></td>
+                <td class="col-4">Vendor:</td>
+                <td class="col-6"><%= jobs[i].vendor %></td>
               </tr>
               <tr class="d-flex">
-                <td class="col-4">Customer Contact:</td>
-                <td class="col-6"><%= jobs[i].customer_nm %></td>
+                <td class="col-4">Vendor Contact:</td>
+                <td class="col-6"><%= jobs[i].vendor_nm %></td>
               </tr>
               <tr class="d-flex">
-                <td class="col-4">Customer Phone:</td>
-                <td class="col-6"><%= jobs[i].customer_phone %></td>
+                <td class="col-4">Vendor Phone:</td>
+                <td class="col-6"><%= jobs[i].vendor_phone %></td>
               </tr>
               <tr class="d-flex">
-                <td class="col-4">Customer Email:</td>
-                <td class="col-6"><%= jobs[i].customer_email %></td>
+                <td class="col-4">Vendor Email:</td>
+                <td class="col-6"><%= jobs[i].vendor_email %></td>
               </tr>
               <tr class="d-flex">
                 <td class="col-4">Notes:</td>
-                <td class="col-6" style="white-space: pre-wrap"><%= jobs[i].customer_notes %></td>
+                <td class="col-6" style="white-space: pre-wrap"><%= jobs[i].vendor_notes %></td>
               </tr>
             </tbody>
           </table>
         </div>
         </div>
         </div>
-        <div class="row" style="line-height:5px"><br></div>
-        <div class="row">
-          <div class="card col-12 border-0" style="padding-right:15px">
-        <h6 class="job-note-headers card-header border">Vendor Details</h6>
-        <div class="card-body border">
-      <table class="table table-borderless">
-          <tbody>
-          <tr class="d-flex">
-            <td class="col-4">Vendor:</td>
-            <td class="col-6"><%= jobs[i].vendor %></td>
-          </tr>
-          <tr class="d-flex">
-            <td class="col-4">Vendor Contact:</td>
-            <td class="col-6"><%= jobs[i].vendor_nm %></td>
-          </tr>
-          <tr class="d-flex">
-            <td class="col-4">Vendor Phone:</td>
-            <td class="col-6"><%= jobs[i].vendor_phone %></td>
-          </tr>
-          <tr class="d-flex">
-            <td class="col-4">Vendor Email:</td>
-            <td class="col-6"><%= jobs[i].vendor_email %></td>
-          </tr>
-          <tr class="d-flex">
-            <td class="col-4">Notes:</td>
-            <td class="col-6" style="white-space: pre-wrap"><%= jobs[i].vendor_notes %></td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-    </div>
-    </div>
-      </div>
-        </div>
-            </div>
           </div>
-      </div>
-    </td>
-    </tr>
-        </tbody>
+            </div>
+                </div>
+              </div>
+          </div>
+        </td>
+        </tr>
+            </tbody>
     <% } %>
       <% } %>
         </table>
