@@ -44,15 +44,30 @@ function getHostURL() {
     const ord_notes = $('#jobNotes').val();
     const customer = $('#customer').val();
     const customer_nm = $('#customer_nm').val();
-    const customer_phone = $('#customer_phone').val();
+    var customer_phone = $('#customer_phone').val();
+    if (customer_phone <1) {
+      customer_phone = 0;
+    } else {
+      customer_phone = customer_phone;
+    }
     const customer_email = $('#customer_email').val();
     const customer_notes = $('#customer_notes').val();
     const vendor = $('#vendor').val();
     const vendor_nm = $('#vendor_nm').val();
-    const vendor_phone = $('#vendor_phone').val();
+    var vendor_phone = $('#vendor_phone').val();
+    if (vendor_phone <1) {
+      vendor_phone = 0;
+    } else {
+      vendor_phone = vendor_phone;
+    }
     const vendor_email = $('#vendor_email').val();
     const vendor_notes = $('#vendor_notes').val();
-    const lump_sum_amount = $('#lumpSumAmount').val();
+    var lump_sum_amount = $('#lumpSumAmount').val();
+    if (lump_sum_amount <1) {
+      lump_sum_amount = 0;
+    } else {
+      lump_sum_amount = lump_sum_amount;
+    }
     const lump_sum_paid = $('#lumpSumPaid').val();
 
  const job = {

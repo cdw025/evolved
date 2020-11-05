@@ -14,7 +14,7 @@
                 <div class="col-4">
                     <div class="form-group">
                         <label for="JobNumberInput">Job #</label>
-                        <input type="text" class="form-control" id="JobNumberInput" placeholder="Job #">
+                        <input type="text" class="form-control" id="JobNumberInput" placeholder="Job #" required>
                     </div>
                 </div>
                 <div class="col-4">
@@ -136,25 +136,28 @@
                 <div class="col-3">
                     <div class="form-group">
                         <label for="customer">Customer</label>
-                        <input type="text" class="form-control" id="customer" placeholder="Enter Customer Company">
+                        <input type="text" class="form-control" id="customer" placeholder="Enter Customer Company" required>
+                        <div class="invalid-feedback">
+                            Please enter Customer's Name.
+                          </div>
                     </div>
                 </div>
                 <div class="col-3">
                   <div class="form-group">
                       <label for="customer_nm">Customer Contact</label>
-                      <input type="text" class="form-control" id="customer_nm" placeholder="Enter Customer Contact Name">
+                      <input type="text" class="form-control" id="customer_nm" placeholder="Enter Customer Contact Name" required>
                   </div>
               </div>
                   <div class="col-3">
                       <div class="form-group">
                           <label for="customer_phone">Customer Phone</label>
-                          <input type="text" class="form-control" id="customer_phone" placeholder="Enter Customer Phone">
+                          <input type="text" class="form-control" id="customer_phone" placeholder="Enter Customer Phone" required>
                       </div>
               </div>
               <div class="col-3">
                 <div class="form-group">
                     <label for="customer_email">Customer Email</label>
-                    <input type="text" class="form-control" id="customer_email" placeholder="Enter Customer Email">
+                    <input type="text" class="form-control" id="customer_email" placeholder="Enter Customer Email" required>
                 </div>
         </div>
           </div>
