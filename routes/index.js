@@ -80,6 +80,9 @@ router.get('/dashboard', authMiddleware.ensureLoggedIn, function(req, res) {
     });
 });
 
+router.get('/oncall', authMiddleware.ensureLoggedIn, function(req, res) {
+  res.render('oncall', { title : 'Express'});
+});
 
 // router.get('/assets', authMiddleware.ensureLoggedIn, function(req, res) {
 //   Asset.getAssets().then(assets => {

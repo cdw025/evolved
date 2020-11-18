@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%- include ('partials/head') %>
+</head>
+<style>
+    #tripTableHeader {
+        margin-bottom: 0px;
+    }
+    #headerDivId {
+        margin-left: 5px;
+        margin-right: 5px;
+    }
+
+    .form-group {
+        font-size: 90%;
+        margin-bottom: 10px;
+    }
+
+    .form-control {
+        font-size: 90%;
+    }
+
+</style>
+<body class="container"></body>
+<header class="page header">
+    <%- include ('partials/header') %>
+ </header>
+</body>
+<main>
+    <br>
+<div class="row" id="headerDivId">
+    <div class="col-1"></div>
+    <h3 class='text-center col-10' id="tripTableHeader">On Call General Details</h3>
+</div>
+    <%- include ('partials/oncalldetails') %>
+    </main>
+    <footer>
+        <%- include ('partials/footer') %>
+    </footer>
+    <script src="shared.js" charset="utf-8"></script>
+    <script src="dashboard.js" charset="utf-8"></script>
+</body>
+</html>
