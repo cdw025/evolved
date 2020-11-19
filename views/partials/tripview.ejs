@@ -176,7 +176,7 @@ td {
         <% for (let i = 0; i < jobs.length; i++) { %>
           <% if (jobs[i].status  === "Upcoming") { %>
         <tbody>
-          <tr class="accordion-toggle collapsed row m-0" id="accordion1" data-toggle="collapse" data-parent="#accordion1" href="#<%= jobs[i].ordnbr %>">
+          <tr class="accordion-toggle collapsed row m-0" id="accordion1" data-toggle="collapse" data-parent="#accordion1" href="#jobID<%= jobs[i].order_id %>">
             <td class="d-inline-block col-1"><%= jobs[i].ordnbr %></td>
             <td class="d-inline-block col-2"><%= jobs[i].customer %></td>
             <td class="d-inline-block col-2"><%= jobs[i].origin %></td>
@@ -189,18 +189,18 @@ td {
               
       <tr class="hide-table-padding">
       <td colspan="12">
-      <div class="collapse in col-sm head-div" id="<%= jobs[i].ordnbr %>">
+      <div class="collapse in col-sm head-div" id="jobID<%= jobs[i].order_id %>">
         <div class="card" id="tdcard">
           <div class="card-body">
             <div class="row">
             <h5 class="card-title col align-self-center" id="cardtitle"><%= jobs[i].ordnbr %> - <%= jobs[i].customer %></h5>
-            <button type="button" class="btn col-1" id="edittripbutton" data-toggle="modal" data-target="#e<%= jobs[i].ordnbr %>">Edit</button>
-            <button type="button" class="btn col-1" id="duplicatetripbutton" data-toggle="modal" data-target="#du<%= jobs[i].ordnbr %>">Duplicate</button>
-            <button type="button" class="btn col-1" data-toggle="modal" data-target="#d<%= jobs[i].ordnbr %>">Delete</button>
+            <button type="button" class="btn col-1" id="edittripbutton" data-toggle="modal" data-target="#ejobID<%= jobs[i].order_id %>">Edit</button>
+            <button type="button" class="btn col-1" id="duplicatetripbutton" data-toggle="modal" data-target="#dujobID<%= jobs[i].order_id %>">Duplicate</button>
+            <button type="button" class="btn col-1" data-toggle="modal" data-target="#djobID<%= jobs[i].order_id %>">Delete</button>
           </div>
     
           <!-- Edit Job Modal -->
-          <div class="modal fade" id="e<%= jobs[i].ordnbr %>" tabindex="-1" role="dialog" aria-labelledby="editTripModalLabel" aria-hidden="true">
+          <div class="modal fade" id="ejobID<%= jobs[i].order_id %>" tabindex="-1" role="dialog" aria-labelledby="editTripModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-xl" role="document">
               <div class="modal-content">
                 <div class="modal-header">
@@ -441,7 +441,7 @@ td {
           <!-- Edit Job Modal End -->
 
           <!-- Duplicate Job Modal Begin -->
-          <div class="modal fade" id="du<%= jobs[i].ordnbr %>" tabindex="-1" role="dialog" aria-labelledby="duplicateTripModalLabel" aria-hidden="true">
+          <div class="modal fade" id="dujobID<%= jobs[i].order_id %>" tabindex="-1" role="dialog" aria-labelledby="duplicateTripModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-xl" role="document">
               <div class="modal-content">
                 <div class="modal-header">
@@ -683,7 +683,7 @@ td {
           </div>
           <!-- Duplicate Job Modal End -->
           <!-- Delete Job Modal -->
-          <div class="modal fade" id="d<%= jobs[i].ordnbr %>" tabindex="-1" role="dialog" aria-labelledby="deleteTripModalLable" aria-hidden="true">
+          <div class="modal fade" id="djobID<%= jobs[i].order_id %>" tabindex="-1" role="dialog" aria-labelledby="deleteTripModalLable" aria-hidden="true">
             <div class="modal-dialog" role="document">
               <div class="modal-content">
                 <div class="modal-header">
@@ -697,7 +697,7 @@ td {
                   <form class="deletetripform">
                     <div class="form-group">
                       <label hidden for="did"></label>
-                      <input hidden type="text" class="form-control" id="did" placeholder="Order #" value="<%= jobs[i].ordnbr %>">
+                      <input hidden type="text" class="form-control" id="did" placeholder="Order #" value="<%= jobs[i].order_id %>">
                   </div>
                 </div>
                 <div class="modal-footer">

@@ -27,9 +27,9 @@ exports.up = function(knex) {
       table.string('barge_name');
       table.string('tug_name');
       table.string('est_start_date');
-      table.string('ord_notes');
-      table.string('customer_notes');
-      table.string('vendor_notes');
+      table.text('ord_notes');
+      table.text('customer_notes');
+      table.text('vendor_notes');
       table.string('created_by');
       table.string('last_modified_by');
       table.timestamp('created_dttm', { useTz : false});

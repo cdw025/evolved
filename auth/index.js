@@ -67,8 +67,7 @@ router.post('/signup', (req, res, next) => {
 });
 
 function validJob(job) {
-    const validJobNumber = typeof job.ordnbr == 'string' &&
-                        job.ordnbr.trim() !='';
+    const validJobNumber = typeof job.ordnbr == 'string';
 
     return validJobNumber;
 }
@@ -130,14 +129,14 @@ router.get('/dashboard/:order_id', (req, res) => {
 
 
 router.post('/newjob', (req, res, next) => {
-    if(validJob(req.body)) {
-        Job
-        .getOneByJobNumber(req.body.ordnbr)
-        .then(job => {
-            console.log('job', job);
-            //If trip not found
-            if(!job) {
-                //this is a unique trip
+    // if(validJob(req.body)) {
+    //     Job
+    //     .getOneByJobNumber(req.body.ordnbr)
+    //     .then(job => {
+    //         console.log('job', job);
+    //         //If trip not found
+    //         if(!job) {
+    //             //this is a unique trip
                     const job = {
                         ordnbr : req.body.ordnbr,
                         status : req.body.status,
@@ -181,12 +180,12 @@ router.post('/newjob', (req, res, next) => {
                     message: 'trip created'
                 });
                     });
-                } else {
-                    // existing trip
-                    console.log('trip already exists');
-                }
-            });
-        }
+        //         } else {
+        //             // existing trip
+        //             console.log('trip already exists');
+        //         }
+        //     });
+        // }
     });
 
 router.put('/dashboard/:order_id', (req, res, next) => {
