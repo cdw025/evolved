@@ -13,7 +13,6 @@ $('.newjobform').submit((event) => {
             window.location = `dashboard`;
         }).catch(error => {
             console.error(error);
-            showErrorMessage(error.responseJSON.message);
         });
         });
     });
@@ -57,7 +56,6 @@ $(document).delegate('.edittripform', 'submit', function(event) {
         window.location = `dashboard`;
     }).catch(error => {
         console.error(error);
-        showErrorMessage(error.responseJSON.message);
     });
 });
 
@@ -80,7 +78,6 @@ $(document).delegate('.deletetripform', 'submit', function(event) {
         window.location = `dashboard`;
     }).catch(error => {
         console.error(error);
-        showErrorMessage(error.responseJSON.message);
     });
 });
 
