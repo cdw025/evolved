@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%- include ('partials/head') %>
+</head>
+<body class="container"></body>
+<header class="page header">
+    <%- include ('partials/header') %>
+ </header>
+
+<main>
+  <style>
+    tr.hide-table-padding td {
+    padding: 0;
+  }
+  
+  .expand-button {
+      position: relative;
+  }
+  
+  .accordion-toggle .expand-button:after
+  {
+    position: absolute;
+    left:.75rem;
+    top: 50%;
+    transform: translate(0, -50%);
+    content: '-';
+  }
+  .accordion-toggle.collapsed .expand-button:after
+  {
+    content: '+';
+  }
+  
+  #tdcard {
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
+  
+  .tow-card {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    background-color: #686a6e;
+  }
+  
+  #cardtitle {
+    margin-bottom: 0px;
+  }
+  
+  .table-responsive {
+    margin-top: 10px;
+  }
+  
+  .card-body {
+    padding: 10px;
+  }
+  
+  .horizontal-line {
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+  
+  .hr-line-line {
+    margin: 1px;
+    border: 1px solid #F0F8FF;
+  }
+  
+  .asset-row {
+    font-size: 80%;
+  }
+  
+  .job-details {
+    padding-top: 10px;
+    font-size: 100%;
+  }
+  
+  .nav-tabs a {
+    color: black;
+  }
+
+  .card-header {
+    padding-top: 2px;
+    padding-bottom: 2px;
+  }
+  
+  
+  
+  /* .table td {
+     text-align: left;  
+  }
+  
+  .table th {
+     text-align: left;
+     padding: 0px;  
+  } */
+  
+  .table>tbody>tr>td {
+    border-top: none;
+  }
+  
+  
+  table>thead>tr>th {
+    border-top: none;
+  }
+  
+  .table {
+    margin: 0px;
+  }
+  
+  .btn-sm {
+    height:90%;
+    width:90%;
+    font-size: 100%;
+    padding: 0px;
+    vertical-align: middle;
+  }
+  
+  .btn-secondary {
+    font-size: 80%;
+  }
+  
+  .dropdown-item {
+    font-size: 100%;
+  }
+  
+  .job-notes {
+    white-space: pre-wrap;
+  }
+  
+  td {
+    font-size: 90%;
+  }
+  
+  .form-group {
+    font-size: 120%;
+  }
+  
+  .job-note-headers {
+    text-align: left;
+    text-decoration: underline;
+  }
+  
+  .right-tabs .nav {
+      float: right;
+  }
+  
+  .bold {
+    font-weight: bold;
+  }
+  
+  .form-control {
+    color: black;
+  }
+  
+  </style>
+  <br>  
+  <h3 style="text-align: center;">Active Job Logs</h3>
+    <% for(let i = 0;i < jobs.length; i++){ %>
+      <% if (jobs[i].status  === "Active") { %>
+        <div class="card">
+          <div class="card-header sm" id="headingOne">
+            <h5 class="mb-0">
+              <button class="btn" data-toggle="collapse" data-target="#jobID<%= jobs[i].order_id %>" aria-expanded="true" aria-controls="jobID<%= jobs[i].order_id %>">
+                <%= jobs[i].ordnbr %>
+              </button>
+            </h5>
+          </div>
+      
+          <div id="jobID<%= jobs[i].order_id %>" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
+            <div class="card-body">
+              Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+            </div>
+          </div>
+        </div>
+        <br>
+        <% } %>
+        <% } %>
+
+
+
+      <script type="text/javascript">
+        window.addEventListener('keydown',function(e){if(e.keyIdentifier=='U+000A'||e.keyIdentifier=='Enter'||e.keyCode==13){if(e.target.nodeName=='INPUT'&&e.target.type=='text'){e.preventDefault();return false;}}},true);
+        </script>
+      <br>
+</main>
+<script src="shared.js" charset="utf-8"></script>
+<footer>
+    <%- include ('partials/footer') %>
+</footer>
+</html>
