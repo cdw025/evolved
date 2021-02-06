@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%- include ('partials/head') %>
+</head>
+
+<main>
+    <table class="table table-sm">
+        <thead>
+          <tr>
+            <th >Delay ID</th>
+            <th >Order ID</th>
+            <th >Asset ID</th>
+            <th >Tow Group</th>
+            <th >Delay Type</th>
+            <th >Delay Start</th>
+            <th >Delay Stop</th>
+            <th >Delay Duration</th>
+            <th >Delay Description</th>
+            <th >Delay Asset Number</th>
+          </tr>
+        </thead>
+        <tbody class="asset-tbody">
+          <% delays.forEach(function(delay) {  %>
+              <tr>
+                <td>
+                  <%- delay.delay_id %>
+                </td>
+                <td>
+                    <%- delay.order_id %>
+                  </td>
+                  <td>
+                    <%- delay.asset_id %>
+                  </td>
+                  <td>
+                    <%- delay.tow_group %>
+                  </td>
+                  <td>
+                    <%- delay.delay_type %>
+                  </td>
+                  <td>
+                    <%- delay.delay_start %>
+                  </td>
+                  <td>
+                    <%- delay.delay_stop %>
+                  </td>
+                  <td>
+                    <%- delay.delay_duration %> hours
+                  </td>
+                  <td>
+                    <%- delay.description %>
+                  </td>
+                  <td>
+                    <%- delay.asset_delay_number %>
+                  </td>
+                </tr>
+                <%  });  %>
+                
+        </tbody>
+      </table>
+
+
+
+</main>
+    <footer>
+        <%- include ('partials/footer') %>
+    </footer>
+    <script src="shared.js" charset="utf-8"></script>
+    <script src="dashboard.js" charset="utf-8"></script>
+
+</html>

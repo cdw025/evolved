@@ -1,0 +1,110 @@
+<div class="modal fade" id="newAsset<%- job.ordnbr %>" tabindex="-1" role="dialog" aria-labelledby="newAssetModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="NewAssetModalLabel">Add New Asset for <%- job.ordnbr %></h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form class="newassetform">
+            <div class="row">
+                <div class="col-4">
+                    <div class="form-group">
+                        <label hidden for="orderIdInput"></label>
+                        <input hidden type="text" class="form-control orderIdInput" value="<%- job.order_id %>">
+                        <label for="JobNumberInput">Job #</label>
+                        <input type="text" class="form-control JobNumberInput" value="<%- job.ordnbr %>" readonly>
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="form-group">
+                        <label for="assetStatus">Asset Status</label>
+                        <select class="form-control assetStatus">
+                          <option>Active</option>
+                          <option>Inactive</option>
+                        </select>
+                      </div>
+              </div>
+                  <div class="col-4">
+                      <div class="form-group">
+                          <label for="towGroup">Tow Group</label>
+                          <input type="integer" class="form-control towGroup" placeholder="ex. 1, 2, 3">
+                      </div>
+              </div>
+          </div>
+          <div class="row">
+            <div class="col-4">
+                <div class="form-group">
+                    <label for="assetName">Asset Name</label>
+                    <input type="text" class="form-control assetName" placeholder="Asset Name">
+                </div>
+            </div>
+            <div class="col-4">
+              <div class="form-group">
+                  <label for="assetVendor">Vendor Name</label>
+                  <input type="text" class="form-control assetVendor" placeholder="Vendor Name">
+              </div>
+          </div>
+          <div class="col-4">
+            <div class="form-group">
+                <label for="assetType">Asset Type</label>
+                <select class="form-control assetType">
+                  <option>Barge</option>
+                  <option>Tug</option>
+                </select>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+              <div class="col-4">
+                  <div class="form-group">
+                      <label for="assetStart">Asset Start</label>
+                      <input type="datetime-local" class="form-control assetStart" placeholder="Asset Start Time">
+                  </div>
+          </div>
+                  <div class="col-4">
+                    <div class="form-group">
+                        <label for="assetStop">Asset Stop</label>
+                        <input type="datetime-local" class="form-control assetStop" placeholder="Asset Stop Time">
+                    </div>
+                  </div>
+            </div>
+            <div class="row">
+                <div class="col-4">
+                    <div class="form-group">
+                        <label for="assetStartFuel">Start Fuel</label>
+                        <input type="integer" class="form-control assetStartFuel" placeholder="Start Fuel">
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="form-group">
+                        <label for="assetStopFuel">Stop Fuel</label>
+                        <input type="integer" class="form-control assetStopFuel" placeholder="Stop Fuel">
+                    </div>
+                </div>
+          </div>
+          <div class="row">
+            <div class="col-4">
+                <div class="form-group">
+                    <label for="assetStartLube">Start Lube</label>
+                    <input type="integer" class="form-control assetStartLube" placeholder="Start Lube">
+                </div>
+            </div>
+            <div class="col-4">
+                <div class="form-group">
+                    <label for="assetStopLube">Stop Lube</label>
+                    <input type="integer" class="form-control assetStopLube" placeholder="Stop Lube">
+                </div>
+            </div>
+      </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary">Save Changes</button>
+            </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

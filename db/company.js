@@ -7,5 +7,5 @@ module.exports = {
 
   getAllUsers: function () {
     return knex('user');
-  }
+  } 
 }

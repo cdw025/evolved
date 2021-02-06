@@ -6,6 +6,7 @@ const Barge = require('../db/barge');
 const Job = require('../db/job');
 const Asset = require('../db/asset');
 const AssetLog = require('../db/assetlog');
+const asset = require('../db/asset');
 
 // Route paths are prepended with /auth
 
@@ -92,8 +93,14 @@ router.post('/login', (req, res, next) => {
                             signed: true,
                             sameSite: 'strict'
                         });
+                        res.cookie('company', user.company, {
+                            httpOnly: true,
+                            signed: true,
+                            sameSite: 'strict'
+                        });
                         res.json({
                             id: user.id,
+                            company : user.company,
                             message: 'Logged In!'
                         });
                     } else {
@@ -271,14 +278,18 @@ router.delete('/dashboard/:order_id', (req, res, next) => {
 
 router.post('/newasset', (req, res, next) => {
                     const asset = {
-                        ordnbr : req.body.ordnbr,
-                        asset_type : req.body.asset_type,
-                        asset_name: req.body.asset_name,
-                        vendor_name : req.body.vendor_name,
+                        order_id : req.body.order_id,
+                        asset_status : req.body.asset_status,
                         tow_group : req.body.tow_group,
-                        asset_start : req.body.asset_start,
+                        asset_name : req.body.asset_name,
+                        vendor_name : req.body.vendor_name,
+                        asset_type : req.body.asset_type,
+                        asset_start: req.body.asset_start,
                         asset_stop : req.body.asset_stop,
-                        asset_status: req.body.asset_status,
+                        start_fuel : req.body.start_fuel,
+                        stop_fuel : req.body.stop_fuel,
+                        start_lube : req.body.start_lube,
+                        stop_lube : req.body.stop_lube,
                         created_by: 'Neal White',
                         last_modified_by: 'Neal White',
                         created_dttm: new Date(),
@@ -297,16 +308,13 @@ router.post('/newasset', (req, res, next) => {
                     });
                 });        
 
-
-
-
     function validAsset(asset) {
     const validAssetNumber = asset.asset_id.trim() !='';
 
     return validAssetNumber;
 }
 
-    router.put('/dashboard/asset/:asset_id', (req, res, next) => {
+    router.put('/editasset/:asset_id', (req, res, next) => {
         if(validAsset(req.body)) {
             Asset
             .update(req.params.asset_id, req.body).then(asset => {
@@ -317,12 +325,126 @@ router.post('/newasset', (req, res, next) => {
             }
     });
 
-    router.delete('/dashboard/asset/:asset_id', (req, res, next) => {
-        Asset
-        .delete(req.params.asset_id).then(() => {
-            res.send('deleted');
-        });
+//     router.delete('/dashboard/asset/:asset_id', (req, res, next) => {
+//         Asset
+//         .delete(req.params.asset_id).then(() => {
+//             res.send('deleted');
+//         });
+// });
+
+
+router.post('/newlog', (req, res, next) => {
+    const log = {
+        order_id : req.body.order_id,
+        asset_id : req.body.asset_id,
+        tow_group : req.body.tow_group,
+        location_type : req.body.location_type,
+        asset_location : req.body.asset_location,
+        latitude : req.body.latitude,
+        longitude : req.body.longitude,
+        fuel_burn : req.body.fuel_burn,
+        lube_burn : req.body.lube_burn,
+        speed : req.body.speed,
+        status : req.body.status,
+        direction : req.body.direction,
+        eta : req.body.eta,
+        miles_made : req.body.miles_made,
+        miles_to_go : req.body. miles_to_go,
+        notes : req.body.notes,
+        log_dttm : new Date(),
+        created_by: 'Neal White',
+        last_modified_by: 'Neal White',
+        created_dttm: new Date(),
+        modified_dttm: new Date()
+    };
+
+    AssetLog
+    .create(log)
+    .then(log => {
+// redirect
+res.json({
+    log,
+    message: 'log created'
 });
+
+    });
+});    
+
+
+
+// router.post('/newlog', (req, res, next) => {
+//     const log = {
+//         order_id : req.body.order_id,
+//         asset_id : req.body.asset_id,
+//         tow_group : req.body.tow_group,
+//         location_type : req.body.location_type,
+//         asset_location : req.body.asset_location,
+//         latitude : req.body.latitude,
+//         longitude : req.body.longitude,
+//         fuel_burn : req.body.fuel_burn,
+//         lube_burn : req.body.lube_burn,
+//         speed : req.body.speed,
+//         direction : req.body.direction,
+//         eta : req.body.eta,
+//         miles_made : req.body.miles_made,
+//         miles_to_go : req.body. miles_to_go,
+//         notes : req.body.notes,
+//         log_dttm : new Date(),
+//         created_by: 'Neal White',
+//         last_modified_by: 'Neal White',
+//         created_dttm: new Date(),
+//         modified_dttm: new Date()
+//     };
+//     Asset
+//     .getMatchingAssets(log)
+//     .then(assets => {
+//         assets = JSON.parse(JSON.stringify(assets));
+//         // console.log(assets);
+        
+//         var modules = [];
+        
+//         assets.forEach(function(assets) {
+//             var diffLog = {
+//                 order_id : req.body.order_id,
+//                 asset_id : assets.asset_id,
+//                 tow_group : req.body.tow_group,
+//                 location_type : req.body.location_type,
+//                 asset_location : req.body.asset_location,
+//                 latitude : req.body.latitude,
+//                 longitude : req.body.longitude,
+//                 fuel_burn : req.body.fuel_burn,
+//                 lube_burn : req.body.lube_burn,
+//                 speed : req.body.speed,
+//                 direction : req.body.direction,
+//                 eta : req.body.eta,
+//                 miles_made : req.body.miles_made,
+//                 miles_to_go : req.body. miles_to_go,
+//                 notes : req.body.notes,
+//                 log_dttm : new Date(),
+//                 created_by: 'Neal White',
+//                 last_modified_by: 'Neal White',
+//                 created_dttm: new Date(),
+//                 modified_dttm: new Date()
+//             };
+//             // console.log(diffLog);
+//             AssetLog
+//             .create(diffLog)
+//             .then(diffLog => {
+//                 modules.push(diffLog);
+//                 if(modules.length === assets.length) {
+//                     return modules;
+//                 }
+//             });
+//         });
+//         res.json({
+//             modules,
+//             message: 'logs created for tow_group in job'
+//         });
+//     });
+// });        
+
+
+
 
 
 module.exports = router;

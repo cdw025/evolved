@@ -140,6 +140,7 @@ td {
   window.addEventListener('keydown',function(e){if(e.keyIdentifier=='U+000A'||e.keyIdentifier=='Enter'||e.keyCode==13){if(e.target.nodeName=='INPUT'&&e.target.type=='text'){e.preventDefault();return false;}}},true);
   </script>
 <br>
+
 <ul class="nav nav-tabs" id="myTab" role="tablist">
   <li class="nav-item">
     <a class="nav-link" id="home-tab" data-toggle="tab" href="#upcoming" role="tab" aria-controls="home" aria-selected="false">Upcoming</a>
@@ -167,40 +168,42 @@ td {
             <th data-sortable="true" scope="col" class="d-inline-block col-2 ">Customer</th>
             <th data-sortable="true" scope="col" class="d-inline-block col-2">Origin</th>
             <th data-sortable="true" scope="col" class="d-inline-block col-2">Destination</th>
-            <th data-sortable="true" scope="col" class="d-inline-block col-2">PM Assigned</th>
-            <th data-sortable="true" scope="col" class="d-inline-block col-1">Status</th>
-            <th data-sortable="true" scope="col" class="d-inline-block col-2">Est. Start</th>
+            <th data-sortable="true" scope="col" class="d-inline-block col-2">Barge(s)</th>
+            <th data-sortable="true" scope="col" class="d-inline-block col-1">PM Assigned</th>
+            <th data-sortable="true" scope="col" class="d-inline-block col-1">Lump Sum</th>
+            <th data-sortable="true" scope="col" class="d-inline-block col-1">Est. Start</th>
             <!-- <th scope="col" class="d-inline-block col-1">#</th> -->
           </tr>
         </thead>
-        <% for (let i = 0; i < jobs.length; i++) { %>
-          <% if (jobs[i].status  === "Upcoming") { %>
-        <tbody>
-          <tr class="accordion-toggle collapsed row m-0" id="accordion1" data-toggle="collapse" data-parent="#accordion1" href="#jobID<%= jobs[i].order_id %>">
-            <td class="d-inline-block col-1"><%= jobs[i].ordnbr %></td>
-            <td class="d-inline-block col-2"><%= jobs[i].customer %></td>
-            <td class="d-inline-block col-2"><%= jobs[i].origin %></td>
-            <td class="d-inline-block col-2"><%= jobs[i].destination %></td>
-            <td class="d-inline-block col-2"><%= jobs[i].pm_assigned %></td>
-            <td class="d-inline-block col-1"><%= jobs[i].status %></td>
-            <td class="d-inline-block col-2"><%= moment(jobs[i].est_start_date).format('M/D/YY') %></td>
+        <% jobs.forEach(function(job) { %>
+          <% if (job.status  === "Upcoming") { %>
+        <tbody class="uvs">
+          <tr class="accordion-toggle collapsed row m-0" id="accordion1" data-toggle="collapse" data-parent="#accordion1" href="#jobID<%= job.order_id %>">
+            <td class="d-inline-block col-1"><%= job.ordnbr %></td>
+            <td class="d-inline-block col-2"><%= job.customer %></td>
+            <td class="d-inline-block col-2"><%= job.origin %></td>
+            <td class="d-inline-block col-2"><%= job.destination %></td>
+            <td class="d-inline-block col-2"><%= job.barge_name %></td>
+            <td class="d-inline-block col-1"><%= job.pm_assigned %></td>
+            <td class="d-inline-block col-1">$<%= Intl.NumberFormat().format(job.lump_sum_amount) %></td>
+            <td class="d-inline-block col-1"><%= moment(job.est_start_date).format('M/D/YY') %></td>
             <!-- <td class="expand-button" class="d-inline-block col-1"></td> -->
             </tr>
               
       <tr class="hide-table-padding">
       <td colspan="12">
-      <div class="collapse in col-sm head-div" id="jobID<%= jobs[i].order_id %>">
+      <div class="collapse in col-sm head-div" id="jobID<%= job.order_id %>">
         <div class="card" id="tdcard">
           <div class="card-body">
             <div class="row">
-            <h5 class="card-title col align-self-center" id="cardtitle"><%= jobs[i].ordnbr %> - <%= jobs[i].customer %></h5>
-            <button type="button" class="btn col-1" id="edittripbutton" data-toggle="modal" data-target="#ejobID<%= jobs[i].order_id %>">Edit</button>
-            <button type="button" class="btn col-1" id="duplicatetripbutton" data-toggle="modal" data-target="#dujobID<%= jobs[i].order_id %>">Duplicate</button>
-            <button type="button" class="btn col-1" data-toggle="modal" data-target="#djobID<%= jobs[i].order_id %>">Delete</button>
+            <h5 class="card-title col align-self-center" id="cardtitle"><%= job.ordnbr %> - <%= job.customer %></h5>
+            <button type="button" class="btn col-1" id="edittripbutton" data-toggle="modal" data-target="#ejobID<%= job.order_id %>">Edit</button>
+            <button type="button" class="btn col-1" id="duplicatetripbutton" data-toggle="modal" data-target="#dujobID<%= job.order_id %>">Duplicate</button>
+            <button type="button" class="btn col-1" data-toggle="modal" data-target="#djobID<%= job.order_id %>">Delete</button>
           </div>
     
           <!-- Edit Job Modal -->
-          <div class="modal fade" id="ejobID<%= jobs[i].order_id %>" tabindex="-1" role="dialog" aria-labelledby="editTripModalLabel" aria-hidden="true">
+          <div class="modal fade" id="ejobID<%= job.order_id %>" tabindex="-1" role="dialog" aria-labelledby="editTripModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-xl" role="document">
               <div class="modal-content">
                 <div class="modal-header">
@@ -217,26 +220,26 @@ td {
                         <div class="col-4">
                             <div class="form-group">
                                 <label hidden for="eid"></label>
-                                <input hidden type="text" class="form-control" id="eid" placeholder="Order #" value="<%= jobs[i].order_id %>">
+                                <input hidden type="text" class="form-control eid" placeholder="Order #" value="<%= job.order_id %>">
                                 <label for="eJobNumberInput">Order #</label>
-                                <input type="text" class="form-control" id="eJobNumberInput" placeholder="Order #" value="<%= jobs[i].ordnbr %>">
+                                <input type="text" class="form-control eJobNumberInput" placeholder="Order #" value="<%= job.ordnbr %>">
                             </div>
                         </div>
                         <div class="col-4">
                           <div class="form-group">
                             <label for="ejobStatus">Status</label>
-                            <select class="form-control" id="ejobStatus" value="<%= jobs[i].status %>">
-                              <option value="Upcoming" <%= jobs[i].status == 'Upcoming' ? 'selected' : ''%>>Upcoming</option>
-                              <option value="Active" <%= jobs[i].status == 'Active' ? 'selected' : ''%>>Active</option>
-                              <option value="Completed" <%= jobs[i].status == 'Completed' ? 'selected' : ''%>>Completed</option>
-                              <option value="Archived" <%= jobs[i].status == 'Archived' ? 'selected' : ''%>>Archived</option>
+                            <select class="form-control ejobStatus" value="<%= job.status %>">
+                              <option value="Upcoming" <%= job.status == 'Upcoming' ? 'selected' : ''%>>Upcoming</option>
+                              <option value="Active" <%= job.status == 'Active' ? 'selected' : ''%>>Active</option>
+                              <option value="Completed" <%= job.status == 'Completed' ? 'selected' : ''%>>Completed</option>
+                              <option value="Archived" <%= job.status == 'Archived' ? 'selected' : ''%>>Archived</option>
                             </select>
                           </div>
                       </div>
                           <div class="col-4">
                               <div class="form-group">
                                   <label for="epmAssigned">PM Assigned</label>
-                                  <input type="text" class="form-control" id="epmAssigned" placeholder="Origin" value="<%= jobs[i].pm_assigned %>">
+                                  <input type="text" class="form-control epmAssigned" placeholder="Origin" value="<%= job.pm_assigned %>">
                               </div>
                       </div>
                   </div>
@@ -244,19 +247,19 @@ td {
                     <div class="col-4">
                         <div class="form-group">
                             <label for="eoriginInput">Origin</label>
-                            <input type="text" class="form-control" id="eoriginInput" placeholder="Origin" value="<%= jobs[i].origin %>">
+                            <input type="text" class="form-control eoriginInput" placeholder="Origin" value="<%= job.origin %>">
                         </div>
                     </div>
                     <div class="col-4">
                       <div class="form-group">
                           <label for="edestinationInput">Destination</label>
-                          <input type="text" class="form-control" id="edestinationInput" placeholder="Destination" value="<%= jobs[i].destination %>">
+                          <input type="text" class="form-control edestinationInput" placeholder="Destination" value="<%= job.destination %>">
                       </div>
                   </div>
                       <div class="col-4">
                           <div class="form-group">
                               <label for="eestStartDate">Estimated Start Date</label>
-                              <input type="date" class="form-control" id="eestStartDate" placeholder="Destination" value="<%= jobs[i].est_start_date %>">
+                              <input type="date" class="form-control eestStartDate" placeholder="Destination" value="<%= job.est_start_date %>">
                           </div>
                   </div>
               </div>
@@ -264,21 +267,21 @@ td {
                 <div class="col-4">
                     <div class="form-group">
                         <label for="eoriginDesc">Origin Desc.</label>
-                        <input type="text" class="form-control" id="eoriginDesc" placeholder="Origin Desc." value="<%= jobs[i].origin_desc %>">
+                        <input type="text" class="form-control eoriginDesc" placeholder="Origin Desc." value="<%= job.origin_desc %>">
                     </div>
                 </div>
                 <div class="col-4">
                   <div class="form-group">
                       <label for="edestDesc">Destination Desc.</label>
-                      <input type="text" class="form-control" id="edestDesc" placeholder="Destination Desc." value="<%= jobs[i].destination_desc %>">
+                      <input type="text" class="form-control edestDesc" placeholder="Destination Desc." value="<%= job.destination_desc %>">
                   </div>
               </div>
               <div class="col-4">
                 <div class="form-group">
                     <label for="econtractSigned">Contract Signed?</label>
-                    <select class="form-control" id="econtractSigned">
-                      <option value="No" <%= jobs[i].contract_signed == 'No' ? 'selected' : ''%>>No</option>
-                      <option value="Yes" <%= jobs[i].contract_signed == 'Yes' ? 'selected' : ''%>>Yes</option>
+                    <select class="form-control econtractSigned">
+                      <option value="No" <%= job.contract_signed == 'No' ? 'selected' : ''%>>No</option>
+                      <option value="Yes" <%= job.contract_signed == 'Yes' ? 'selected' : ''%>>Yes</option>
                     </select>
                   </div>
             </div>
@@ -291,25 +294,25 @@ td {
                         <div class="input-group-prepend">
                           <span class="input-group-text">$</span>
                         </div>
-                        <input type="text" class="form-control" id="elumpSumAmount" value="<%= jobs[i].lump_sum_amount %>">
+                        <input type="text" class="form-control elumpSumAmount" value="<%= job.lump_sum_amount %>">
                       </div>
                 </div>
             </div>
             <div class="col-4">
                 <div class="form-group">
                     <label for="elumpSumPaid">Lump Sum Sent to Billing?</label>
-                    <select class="form-control" id="elumpSumPaid" value="<%= jobs[i].lump_sum_paid %>">
-                      <option value="unsent" <%= jobs[i].lump_sum_paid == 'unsent' ? 'selected' : ''%>>unsent</option>
-                      <option value="sent" <%= jobs[i].lump_sum_paid == 'sent' ? 'selected' : ''%>>sent</option>
+                    <select class="form-control elumpSumPaid" value="<%= job.lump_sum_paid %>">
+                      <option value="unsent" <%= job.lump_sum_paid == 'unsent' ? 'selected' : ''%>>unsent</option>
+                      <option value="sent" <%= job.lump_sum_paid == 'sent' ? 'selected' : ''%>>sent</option>
                     </select>
                   </div>
           </div>
           <div class="col-4">
             <div class="form-group">
                 <label for="ekickoffMeeting">Kickoff Meeting?</label>
-                <select class="form-control" id="ekickoffMeeting" value="<%= jobs[i].kickoff_meeting %>">
-                  <option value="No" <%= jobs[i].kickoff_meeting == 'No' ? 'selected' : ''%>>No</option>
-                  <option value="Yes" <%= jobs[i].kickoff_meeting == 'Yes' ? 'selected' : ''%>>Yes</option>
+                <select class="form-control ekickoffMeeting" value="<%= job.kickoff_meeting %>">
+                  <option value="No" <%= job.kickoff_meeting == 'No' ? 'selected' : ''%>>No</option>
+                  <option value="Yes" <%= job.kickoff_meeting == 'Yes' ? 'selected' : ''%>>Yes</option>
                 </select>
               </div>
         </div>
@@ -322,16 +325,16 @@ td {
                     <div class="input-group-prepend">
                       <span class="input-group-text">$</span>
                     </div>
-                    <input type="text" class="form-control" id="eproformaAmount" value="<%= jobs[i].proforma_amount %>">
+                    <input type="text" class="form-control eproformaAmount" value="<%= job.proforma_amount %>">
                   </div>
             </div>
         </div>
         <div class="col-4">
             <div class="form-group">
                 <label for="eproformaPaid">Proforma Sent to Billing?</label>
-                <select class="form-control" id="eproformaPaid" value="<%= jobs[i].proforma_paid %>">
-                  <option value="unsent" <%= jobs[i].proforma_paid == 'unsent' ? 'selected' : ''%>>unsent</option>
-                  <option value="sent" <%= jobs[i].proforma_paid == 'sent' ? 'selected' : ''%>>sent</option>
+                <select class="form-control eproformaPaid" value="<%= job.proforma_paid %>">
+                  <option value="unsent" <%= job.proforma_paid == 'unsent' ? 'selected' : ''%>>unsent</option>
+                  <option value="sent" <%= job.proforma_paid == 'sent' ? 'selected' : ''%>>sent</option>
                 </select>
               </div>
       </div>
@@ -340,13 +343,13 @@ td {
         <div class="col-4">
             <div class="form-group">
                 <label for="ebargeName">Barge(s)</label>
-                <input type="text" class="form-control" id="ebargeName" value="<%= jobs[i].barge_name %>">
+                <input type="text" class="form-control ebargeName" value="<%= job.barge_name %>">
             </div>
         </div>
         <div class="col-4">
           <div class="form-group">
               <label for="etugName">Tug(s)</label>
-              <input type="text" class="form-control" id="etugName" value="<%= jobs[i].tug_name %>">
+              <input type="text" class="form-control etugName" value="<%= job.tug_name %>">
           </div>
       </div>
   </div>
@@ -354,7 +357,7 @@ td {
               <div class="col-12">
                   <div class="form-group">
                       <label for="ejobNotes">Job Notes</label>
-                      <textarea class="form-control" id="ejobNotes" rows="2" placeholder="Enter any general job notes here."><%= jobs[i].ord_notes %></textarea>
+                      <textarea class="form-control ejobNotes" rows="2" placeholder="Enter any general job notes here."><%= job.ord_notes %></textarea>
                   </div>
               </div>
         </div>
@@ -363,25 +366,25 @@ td {
               <div class="col-3">
                   <div class="form-group">
                       <label for="ecustomer">Customer</label>
-                      <input type="text" class="form-control" id="ecustomer" placeholder="Enter Customer Company" value="<%= jobs[i].customer %>">
+                      <input type="text" class="form-control ecustomer" placeholder="Enter Customer Company" value="<%= job.customer %>">
                   </div>
               </div>
               <div class="col-3">
                 <div class="form-group">
                     <label for="ecustomer_nm">Customer Contact</label>
-                    <input type="text" class="form-control" id="ecustomer_nm" placeholder="Enter Customer Contact Name" value="<%= jobs[i].customer_nm %>">
+                    <input type="text" class="form-control ecustomer_nm" placeholder="Enter Customer Contact Name" value="<%= job.customer_nm %>">
                 </div>
             </div>
                 <div class="col-3">
                     <div class="form-group">
                         <label for="ecustomer_phone">Customer Phone</label>
-                        <input type="text" class="form-control" id="ecustomer_phone" placeholder="Enter Customer Phone" value="<%= jobs[i].customer_phone %>">
+                        <input type="text" class="form-control ecustomer_phone" placeholder="Enter Customer Phone" value="<%= job.customer_phone %>">
                     </div>
             </div>
             <div class="col-3">
               <div class="form-group">
                   <label for="ecustomer_email">Customer Email</label>
-                  <input type="text" class="form-control" id="ecustomer_email" placeholder="Enter Customer Email" value="<%= jobs[i].customer_email %>">
+                  <input type="text" class="form-control ecustomer_email" placeholder="Enter Customer Email" value="<%= job.customer_email %>">
               </div>
       </div>
         </div>
@@ -389,7 +392,7 @@ td {
           <div class="col-12">
               <div class="form-group">
                   <label for="ecustomer_notes">Customer Notes</label>
-                  <textarea class="form-control" id="ecustomer_notes" rows="2" placeholder="Enter any customer notes here."><%= jobs[i].customer_notes %></textarea>
+                  <textarea class="form-control ecustomer_notes" rows="2" placeholder="Enter any customer notes here."><%= job.customer_notes %></textarea>
               </div>
           </div>
     </div>
@@ -398,25 +401,25 @@ td {
               <div class="col-3">
                   <div class="form-group">
                       <label for="evendor">Vendor</label>
-                      <input type="text" class="form-control" id="evendor" placeholder="Enter Vendor Company" value="<%= jobs[i].vendor %>">
+                      <input type="text" class="form-control evendor" placeholder="Enter Vendor Company" value="<%= job.vendor %>">
                   </div>
               </div>
               <div class="col-3">
                 <div class="form-group">
                     <label for="evendor_nm">Vendor Contact</label>
-                    <input type="text" class="form-control" id="evendor_nm" placeholder="Enter Vendor Contact Name" value="<%= jobs[i].vendor_nm %>">
+                    <input type="text" class="form-control evendor_nm" placeholder="Enter Vendor Contact Name" value="<%= job.vendor_nm %>">
                 </div>
             </div>
                 <div class="col-3">
                     <div class="form-group">
                         <label for="evendor_phone">Vendor Phone</label>
-                        <input type="text" class="form-control" id="evendor_phone" placeholder="Enter Vendor Phone" value="<%= jobs[i].vendor_phone %>">
+                        <input type="text" class="form-control evendor_phone" placeholder="Enter Vendor Phone" value="<%= job.vendor_phone %>">
                     </div>
             </div>
             <div class="col-3">
               <div class="form-group">
                   <label for="evendor_email">Vendor Email</label>
-                  <input type="text" class="form-control" id="evendor_email" placeholder="Enter Vendor Email" value="<%= jobs[i].vendor_email %>">
+                  <input type="text" class="form-control evendor_email" placeholder="Enter Vendor Email" value="<%= job.vendor_email %>">
               </div>
       </div>
         </div>
@@ -424,7 +427,7 @@ td {
           <div class="col-12">
               <div class="form-group">
                   <label for="evendor_notes">Vendor Notes</label>
-                  <textarea class="form-control" id="evendor_notes" rows="2" placeholder="Enter any vendor notes here."><%= jobs[i].vendor_notes %></textarea>
+                  <textarea class="form-control evendor_notes" rows="2" placeholder="Enter any vendor notes here."><%= job.vendor_notes %></textarea>
               </div>
           </div>
     </div>
@@ -441,11 +444,11 @@ td {
           <!-- Edit Job Modal End -->
 
           <!-- Duplicate Job Modal Begin -->
-          <div class="modal fade" id="dujobID<%= jobs[i].order_id %>" tabindex="-1" role="dialog" aria-labelledby="duplicateTripModalLabel" aria-hidden="true">
+          <div class="modal fade" id="dujobID<%= job.order_id %>" tabindex="-1" role="dialog" aria-labelledby="duplicateTripModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-xl" role="document">
               <div class="modal-content">
                 <div class="modal-header">
-                  <h5 class="modal-title" id="editTripModalLabel">Duplicating Job <%= jobs[i].ordnbr %></h5>
+                  <h5 class="modal-title" id="editTripModalLabel">Duplicating Job <%= job.ordnbr %></h5>
                   <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                   </button>
@@ -458,7 +461,7 @@ td {
                       <div class="col-4">
                           <div class="form-group">
                               <label for="duJobNumberInput">Enter New Order #</label>
-                              <input type="text" class="form-control" id="duJobNumberInput" placeholder="Enter New Order #">
+                              <input type="text" class="form-control duJobNumberInput" placeholder="Enter New Order #">
                           </div>
                       </div>
                     </div>
@@ -467,18 +470,18 @@ td {
                         <div class="col-4">
                           <div class="form-group">
                             <label for="ejobStatus">Status</label>
-                            <select class="form-control" id="ejobStatus" value="<%= jobs[i].status %>">
-                              <option value="Upcoming" <%= jobs[i].status == 'Upcoming' ? 'selected' : ''%>>Upcoming</option>
-                              <option value="Active" <%= jobs[i].status == 'Active' ? 'selected' : ''%>>Active</option>
-                              <option value="Completed" <%= jobs[i].status == 'Completed' ? 'selected' : ''%>>Completed</option>
-                              <option value="Archived" <%= jobs[i].status == 'Archived' ? 'selected' : ''%>>Archived</option>
+                            <select class="form-control ejobStatus" value="<%= job.status %>">
+                              <option value="Upcoming" <%= job.status == 'Upcoming' ? 'selected' : ''%>>Upcoming</option>
+                              <option value="Active" <%= job.status == 'Active' ? 'selected' : ''%>>Active</option>
+                              <option value="Completed" <%= job.status == 'Completed' ? 'selected' : ''%>>Completed</option>
+                              <option value="Archived" <%= job.status == 'Archived' ? 'selected' : ''%>>Archived</option>
                             </select>
                           </div>
                       </div>
                           <div class="col-4">
                               <div class="form-group">
                                   <label for="epmAssigned">PM Assigned</label>
-                                  <input type="text" class="form-control" id="epmAssigned" placeholder="Origin" value="<%= jobs[i].pm_assigned %>">
+                                  <input type="text" class="form-control epmAssigned" placeholder="Origin" value="<%= job.pm_assigned %>">
                               </div>
                       </div>
                   </div>
@@ -486,19 +489,19 @@ td {
                     <div class="col-4">
                         <div class="form-group">
                             <label for="eoriginInput">Origin</label>
-                            <input type="text" class="form-control" id="eoriginInput" placeholder="Origin" value="<%= jobs[i].origin %>">
+                            <input type="text" class="form-control eoriginInput" placeholder="Origin" value="<%= job.origin %>">
                         </div>
                     </div>
                     <div class="col-4">
                       <div class="form-group">
                           <label for="edestinationInput">Destination</label>
-                          <input type="text" class="form-control" id="edestinationInput" placeholder="Destination" value="<%= jobs[i].destination %>">
+                          <input type="text" class="form-control edestinationInput" placeholder="Destination" value="<%= job.destination %>">
                       </div>
                   </div>
                       <div class="col-4">
                           <div class="form-group">
                               <label for="eestStartDate">Estimated Start Date</label>
-                              <input type="date" class="form-control" id="eestStartDate" placeholder="Destination" value="<%= jobs[i].est_start_date %>">
+                              <input type="date" class="form-control eestStartDate" placeholder="Destination" value="<%= job.est_start_date %>">
                           </div>
                   </div>
               </div>
@@ -506,21 +509,21 @@ td {
                 <div class="col-4">
                     <div class="form-group">
                         <label for="eoriginDesc">Origin Desc.</label>
-                        <input type="text" class="form-control" id="eoriginDesc" placeholder="Origin Desc." value="<%= jobs[i].origin_desc %>">
+                        <input type="text" class="form-control eoriginDesc" placeholder="Origin Desc." value="<%= job.origin_desc %>">
                     </div>
                 </div>
                 <div class="col-4">
                   <div class="form-group">
                       <label for="edestDesc">Destination Desc.</label>
-                      <input type="text" class="form-control" id="edestDesc" placeholder="Destination Desc." value="<%= jobs[i].destination_desc %>">
+                      <input type="text" class="form-control edestDesc" placeholder="Destination Desc." value="<%= job.destination_desc %>">
                   </div>
               </div>
               <div class="col-4">
                 <div class="form-group">
                     <label for="econtractSigned">Contract Signed?</label>
-                    <select class="form-control" id="econtractSigned">
-                      <option value="No" <%= jobs[i].contract_signed == 'No' ? 'selected' : ''%>>No</option>
-                      <option value="Yes" <%= jobs[i].contract_signed == 'Yes' ? 'selected' : ''%>>Yes</option>
+                    <select class="form-control econtractSigned">
+                      <option value="No" <%= job.contract_signed == 'No' ? 'selected' : ''%>>No</option>
+                      <option value="Yes" <%= job.contract_signed == 'Yes' ? 'selected' : ''%>>Yes</option>
                     </select>
                   </div>
             </div>
@@ -533,25 +536,25 @@ td {
                         <div class="input-group-prepend">
                           <span class="input-group-text">$</span>
                         </div>
-                        <input type="text" class="form-control" id="elumpSumAmount" value="<%= jobs[i].lump_sum_amount %>">
+                        <input type="text" class="form-control elumpSumAmount" value="<%= job.lump_sum_amount %>">
                       </div>
                 </div>
             </div>
             <div class="col-4">
                 <div class="form-group">
                     <label for="elumpSumPaid">Lump Sum Sent to Billing?</label>
-                    <select class="form-control" id="elumpSumPaid" value="<%= jobs[i].lump_sum_paid %>">
-                      <option value="unsent" <%= jobs[i].lump_sum_paid == 'unsent' ? 'selected' : ''%>>unsent</option>
-                      <option value="sent" <%= jobs[i].lump_sum_paid == 'sent' ? 'selected' : ''%>>sent</option>
+                    <select class="form-control elumpSumPaid" value="<%= job.lump_sum_paid %>">
+                      <option value="unsent" <%= job.lump_sum_paid == 'unsent' ? 'selected' : ''%>>unsent</option>
+                      <option value="sent" <%= job.lump_sum_paid == 'sent' ? 'selected' : ''%>>sent</option>
                     </select>
                   </div>
           </div>
           <div class="col-4">
             <div class="form-group">
                 <label for="ekickoffMeeting">Kickoff Meeting?</label>
-                <select class="form-control" id="ekickoffMeeting" value="<%= jobs[i].kickoff_meeting %>">
-                  <option value="No" <%= jobs[i].kickoff_meeting == 'No' ? 'selected' : ''%>>No</option>
-                  <option value="Yes" <%= jobs[i].kickoff_meeting == 'Yes' ? 'selected' : ''%>>Yes</option>
+                <select class="form-control ekickoffMeeting" value="<%= job.kickoff_meeting %>">
+                  <option value="No" <%= job.kickoff_meeting == 'No' ? 'selected' : ''%>>No</option>
+                  <option value="Yes" <%= job.kickoff_meeting == 'Yes' ? 'selected' : ''%>>Yes</option>
                 </select>
               </div>
         </div>
@@ -564,16 +567,16 @@ td {
                     <div class="input-group-prepend">
                       <span class="input-group-text">$</span>
                     </div>
-                    <input type="text" class="form-control" id="eproformaAmount" value="<%= jobs[i].proforma_amount %>">
+                    <input type="text" class="form-control eproformaAmount" value="<%= job.proforma_amount %>">
                   </div>
             </div>
         </div>
         <div class="col-4">
             <div class="form-group">
                 <label for="eproformaPaid">Proforma Sent to Billing?</label>
-                <select class="form-control" id="eproformaPaid" value="<%= jobs[i].proforma_paid %>">
-                  <option value="unsent" <%= jobs[i].proforma_paid == 'unsent' ? 'selected' : ''%>>unsent</option>
-                  <option value="sent" <%= jobs[i].proforma_paid == 'sent' ? 'selected' : ''%>>sent</option>
+                <select class="form-control eproformaPaid" value="<%= job.proforma_paid %>">
+                  <option value="unsent" <%= job.proforma_paid == 'unsent' ? 'selected' : ''%>>unsent</option>
+                  <option value="sent" <%= job.proforma_paid == 'sent' ? 'selected' : ''%>>sent</option>
                 </select>
               </div>
       </div>
@@ -582,13 +585,13 @@ td {
         <div class="col-4">
             <div class="form-group">
                 <label for="ebargeName">Barge(s)</label>
-                <input type="text" class="form-control" id="ebargeName" value="<%= jobs[i].barge_name %>">
+                <input type="text" class="form-control ebargeName" value="<%= job.barge_name %>">
             </div>
         </div>
         <div class="col-4">
           <div class="form-group">
               <label for="etugName">Tug(s)</label>
-              <input type="text" class="form-control" id="etugName" value="<%= jobs[i].tug_name %>">
+              <input type="text" class="form-control etugName" value="<%= job.tug_name %>">
           </div>
       </div>
   </div>
@@ -596,7 +599,7 @@ td {
               <div class="col-12">
                   <div class="form-group">
                       <label for="ejobNotes">Job Notes</label>
-                      <textarea class="form-control" id="ejobNotes" rows="2" placeholder="Enter any general job notes here."><%= jobs[i].ord_notes %></textarea>
+                      <textarea class="form-control ejobNotes" rows="2" placeholder="Enter any general job notes here."><%= job.ord_notes %></textarea>
                   </div>
               </div>
         </div>
@@ -605,25 +608,25 @@ td {
               <div class="col-3">
                   <div class="form-group">
                       <label for="ecustomer">Customer</label>
-                      <input type="text" class="form-control" id="ecustomer" placeholder="Enter Customer Company" value="<%= jobs[i].customer %>">
+                      <input type="text" class="form-control ecustomer" placeholder="Enter Customer Company" value="<%= job.customer %>">
                   </div>
               </div>
               <div class="col-3">
                 <div class="form-group">
                     <label for="ecustomer_nm">Customer Contact</label>
-                    <input type="text" class="form-control" id="ecustomer_nm" placeholder="Enter Customer Contact Name" value="<%= jobs[i].customer_nm %>">
+                    <input type="text" class="form-control ecustomer_nm" placeholder="Enter Customer Contact Name" value="<%= job.customer_nm %>">
                 </div>
             </div>
                 <div class="col-3">
                     <div class="form-group">
                         <label for="ecustomer_phone">Customer Phone</label>
-                        <input type="text" class="form-control" id="ecustomer_phone" placeholder="Enter Customer Phone" value="<%= jobs[i].customer_phone %>">
+                        <input type="text" class="form-control ecustomer_phone" placeholder="Enter Customer Phone" value="<%= job.customer_phone %>">
                     </div>
             </div>
             <div class="col-3">
               <div class="form-group">
                   <label for="ecustomer_email">Customer Email</label>
-                  <input type="text" class="form-control" id="ecustomer_email" placeholder="Enter Customer Email" value="<%= jobs[i].customer_email %>">
+                  <input type="text" class="form-control ecustomer_email" placeholder="Enter Customer Email" value="<%= job.customer_email %>">
               </div>
       </div>
         </div>
@@ -631,7 +634,7 @@ td {
           <div class="col-12">
               <div class="form-group">
                   <label for="ecustomer_notes">Customer Notes</label>
-                  <textarea class="form-control" id="ecustomer_notes" rows="2" placeholder="Enter any customer notes here."><%= jobs[i].customer_notes %></textarea>
+                  <textarea class="form-control ecustomer_notes" rows="2" placeholder="Enter any customer notes here."><%= job.customer_notes %></textarea>
               </div>
           </div>
     </div>
@@ -640,25 +643,25 @@ td {
               <div class="col-3">
                   <div class="form-group">
                       <label for="evendor">Vendor</label>
-                      <input type="text" class="form-control" id="evendor" placeholder="Enter Vendor Company" value="<%= jobs[i].vendor %>">
+                      <input type="text" class="form-control evendor" placeholder="Enter Vendor Company" value="<%= job.vendor %>">
                   </div>
               </div>
               <div class="col-3">
                 <div class="form-group">
                     <label for="evendor_nm">Vendor Contact</label>
-                    <input type="text" class="form-control" id="evendor_nm" placeholder="Enter Vendor Contact Name" value="<%= jobs[i].vendor_nm %>">
+                    <input type="text" class="form-control evendor_nm" placeholder="Enter Vendor Contact Name" value="<%= job.vendor_nm %>">
                 </div>
             </div>
                 <div class="col-3">
                     <div class="form-group">
                         <label for="evendor_phone">Vendor Phone</label>
-                        <input type="text" class="form-control" id="evendor_phone" placeholder="Enter Vendor Phone" value="<%= jobs[i].vendor_phone %>">
+                        <input type="text" class="form-control evendor_phone" placeholder="Enter Vendor Phone" value="<%= job.vendor_phone %>">
                     </div>
             </div>
             <div class="col-3">
               <div class="form-group">
                   <label for="evendor_email">Vendor Email</label>
-                  <input type="text" class="form-control" id="evendor_email" placeholder="Enter Vendor Email" value="<%= jobs[i].vendor_email %>">
+                  <input type="text" class="form-control evendor_email" placeholder="Enter Vendor Email" value="<%= job.vendor_email %>">
               </div>
       </div>
         </div>
@@ -666,7 +669,7 @@ td {
           <div class="col-12">
               <div class="form-group">
                   <label for="evendor_notes">Vendor Notes</label>
-                  <textarea class="form-control" id="evendor_notes" rows="2" placeholder="Enter any vendor notes here."><%= jobs[i].vendor_notes %></textarea>
+                  <textarea class="form-control evendor_notes" rows="2" placeholder="Enter any vendor notes here."><%= job.vendor_notes %></textarea>
               </div>
           </div>
     </div>
@@ -683,11 +686,11 @@ td {
           </div>
           <!-- Duplicate Job Modal End -->
           <!-- Delete Job Modal -->
-          <div class="modal fade" id="djobID<%= jobs[i].order_id %>" tabindex="-1" role="dialog" aria-labelledby="deleteTripModalLable" aria-hidden="true">
+          <div class="modal fade" id="djobID<%= job.order_id %>" tabindex="-1" role="dialog" aria-labelledby="deleteTripModalLable" aria-hidden="true">
             <div class="modal-dialog" role="document">
               <div class="modal-content">
                 <div class="modal-header">
-                  <h5 class="modal-title" id="exampleModalLabel">Are you sure you want to delete job <%= jobs[i].ordnbr %>? </h5>
+                  <h5 class="modal-title" id="exampleModalLabel">Are you sure you want to delete job <%= job.ordnbr %>? </h5>
                   <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                   </button>
@@ -697,7 +700,7 @@ td {
                   <form class="deletetripform">
                     <div class="form-group">
                       <label hidden for="did"></label>
-                      <input hidden type="text" class="form-control" id="did" placeholder="Order #" value="<%= jobs[i].order_id %>">
+                      <input hidden type="text" class="form-control did" placeholder="Order #" value="<%= job.order_id %>">
                   </div>
                 </div>
                 <div class="modal-footer">
@@ -724,51 +727,51 @@ td {
                 <tbody>
                   <tr class="d-flex">
                   <td class="col-3 bold">Origin:</td>
-                  <td class="col-4"><%= jobs[i].origin %></td>
+                  <td class="col-4"><%= job.origin %></td>
                   <td class="col-2 bold">Lump Sum:</td>
-                  <td class="col-3">$<%= Intl.NumberFormat().format(jobs[i].lump_sum_amount) %> <a>(<%= jobs[i].lump_sum_paid %>)</a></td>
+                  <td class="col-3">$<%= Intl.NumberFormat().format(job.lump_sum_amount) %> <a>(<%= job.lump_sum_paid %>)</a></td>
                 </tr>
                 <tr class="d-flex">
                   <td class="col-3 bold">Origin Desc.:</td>
-                  <td class="col-4"><%= jobs[i].origin_desc %></td>
+                  <td class="col-4"><%= job.origin_desc %></td>
                   <td class="col-2 bold">Contract Signed:</td>
-                  <td class="col-3"><%= jobs[i].contract_signed %></td>
+                  <td class="col-3"><%= job.contract_signed %></td>
                 </tr>
                 <tr class="d-flex">
                   <td class="col-3 bold">Destination:</td>
-                  <td class="col-4"><%= jobs[i].destination %></td>
+                  <td class="col-4"><%= job.destination %></td>
                   <td class="col-2 bold">Kickoff Meeting:</td>
-                  <td class="col-3"><%= jobs[i].kickoff_meeting %></td>
+                  <td class="col-3"><%= job.kickoff_meeting %></td>
                 </tr>
                 <tr class="d-flex">
                   <td class="col-3 bold">Destination Description:</td>
-                  <td class="col-4"><%= jobs[i].destination_desc %></td>
+                  <td class="col-4"><%= job.destination_desc %></td>
                   <td class="col-2 bold">Proforma:</td>
-                  <td class="col-3">$<%= Intl.NumberFormat().format(jobs[i].proforma_amount) %> <a>(<%= jobs[i].proforma_paid %>)</a></td>
+                  <td class="col-3">$<%= Intl.NumberFormat().format(job.proforma_amount) %> <a>(<%= job.proforma_paid %>)</a></td>
                 </tr>
                 <tr class="d-flex">
                   <td class="col-3 bold">Start Date:</td>
-                  <td class="col-6"><%= moment(jobs[i].est_start_date).format('M/D/YY') %></td>
+                  <td class="col-6"><%= moment(job.est_start_date).format('M/D/YY') %></td>
                 </tr>
                 <tr class="d-flex">
                   <td class="col-3 bold">PM Assigned:</td>
-                  <td class="col-6"><%= jobs[i].pm_assigned %></td>
+                  <td class="col-6"><%= job.pm_assigned %></td>
                 </tr>
                 <tr class="d-flex">
                   <td class="col-3 bold">Status:</td>
-                  <td class="col-6"><%= jobs[i].status %></td>
+                  <td class="col-6"><%= job.status %></td>
                 </tr>
                 <tr class="d-flex">
                   <td class="col-3 bold">Barge(s):</td>
-                  <td class="col-6"><%= jobs[i].barge_name %></td>
+                  <td class="col-6"><%= job.barge_name %></td>
                 </tr>
                 <tr class="d-flex">
                   <td class="col-3 bold">Tug(s):</td>
-                  <td class="col-6"><%= jobs[i].tug_name %></td>
+                  <td class="col-6"><%= job.tug_name %></td>
                 </tr>
                 <tr class="d-flex">
                   <td class="col-3 bold">Trip Notes:</td>
-                  <td class="col-9" style="white-space: pre-wrap"><%= jobs[i].ord_notes %></td>
+                  <td class="col-9" style="white-space: pre-wrap"><%= job.ord_notes %></td>
                 </tr>
               </tbody>
             </table>
@@ -783,23 +786,23 @@ td {
               <tbody>
               <tr class="d-flex">
                 <td class="col-4">Customer:</td>
-                <td class="col-6"><%= jobs[i].customer %></td>
+                <td class="col-6"><%= job.customer %></td>
               </tr>
               <tr class="d-flex">
                 <td class="col-4">Customer Contact:</td>
-                <td class="col-6"><%= jobs[i].customer_nm %></td>
+                <td class="col-6"><%= job.customer_nm %></td>
               </tr>
               <tr class="d-flex">
                 <td class="col-4">Customer Phone:</td>
-                <td class="col-6"><%= jobs[i].customer_phone %></td>
+                <td class="col-6"><%= job.customer_phone %></td>
               </tr>
               <tr class="d-flex">
                 <td class="col-4">Customer Email:</td>
-                <td class="col-6"><%= jobs[i].customer_email %></td>
+                <td class="col-6"><%= job.customer_email %></td>
               </tr>
               <tr class="d-flex">
                 <td class="col-4">Notes:</td>
-                <td class="col-6" style="white-space: pre-wrap"><%= jobs[i].customer_notes %></td>
+                <td class="col-6" style="white-space: pre-wrap"><%= job.customer_notes %></td>
               </tr>
             </tbody>
           </table>
@@ -815,23 +818,23 @@ td {
           <tbody>
           <tr class="d-flex">
             <td class="col-4">Vendor:</td>
-            <td class="col-6"><%= jobs[i].vendor %></td>
+            <td class="col-6"><%= job.vendor %></td>
           </tr>
           <tr class="d-flex">
             <td class="col-4">Vendor Contact:</td>
-            <td class="col-6"><%= jobs[i].vendor_nm %></td>
+            <td class="col-6"><%= job.vendor_nm %></td>
           </tr>
           <tr class="d-flex">
             <td class="col-4">Vendor Phone:</td>
-            <td class="col-6"><%= jobs[i].vendor_phone %></td>
+            <td class="col-6"><%= job.vendor_phone %></td>
           </tr>
           <tr class="d-flex">
             <td class="col-4">Vendor Email:</td>
-            <td class="col-6"><%= jobs[i].vendor_email %></td>
+            <td class="col-6"><%= job.vendor_email %></td>
           </tr>
           <tr class="d-flex">
             <td class="col-4">Notes:</td>
-            <td class="col-6" style="white-space: pre-wrap"><%= jobs[i].vendor_notes %></td>
+            <td class="col-6" style="white-space: pre-wrap"><%= job.vendor_notes %></td>
           </tr>
         </tbody>
       </table>
@@ -846,8 +849,8 @@ td {
     </td>
     </tr>
         </tbody>
-    <% } %>
-      <% } %>
+        <% } %>
+        <% }); %>
         </table>
       </div>
   </div>
@@ -862,40 +865,42 @@ td {
             <th data-sortable="true" scope="col" class="d-inline-block col-2 ">Customer</th>
             <th data-sortable="true" scope="col" class="d-inline-block col-2">Origin</th>
             <th data-sortable="true" scope="col" class="d-inline-block col-2">Destination</th>
-            <th data-sortable="true" scope="col" class="d-inline-block col-2">PM Assigned</th>
-            <th data-sortable="true" scope="col" class="d-inline-block col-1">Status</th>
-            <th data-sortable="true" scope="col" class="d-inline-block col-2">Est. Start</th>
+            <th data-sortable="true" scope="col" class="d-inline-block col-2">Barge(s)</th>
+            <th data-sortable="true" scope="col" class="d-inline-block col-1">PM Assigned</th>
+            <th data-sortable="true" scope="col" class="d-inline-block col-1">Lump Sum</th>
+            <th data-sortable="true" scope="col" class="d-inline-block col-1">Est. Start</th>
             <!-- <th scope="col" class="d-inline-block col-1">#</th> -->
           </tr>
         </thead>
-        <% for (let i = 0; i < jobs.length; i++) { %>
-          <% if (jobs[i].status  === "Active") { %>
-            <tbody>
-              <tr class="accordion-toggle collapsed row m-0" id="accordion1" data-toggle="collapse" data-parent="#accordion1" href="#jobID<%= jobs[i].order_id %>">
-                <td class="d-inline-block col-1"><%= jobs[i].ordnbr %></td>
-                <td class="d-inline-block col-2"><%= jobs[i].customer %></td>
-                <td class="d-inline-block col-2"><%= jobs[i].origin %></td>
-                <td class="d-inline-block col-2"><%= jobs[i].destination %></td>
-                <td class="d-inline-block col-2"><%= jobs[i].pm_assigned %></td>
-                <td class="d-inline-block col-1"><%= jobs[i].status %></td>
-                <td class="d-inline-block col-2"><%= moment(jobs[i].est_start_date).format('M/D/YY') %></td>
+        <% jobs.forEach(function(job) { %>
+          <% if (job.status  === "Active") { %>
+            <tbody class="uvs">
+              <tr class="accordion-toggle collapsed row m-0" id="accordion1" data-toggle="collapse" data-parent="#accordion1" href="#jobID<%= job.order_id %>">
+                <td class="d-inline-block col-1"><%= job.ordnbr %></td>
+                <td class="d-inline-block col-2"><%= job.customer %></td>
+                <td class="d-inline-block col-2"><%= job.origin %></td>
+                <td class="d-inline-block col-2"><%= job.destination %></td>
+                <td class="d-inline-block col-2"><%= job.barge_name %></td>
+                <td class="d-inline-block col-1"><%= job.pm_assigned %></td>
+                <td class="d-inline-block col-1">$<%= Intl.NumberFormat().format(job.lump_sum_amount) %></td>
+                <td class="d-inline-block col-1"><%= moment(job.est_start_date).format('M/D/YY') %></td>
                 <!-- <td class="expand-button" class="d-inline-block col-1"></td> -->
                 </tr>
                   
           <tr class="hide-table-padding">
           <td colspan="12">
-          <div class="collapse in col-sm head-div" id="jobID<%= jobs[i].order_id %>">
+          <div class="collapse in col-sm head-div" id="jobID<%= job.order_id %>">
             <div class="card" id="tdcard">
               <div class="card-body">
                 <div class="row">
-                <h5 class="card-title col align-self-center" id="cardtitle"><%= jobs[i].ordnbr %> - <%= jobs[i].customer %></h5>
-                <button type="button" class="btn col-1" id="edittripbutton" data-toggle="modal" data-target="#ejobID<%= jobs[i].order_id %>">Edit</button>
-                <button type="button" class="btn col-1" id="duplicatetripbutton" data-toggle="modal" data-target="#dujobID<%= jobs[i].order_id %>">Duplicate</button>
-                <button type="button" class="btn col-1" data-toggle="modal" data-target="#djobID<%= jobs[i].order_id %>">Delete</button>
+                <h5 class="card-title col align-self-center" id="cardtitle"><%= job.ordnbr %> - <%= job.customer %></h5>
+                <button type="button" class="btn col-1" id="edittripbutton" data-toggle="modal" data-target="#ejobID<%= job.order_id %>">Edit</button>
+                <button type="button" class="btn col-1" id="duplicatetripbutton" data-toggle="modal" data-target="#dujobID<%= job.order_id %>">Duplicate</button>
+                <button type="button" class="btn col-1" data-toggle="modal" data-target="#djobID<%= job.order_id %>">Delete</button>
               </div>
         
               <!-- Edit Job Modal -->
-              <div class="modal fade" id="ejobID<%= jobs[i].order_id %>" tabindex="-1" role="dialog" aria-labelledby="editTripModalLabel" aria-hidden="true">
+              <div class="modal fade" id="ejobID<%= job.order_id %>" tabindex="-1" role="dialog" aria-labelledby="editTripModalLabel" aria-hidden="true">
                 <div class="modal-dialog modal-xl" role="document">
                   <div class="modal-content">
                     <div class="modal-header">
@@ -912,26 +917,26 @@ td {
                             <div class="col-4">
                                 <div class="form-group">
                                     <label hidden for="eid"></label>
-                                    <input hidden type="text" class="form-control" id="eid" placeholder="Order #" value="<%= jobs[i].order_id %>">
+                                    <input hidden type="text" class="form-control eid" placeholder="Order #" value="<%= job.order_id %>">
                                     <label for="eJobNumberInput">Order #</label>
-                                    <input type="text" class="form-control" id="eJobNumberInput" placeholder="Order #" value="<%= jobs[i].ordnbr %>" readonly>
+                                    <input type="text" class="form-control eJobNumberInput" placeholder="Order #" value="<%= job.ordnbr %>">
                                 </div>
                             </div>
                             <div class="col-4">
                               <div class="form-group">
                                 <label for="ejobStatus">Status</label>
-                                <select class="form-control" id="ejobStatus" value="<%= jobs[i].status %>">
-                                  <option value="Upcoming" <%= jobs[i].status == 'Upcoming' ? 'selected' : ''%>>Upcoming</option>
-                                  <option value="Active" <%= jobs[i].status == 'Active' ? 'selected' : ''%>>Active</option>
-                                  <option value="Completed" <%= jobs[i].status == 'Completed' ? 'selected' : ''%>>Completed</option>
-                                  <option value="Archived" <%= jobs[i].status == 'Archived' ? 'selected' : ''%>>Archived</option>
+                                <select class="form-control ejobStatus" value="<%= job.status %>">
+                                  <option value="Upcoming" <%= job.status == 'Upcoming' ? 'selected' : ''%>>Upcoming</option>
+                                  <option value="Active" <%= job.status == 'Active' ? 'selected' : ''%>>Active</option>
+                                  <option value="Completed" <%= job.status == 'Completed' ? 'selected' : ''%>>Completed</option>
+                                  <option value="Archived" <%= job.status == 'Archived' ? 'selected' : ''%>>Archived</option>
                                 </select>
                               </div>
                           </div>
                               <div class="col-4">
                                   <div class="form-group">
                                       <label for="epmAssigned">PM Assigned</label>
-                                      <input type="text" class="form-control" id="epmAssigned" placeholder="Origin" value="<%= jobs[i].pm_assigned %>">
+                                      <input type="text" class="form-control epmAssigned" placeholder="Origin" value="<%= job.pm_assigned %>">
                                   </div>
                           </div>
                       </div>
@@ -939,19 +944,19 @@ td {
                         <div class="col-4">
                             <div class="form-group">
                                 <label for="eoriginInput">Origin</label>
-                                <input type="text" class="form-control" id="eoriginInput" placeholder="Origin" value="<%= jobs[i].origin %>">
+                                <input type="text" class="form-control eoriginInput" placeholder="Origin" value="<%= job.origin %>">
                             </div>
                         </div>
                         <div class="col-4">
                           <div class="form-group">
                               <label for="edestinationInput">Destination</label>
-                              <input type="text" class="form-control" id="edestinationInput" placeholder="Destination" value="<%= jobs[i].destination %>">
+                              <input type="text" class="form-control edestinationInput" placeholder="Destination" value="<%= job.destination %>">
                           </div>
                       </div>
                           <div class="col-4">
                               <div class="form-group">
                                   <label for="eestStartDate">Estimated Start Date</label>
-                                  <input type="date" class="form-control" id="eestStartDate" placeholder="Destination" value="<%= jobs[i].est_start_date %>">
+                                  <input type="date" class="form-control eestStartDate" placeholder="Destination" value="<%= job.est_start_date %>">
                               </div>
                       </div>
                   </div>
@@ -959,21 +964,21 @@ td {
                     <div class="col-4">
                         <div class="form-group">
                             <label for="eoriginDesc">Origin Desc.</label>
-                            <input type="text" class="form-control" id="eoriginDesc" placeholder="Origin Desc." value="<%= jobs[i].origin_desc %>">
+                            <input type="text" class="form-control eoriginDesc" placeholder="Origin Desc." value="<%= job.origin_desc %>">
                         </div>
                     </div>
                     <div class="col-4">
                       <div class="form-group">
                           <label for="edestDesc">Destination Desc.</label>
-                          <input type="text" class="form-control" id="edestDesc" placeholder="Destination Desc." value="<%= jobs[i].destination_desc %>">
+                          <input type="text" class="form-control edestDesc" placeholder="Destination Desc." value="<%= job.destination_desc %>">
                       </div>
                   </div>
                   <div class="col-4">
                     <div class="form-group">
                         <label for="econtractSigned">Contract Signed?</label>
-                        <select class="form-control" id="econtractSigned">
-                          <option value="No" <%= jobs[i].contract_signed == 'No' ? 'selected' : ''%>>No</option>
-                          <option value="Yes" <%= jobs[i].contract_signed == 'Yes' ? 'selected' : ''%>>Yes</option>
+                        <select class="form-control econtractSigned">
+                          <option value="No" <%= job.contract_signed == 'No' ? 'selected' : ''%>>No</option>
+                          <option value="Yes" <%= job.contract_signed == 'Yes' ? 'selected' : ''%>>Yes</option>
                         </select>
                       </div>
                 </div>
@@ -986,25 +991,25 @@ td {
                             <div class="input-group-prepend">
                               <span class="input-group-text">$</span>
                             </div>
-                            <input type="text" class="form-control" id="elumpSumAmount" value="<%= jobs[i].lump_sum_amount %>">
+                            <input type="text" class="form-control elumpSumAmount" value="<%= job.lump_sum_amount %>">
                           </div>
                     </div>
                 </div>
                 <div class="col-4">
                     <div class="form-group">
                         <label for="elumpSumPaid">Lump Sum Sent to Billing?</label>
-                        <select class="form-control" id="elumpSumPaid" value="<%= jobs[i].lump_sum_paid %>">
-                          <option value="unsent" <%= jobs[i].lump_sum_paid == 'unsent' ? 'selected' : ''%>>unsent</option>
-                          <option value="sent" <%= jobs[i].lump_sum_paid == 'sent' ? 'selected' : ''%>>sent</option>
+                        <select class="form-control elumpSumPaid" value="<%= job.lump_sum_paid %>">
+                          <option value="unsent" <%= job.lump_sum_paid == 'unsent' ? 'selected' : ''%>>unsent</option>
+                          <option value="sent" <%= job.lump_sum_paid == 'sent' ? 'selected' : ''%>>sent</option>
                         </select>
                       </div>
               </div>
               <div class="col-4">
                 <div class="form-group">
                     <label for="ekickoffMeeting">Kickoff Meeting?</label>
-                    <select class="form-control" id="ekickoffMeeting" value="<%= jobs[i].kickoff_meeting %>">
-                      <option value="No" <%= jobs[i].kickoff_meeting == 'No' ? 'selected' : ''%>>No</option>
-                      <option value="Yes" <%= jobs[i].kickoff_meeting == 'Yes' ? 'selected' : ''%>>Yes</option>
+                    <select class="form-control ekickoffMeeting" value="<%= job.kickoff_meeting %>">
+                      <option value="No" <%= job.kickoff_meeting == 'No' ? 'selected' : ''%>>No</option>
+                      <option value="Yes" <%= job.kickoff_meeting == 'Yes' ? 'selected' : ''%>>Yes</option>
                     </select>
                   </div>
             </div>
@@ -1017,16 +1022,16 @@ td {
                         <div class="input-group-prepend">
                           <span class="input-group-text">$</span>
                         </div>
-                        <input type="text" class="form-control" id="eproformaAmount" value="<%= jobs[i].proforma_amount %>">
+                        <input type="text" class="form-control eproformaAmount" value="<%= job.proforma_amount %>">
                       </div>
                 </div>
             </div>
             <div class="col-4">
                 <div class="form-group">
                     <label for="eproformaPaid">Proforma Sent to Billing?</label>
-                    <select class="form-control" id="eproformaPaid" value="<%= jobs[i].proforma_paid %>">
-                      <option value="unsent" <%= jobs[i].proforma_paid == 'unsent' ? 'selected' : ''%>>unsent</option>
-                      <option value="sent" <%= jobs[i].proforma_paid == 'sent' ? 'selected' : ''%>>sent</option>
+                    <select class="form-control eproformaPaid" value="<%= job.proforma_paid %>">
+                      <option value="unsent" <%= job.proforma_paid == 'unsent' ? 'selected' : ''%>>unsent</option>
+                      <option value="sent" <%= job.proforma_paid == 'sent' ? 'selected' : ''%>>sent</option>
                     </select>
                   </div>
           </div>
@@ -1035,13 +1040,13 @@ td {
             <div class="col-4">
                 <div class="form-group">
                     <label for="ebargeName">Barge(s)</label>
-                    <input type="text" class="form-control" id="ebargeName" value="<%= jobs[i].barge_name %>">
+                    <input type="text" class="form-control ebargeName" value="<%= job.barge_name %>">
                 </div>
             </div>
             <div class="col-4">
               <div class="form-group">
                   <label for="etugName">Tug(s)</label>
-                  <input type="text" class="form-control" id="etugName" value="<%= jobs[i].tug_name %>">
+                  <input type="text" class="form-control etugName" value="<%= job.tug_name %>">
               </div>
           </div>
       </div>
@@ -1049,7 +1054,7 @@ td {
                   <div class="col-12">
                       <div class="form-group">
                           <label for="ejobNotes">Job Notes</label>
-                          <textarea class="form-control" id="ejobNotes" rows="2" placeholder="Enter any general job notes here."><%= jobs[i].ord_notes %></textarea>
+                          <textarea class="form-control ejobNotes" rows="2" placeholder="Enter any general job notes here."><%= job.ord_notes %></textarea>
                       </div>
                   </div>
             </div>
@@ -1058,25 +1063,25 @@ td {
                   <div class="col-3">
                       <div class="form-group">
                           <label for="ecustomer">Customer</label>
-                          <input type="text" class="form-control" id="ecustomer" placeholder="Enter Customer Company" value="<%= jobs[i].customer %>">
+                          <input type="text" class="form-control ecustomer" placeholder="Enter Customer Company" value="<%= job.customer %>">
                       </div>
                   </div>
                   <div class="col-3">
                     <div class="form-group">
                         <label for="ecustomer_nm">Customer Contact</label>
-                        <input type="text" class="form-control" id="ecustomer_nm" placeholder="Enter Customer Contact Name" value="<%= jobs[i].customer_nm %>">
+                        <input type="text" class="form-control ecustomer_nm" placeholder="Enter Customer Contact Name" value="<%= job.customer_nm %>">
                     </div>
                 </div>
                     <div class="col-3">
                         <div class="form-group">
                             <label for="ecustomer_phone">Customer Phone</label>
-                            <input type="text" class="form-control" id="ecustomer_phone" placeholder="Enter Customer Phone" value="<%= jobs[i].customer_phone %>">
+                            <input type="text" class="form-control ecustomer_phone" placeholder="Enter Customer Phone" value="<%= job.customer_phone %>">
                         </div>
                 </div>
                 <div class="col-3">
                   <div class="form-group">
                       <label for="ecustomer_email">Customer Email</label>
-                      <input type="text" class="form-control" id="ecustomer_email" placeholder="Enter Customer Email" value="<%= jobs[i].customer_email %>">
+                      <input type="text" class="form-control ecustomer_email" placeholder="Enter Customer Email" value="<%= job.customer_email %>">
                   </div>
           </div>
             </div>
@@ -1084,7 +1089,7 @@ td {
               <div class="col-12">
                   <div class="form-group">
                       <label for="ecustomer_notes">Customer Notes</label>
-                      <textarea class="form-control" id="ecustomer_notes" rows="2" placeholder="Enter any customer notes here."><%= jobs[i].customer_notes %></textarea>
+                      <textarea class="form-control ecustomer_notes" rows="2" placeholder="Enter any customer notes here."><%= job.customer_notes %></textarea>
                   </div>
               </div>
         </div>
@@ -1093,25 +1098,25 @@ td {
                   <div class="col-3">
                       <div class="form-group">
                           <label for="evendor">Vendor</label>
-                          <input type="text" class="form-control" id="evendor" placeholder="Enter Vendor Company" value="<%= jobs[i].vendor %>">
+                          <input type="text" class="form-control evendor" placeholder="Enter Vendor Company" value="<%= job.vendor %>">
                       </div>
                   </div>
                   <div class="col-3">
                     <div class="form-group">
                         <label for="evendor_nm">Vendor Contact</label>
-                        <input type="text" class="form-control" id="evendor_nm" placeholder="Enter Vendor Contact Name" value="<%= jobs[i].vendor_nm %>">
+                        <input type="text" class="form-control evendor_nm" placeholder="Enter Vendor Contact Name" value="<%= job.vendor_nm %>">
                     </div>
                 </div>
                     <div class="col-3">
                         <div class="form-group">
                             <label for="evendor_phone">Vendor Phone</label>
-                            <input type="text" class="form-control" id="evendor_phone" placeholder="Enter Vendor Phone" value="<%= jobs[i].vendor_phone %>">
+                            <input type="text" class="form-control evendor_phone" placeholder="Enter Vendor Phone" value="<%= job.vendor_phone %>">
                         </div>
                 </div>
                 <div class="col-3">
                   <div class="form-group">
                       <label for="evendor_email">Vendor Email</label>
-                      <input type="text" class="form-control" id="evendor_email" placeholder="Enter Vendor Email" value="<%= jobs[i].vendor_email %>">
+                      <input type="text" class="form-control evendor_email" placeholder="Enter Vendor Email" value="<%= job.vendor_email %>">
                   </div>
           </div>
             </div>
@@ -1119,7 +1124,7 @@ td {
               <div class="col-12">
                   <div class="form-group">
                       <label for="evendor_notes">Vendor Notes</label>
-                      <textarea class="form-control" id="evendor_notes" rows="2" placeholder="Enter any vendor notes here."><%= jobs[i].vendor_notes %></textarea>
+                      <textarea class="form-control evendor_notes" rows="2" placeholder="Enter any vendor notes here."><%= job.vendor_notes %></textarea>
                   </div>
               </div>
         </div>
@@ -1136,11 +1141,11 @@ td {
               <!-- Edit Job Modal End -->
     
               <!-- Duplicate Job Modal Begin -->
-              <div class="modal fade" id="dujobID<%= jobs[i].order_id %>" tabindex="-1" role="dialog" aria-labelledby="duplicateTripModalLabel" aria-hidden="true">
+              <div class="modal fade" id="dujobID<%= job.order_id %>" tabindex="-1" role="dialog" aria-labelledby="duplicateTripModalLabel" aria-hidden="true">
                 <div class="modal-dialog modal-xl" role="document">
                   <div class="modal-content">
                     <div class="modal-header">
-                      <h5 class="modal-title" id="editTripModalLabel">Duplicating Job <%= jobs[i].ordnbr %></h5>
+                      <h5 class="modal-title" id="editTripModalLabel">Duplicating Job <%= job.ordnbr %></h5>
                       <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                       </button>
@@ -1153,7 +1158,7 @@ td {
                           <div class="col-4">
                               <div class="form-group">
                                   <label for="duJobNumberInput">Enter New Order #</label>
-                                  <input type="text" class="form-control" id="duJobNumberInput" placeholder="Enter New Order #">
+                                  <input type="text" class="form-control duJobNumberInput" placeholder="Enter New Order #">
                               </div>
                           </div>
                         </div>
@@ -1162,18 +1167,18 @@ td {
                             <div class="col-4">
                               <div class="form-group">
                                 <label for="ejobStatus">Status</label>
-                                <select class="form-control" id="ejobStatus" value="<%= jobs[i].status %>">
-                                  <option value="Upcoming" <%= jobs[i].status == 'Upcoming' ? 'selected' : ''%>>Upcoming</option>
-                                  <option value="Active" <%= jobs[i].status == 'Active' ? 'selected' : ''%>>Active</option>
-                                  <option value="Completed" <%= jobs[i].status == 'Completed' ? 'selected' : ''%>>Completed</option>
-                                  <option value="Archived" <%= jobs[i].status == 'Archived' ? 'selected' : ''%>>Archived</option>
+                                <select class="form-control ejobStatus" value="<%= job.status %>">
+                                  <option value="Upcoming" <%= job.status == 'Upcoming' ? 'selected' : ''%>>Upcoming</option>
+                                  <option value="Active" <%= job.status == 'Active' ? 'selected' : ''%>>Active</option>
+                                  <option value="Completed" <%= job.status == 'Completed' ? 'selected' : ''%>>Completed</option>
+                                  <option value="Archived" <%= job.status == 'Archived' ? 'selected' : ''%>>Archived</option>
                                 </select>
                               </div>
                           </div>
                               <div class="col-4">
                                   <div class="form-group">
                                       <label for="epmAssigned">PM Assigned</label>
-                                      <input type="text" class="form-control" id="epmAssigned" placeholder="Origin" value="<%= jobs[i].pm_assigned %>">
+                                      <input type="text" class="form-control epmAssigned" placeholder="Origin" value="<%= job.pm_assigned %>">
                                   </div>
                           </div>
                       </div>
@@ -1181,19 +1186,19 @@ td {
                         <div class="col-4">
                             <div class="form-group">
                                 <label for="eoriginInput">Origin</label>
-                                <input type="text" class="form-control" id="eoriginInput" placeholder="Origin" value="<%= jobs[i].origin %>">
+                                <input type="text" class="form-control eoriginInput" placeholder="Origin" value="<%= job.origin %>">
                             </div>
                         </div>
                         <div class="col-4">
                           <div class="form-group">
                               <label for="edestinationInput">Destination</label>
-                              <input type="text" class="form-control" id="edestinationInput" placeholder="Destination" value="<%= jobs[i].destination %>">
+                              <input type="text" class="form-control edestinationInput" placeholder="Destination" value="<%= job.destination %>">
                           </div>
                       </div>
                           <div class="col-4">
                               <div class="form-group">
                                   <label for="eestStartDate">Estimated Start Date</label>
-                                  <input type="date" class="form-control" id="eestStartDate" placeholder="Destination" value="<%= jobs[i].est_start_date %>">
+                                  <input type="date" class="form-control eestStartDate" placeholder="Destination" value="<%= job.est_start_date %>">
                               </div>
                       </div>
                   </div>
@@ -1201,21 +1206,21 @@ td {
                     <div class="col-4">
                         <div class="form-group">
                             <label for="eoriginDesc">Origin Desc.</label>
-                            <input type="text" class="form-control" id="eoriginDesc" placeholder="Origin Desc." value="<%= jobs[i].origin_desc %>">
+                            <input type="text" class="form-control eoriginDesc" placeholder="Origin Desc." value="<%= job.origin_desc %>">
                         </div>
                     </div>
                     <div class="col-4">
                       <div class="form-group">
                           <label for="edestDesc">Destination Desc.</label>
-                          <input type="text" class="form-control" id="edestDesc" placeholder="Destination Desc." value="<%= jobs[i].destination_desc %>">
+                          <input type="text" class="form-control edestDesc" placeholder="Destination Desc." value="<%= job.destination_desc %>">
                       </div>
                   </div>
                   <div class="col-4">
                     <div class="form-group">
                         <label for="econtractSigned">Contract Signed?</label>
-                        <select class="form-control" id="econtractSigned">
-                          <option value="No" <%= jobs[i].contract_signed == 'No' ? 'selected' : ''%>>No</option>
-                          <option value="Yes" <%= jobs[i].contract_signed == 'Yes' ? 'selected' : ''%>>Yes</option>
+                        <select class="form-control econtractSigned">
+                          <option value="No" <%= job.contract_signed == 'No' ? 'selected' : ''%>>No</option>
+                          <option value="Yes" <%= job.contract_signed == 'Yes' ? 'selected' : ''%>>Yes</option>
                         </select>
                       </div>
                 </div>
@@ -1228,25 +1233,25 @@ td {
                             <div class="input-group-prepend">
                               <span class="input-group-text">$</span>
                             </div>
-                            <input type="text" class="form-control" id="elumpSumAmount" value="<%= jobs[i].lump_sum_amount %>">
+                            <input type="text" class="form-control elumpSumAmount" value="<%= job.lump_sum_amount %>">
                           </div>
                     </div>
                 </div>
                 <div class="col-4">
                     <div class="form-group">
                         <label for="elumpSumPaid">Lump Sum Sent to Billing?</label>
-                        <select class="form-control" id="elumpSumPaid" value="<%= jobs[i].lump_sum_paid %>">
-                          <option value="unsent" <%= jobs[i].lump_sum_paid == 'unsent' ? 'selected' : ''%>>unsent</option>
-                          <option value="sent" <%= jobs[i].lump_sum_paid == 'sent' ? 'selected' : ''%>>sent</option>
+                        <select class="form-control elumpSumPaid" value="<%= job.lump_sum_paid %>">
+                          <option value="unsent" <%= job.lump_sum_paid == 'unsent' ? 'selected' : ''%>>unsent</option>
+                          <option value="sent" <%= job.lump_sum_paid == 'sent' ? 'selected' : ''%>>sent</option>
                         </select>
                       </div>
               </div>
               <div class="col-4">
                 <div class="form-group">
                     <label for="ekickoffMeeting">Kickoff Meeting?</label>
-                    <select class="form-control" id="ekickoffMeeting" value="<%= jobs[i].kickoff_meeting %>">
-                      <option value="No" <%= jobs[i].kickoff_meeting == 'No' ? 'selected' : ''%>>No</option>
-                      <option value="Yes" <%= jobs[i].kickoff_meeting == 'Yes' ? 'selected' : ''%>>Yes</option>
+                    <select class="form-control ekickoffMeeting" value="<%= job.kickoff_meeting %>">
+                      <option value="No" <%= job.kickoff_meeting == 'No' ? 'selected' : ''%>>No</option>
+                      <option value="Yes" <%= job.kickoff_meeting == 'Yes' ? 'selected' : ''%>>Yes</option>
                     </select>
                   </div>
             </div>
@@ -1259,16 +1264,16 @@ td {
                         <div class="input-group-prepend">
                           <span class="input-group-text">$</span>
                         </div>
-                        <input type="text" class="form-control" id="eproformaAmount" value="<%= jobs[i].proforma_amount %>">
+                        <input type="text" class="form-control eproformaAmount" value="<%= job.proforma_amount %>">
                       </div>
                 </div>
             </div>
             <div class="col-4">
                 <div class="form-group">
                     <label for="eproformaPaid">Proforma Sent to Billing?</label>
-                    <select class="form-control" id="eproformaPaid" value="<%= jobs[i].proforma_paid %>">
-                      <option value="unsent" <%= jobs[i].proforma_paid == 'unsent' ? 'selected' : ''%>>unsent</option>
-                      <option value="sent" <%= jobs[i].proforma_paid == 'sent' ? 'selected' : ''%>>sent</option>
+                    <select class="form-control eproformaPaid" value="<%= job.proforma_paid %>">
+                      <option value="unsent" <%= job.proforma_paid == 'unsent' ? 'selected' : ''%>>unsent</option>
+                      <option value="sent" <%= job.proforma_paid == 'sent' ? 'selected' : ''%>>sent</option>
                     </select>
                   </div>
           </div>
@@ -1277,13 +1282,13 @@ td {
             <div class="col-4">
                 <div class="form-group">
                     <label for="ebargeName">Barge(s)</label>
-                    <input type="text" class="form-control" id="ebargeName" value="<%= jobs[i].barge_name %>">
+                    <input type="text" class="form-control ebargeName" value="<%= job.barge_name %>">
                 </div>
             </div>
             <div class="col-4">
               <div class="form-group">
                   <label for="etugName">Tug(s)</label>
-                  <input type="text" class="form-control" id="etugName" value="<%= jobs[i].tug_name %>">
+                  <input type="text" class="form-control etugName" value="<%= job.tug_name %>">
               </div>
           </div>
       </div>
@@ -1291,7 +1296,7 @@ td {
                   <div class="col-12">
                       <div class="form-group">
                           <label for="ejobNotes">Job Notes</label>
-                          <textarea class="form-control" id="ejobNotes" rows="2" placeholder="Enter any general job notes here."><%= jobs[i].ord_notes %></textarea>
+                          <textarea class="form-control ejobNotes" rows="2" placeholder="Enter any general job notes here."><%= job.ord_notes %></textarea>
                       </div>
                   </div>
             </div>
@@ -1300,25 +1305,25 @@ td {
                   <div class="col-3">
                       <div class="form-group">
                           <label for="ecustomer">Customer</label>
-                          <input type="text" class="form-control" id="ecustomer" placeholder="Enter Customer Company" value="<%= jobs[i].customer %>">
+                          <input type="text" class="form-control ecustomer" placeholder="Enter Customer Company" value="<%= job.customer %>">
                       </div>
                   </div>
                   <div class="col-3">
                     <div class="form-group">
                         <label for="ecustomer_nm">Customer Contact</label>
-                        <input type="text" class="form-control" id="ecustomer_nm" placeholder="Enter Customer Contact Name" value="<%= jobs[i].customer_nm %>">
+                        <input type="text" class="form-control ecustomer_nm" placeholder="Enter Customer Contact Name" value="<%= job.customer_nm %>">
                     </div>
                 </div>
                     <div class="col-3">
                         <div class="form-group">
                             <label for="ecustomer_phone">Customer Phone</label>
-                            <input type="text" class="form-control" id="ecustomer_phone" placeholder="Enter Customer Phone" value="<%= jobs[i].customer_phone %>">
+                            <input type="text" class="form-control ecustomer_phone" placeholder="Enter Customer Phone" value="<%= job.customer_phone %>">
                         </div>
                 </div>
                 <div class="col-3">
                   <div class="form-group">
                       <label for="ecustomer_email">Customer Email</label>
-                      <input type="text" class="form-control" id="ecustomer_email" placeholder="Enter Customer Email" value="<%= jobs[i].customer_email %>">
+                      <input type="text" class="form-control ecustomer_email" placeholder="Enter Customer Email" value="<%= job.customer_email %>">
                   </div>
           </div>
             </div>
@@ -1326,7 +1331,7 @@ td {
               <div class="col-12">
                   <div class="form-group">
                       <label for="ecustomer_notes">Customer Notes</label>
-                      <textarea class="form-control" id="ecustomer_notes" rows="2" placeholder="Enter any customer notes here."><%= jobs[i].customer_notes %></textarea>
+                      <textarea class="form-control ecustomer_notes" rows="2" placeholder="Enter any customer notes here."><%= job.customer_notes %></textarea>
                   </div>
               </div>
         </div>
@@ -1335,25 +1340,25 @@ td {
                   <div class="col-3">
                       <div class="form-group">
                           <label for="evendor">Vendor</label>
-                          <input type="text" class="form-control" id="evendor" placeholder="Enter Vendor Company" value="<%= jobs[i].vendor %>">
+                          <input type="text" class="form-control evendor" placeholder="Enter Vendor Company" value="<%= job.vendor %>">
                       </div>
                   </div>
                   <div class="col-3">
                     <div class="form-group">
                         <label for="evendor_nm">Vendor Contact</label>
-                        <input type="text" class="form-control" id="evendor_nm" placeholder="Enter Vendor Contact Name" value="<%= jobs[i].vendor_nm %>">
+                        <input type="text" class="form-control evendor_nm" placeholder="Enter Vendor Contact Name" value="<%= job.vendor_nm %>">
                     </div>
                 </div>
                     <div class="col-3">
                         <div class="form-group">
                             <label for="evendor_phone">Vendor Phone</label>
-                            <input type="text" class="form-control" id="evendor_phone" placeholder="Enter Vendor Phone" value="<%= jobs[i].vendor_phone %>">
+                            <input type="text" class="form-control evendor_phone" placeholder="Enter Vendor Phone" value="<%= job.vendor_phone %>">
                         </div>
                 </div>
                 <div class="col-3">
                   <div class="form-group">
                       <label for="evendor_email">Vendor Email</label>
-                      <input type="text" class="form-control" id="evendor_email" placeholder="Enter Vendor Email" value="<%= jobs[i].vendor_email %>">
+                      <input type="text" class="form-control evendor_email" placeholder="Enter Vendor Email" value="<%= job.vendor_email %>">
                   </div>
           </div>
             </div>
@@ -1361,7 +1366,7 @@ td {
               <div class="col-12">
                   <div class="form-group">
                       <label for="evendor_notes">Vendor Notes</label>
-                      <textarea class="form-control" id="evendor_notes" rows="2" placeholder="Enter any vendor notes here."><%= jobs[i].vendor_notes %></textarea>
+                      <textarea class="form-control evendor_notes" rows="2" placeholder="Enter any vendor notes here."><%= job.vendor_notes %></textarea>
                   </div>
               </div>
         </div>
@@ -1378,11 +1383,11 @@ td {
               </div>
               <!-- Duplicate Job Modal End -->
               <!-- Delete Job Modal -->
-              <div class="modal fade" id="djobID<%= jobs[i].order_id %>" tabindex="-1" role="dialog" aria-labelledby="deleteTripModalLable" aria-hidden="true">
+              <div class="modal fade" id="djobID<%= job.order_id %>" tabindex="-1" role="dialog" aria-labelledby="deleteTripModalLable" aria-hidden="true">
                 <div class="modal-dialog" role="document">
                   <div class="modal-content">
                     <div class="modal-header">
-                      <h5 class="modal-title" id="exampleModalLabel">Are you sure you want to delete job <%= jobs[i].ordnbr %>? </h5>
+                      <h5 class="modal-title" id="exampleModalLabel">Are you sure you want to delete job <%= job.ordnbr %>? </h5>
                       <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                       </button>
@@ -1392,7 +1397,7 @@ td {
                       <form class="deletetripform">
                         <div class="form-group">
                           <label hidden for="did"></label>
-                          <input hidden type="text" class="form-control" id="did" placeholder="Order #" value="<%= jobs[i].order_id %>">
+                          <input hidden type="text" class="form-control did" placeholder="Order #" value="<%= job.order_id %>">
                       </div>
                     </div>
                     <div class="modal-footer">
@@ -1419,51 +1424,51 @@ td {
                     <tbody>
                       <tr class="d-flex">
                       <td class="col-3 bold">Origin:</td>
-                      <td class="col-4"><%= jobs[i].origin %></td>
+                      <td class="col-4"><%= job.origin %></td>
                       <td class="col-2 bold">Lump Sum:</td>
-                      <td class="col-3">$<%= Intl.NumberFormat().format(jobs[i].lump_sum_amount) %> <a>(<%= jobs[i].lump_sum_paid %>)</a></td>
+                      <td class="col-3">$<%= Intl.NumberFormat().format(job.lump_sum_amount) %> <a>(<%= job.lump_sum_paid %>)</a></td>
                     </tr>
                     <tr class="d-flex">
                       <td class="col-3 bold">Origin Desc.:</td>
-                      <td class="col-4"><%= jobs[i].origin_desc %></td>
+                      <td class="col-4"><%= job.origin_desc %></td>
                       <td class="col-2 bold">Contract Signed:</td>
-                      <td class="col-3"><%= jobs[i].contract_signed %></td>
+                      <td class="col-3"><%= job.contract_signed %></td>
                     </tr>
                     <tr class="d-flex">
                       <td class="col-3 bold">Destination:</td>
-                      <td class="col-4"><%= jobs[i].destination %></td>
+                      <td class="col-4"><%= job.destination %></td>
                       <td class="col-2 bold">Kickoff Meeting:</td>
-                      <td class="col-3"><%= jobs[i].kickoff_meeting %></td>
+                      <td class="col-3"><%= job.kickoff_meeting %></td>
                     </tr>
                     <tr class="d-flex">
                       <td class="col-3 bold">Destination Description:</td>
-                      <td class="col-4"><%= jobs[i].destination_desc %></td>
+                      <td class="col-4"><%= job.destination_desc %></td>
                       <td class="col-2 bold">Proforma:</td>
-                      <td class="col-3">$<%= Intl.NumberFormat().format(jobs[i].proforma_amount) %> <a>(<%= jobs[i].proforma_paid %>)</a></td>
+                      <td class="col-3">$<%= Intl.NumberFormat().format(job.proforma_amount) %> <a>(<%= job.proforma_paid %>)</a></td>
                     </tr>
                     <tr class="d-flex">
                       <td class="col-3 bold">Start Date:</td>
-                      <td class="col-6"><%= moment(jobs[i].est_start_date).format('M/D/YY') %></td>
+                      <td class="col-6"><%= moment(job.est_start_date).format('M/D/YY') %></td>
                     </tr>
                     <tr class="d-flex">
                       <td class="col-3 bold">PM Assigned:</td>
-                      <td class="col-6"><%= jobs[i].pm_assigned %></td>
+                      <td class="col-6"><%= job.pm_assigned %></td>
                     </tr>
                     <tr class="d-flex">
                       <td class="col-3 bold">Status:</td>
-                      <td class="col-6"><%= jobs[i].status %></td>
+                      <td class="col-6"><%= job.status %></td>
                     </tr>
                     <tr class="d-flex">
                       <td class="col-3 bold">Barge(s):</td>
-                      <td class="col-6"><%= jobs[i].barge_name %></td>
+                      <td class="col-6"><%= job.barge_name %></td>
                     </tr>
                     <tr class="d-flex">
                       <td class="col-3 bold">Tug(s):</td>
-                      <td class="col-6"><%= jobs[i].tug_name %></td>
+                      <td class="col-6"><%= job.tug_name %></td>
                     </tr>
                     <tr class="d-flex">
                       <td class="col-3 bold">Trip Notes:</td>
-                      <td class="col-9" style="white-space: pre-wrap"><%= jobs[i].ord_notes %></td>
+                      <td class="col-9" style="white-space: pre-wrap"><%= job.ord_notes %></td>
                     </tr>
                   </tbody>
                 </table>
@@ -1478,23 +1483,23 @@ td {
                   <tbody>
                   <tr class="d-flex">
                     <td class="col-4">Customer:</td>
-                    <td class="col-6"><%= jobs[i].customer %></td>
+                    <td class="col-6"><%= job.customer %></td>
                   </tr>
                   <tr class="d-flex">
                     <td class="col-4">Customer Contact:</td>
-                    <td class="col-6"><%= jobs[i].customer_nm %></td>
+                    <td class="col-6"><%= job.customer_nm %></td>
                   </tr>
                   <tr class="d-flex">
                     <td class="col-4">Customer Phone:</td>
-                    <td class="col-6"><%= jobs[i].customer_phone %></td>
+                    <td class="col-6"><%= job.customer_phone %></td>
                   </tr>
                   <tr class="d-flex">
                     <td class="col-4">Customer Email:</td>
-                    <td class="col-6"><%= jobs[i].customer_email %></td>
+                    <td class="col-6"><%= job.customer_email %></td>
                   </tr>
                   <tr class="d-flex">
                     <td class="col-4">Notes:</td>
-                    <td class="col-6" style="white-space: pre-wrap"><%= jobs[i].customer_notes %></td>
+                    <td class="col-6" style="white-space: pre-wrap"><%= job.customer_notes %></td>
                   </tr>
                 </tbody>
               </table>
@@ -1510,23 +1515,23 @@ td {
               <tbody>
               <tr class="d-flex">
                 <td class="col-4">Vendor:</td>
-                <td class="col-6"><%= jobs[i].vendor %></td>
+                <td class="col-6"><%= job.vendor %></td>
               </tr>
               <tr class="d-flex">
                 <td class="col-4">Vendor Contact:</td>
-                <td class="col-6"><%= jobs[i].vendor_nm %></td>
+                <td class="col-6"><%= job.vendor_nm %></td>
               </tr>
               <tr class="d-flex">
                 <td class="col-4">Vendor Phone:</td>
-                <td class="col-6"><%= jobs[i].vendor_phone %></td>
+                <td class="col-6"><%= job.vendor_phone %></td>
               </tr>
               <tr class="d-flex">
                 <td class="col-4">Vendor Email:</td>
-                <td class="col-6"><%= jobs[i].vendor_email %></td>
+                <td class="col-6"><%= job.vendor_email %></td>
               </tr>
               <tr class="d-flex">
                 <td class="col-4">Notes:</td>
-                <td class="col-6" style="white-space: pre-wrap"><%= jobs[i].vendor_notes %></td>
+                <td class="col-6" style="white-space: pre-wrap"><%= job.vendor_notes %></td>
               </tr>
             </tbody>
           </table>
@@ -1541,8 +1546,8 @@ td {
         </td>
         </tr>
             </tbody>
-    <% } %>
-      <% } %>
+            <% } %>
+            <% }); %>
         </table>
       </div>
   </div>
@@ -1554,43 +1559,45 @@ td {
             <thead>
               <tr class="row m-0">
                 <th data-field="order_id" data-sortable="true" scope="col" class="d-inline-block col-1">Job</th>
-                <th data-sortable="true" scope="col" class="d-inline-block col-2 ">Customer</th>
-                <th data-sortable="true" scope="col" class="d-inline-block col-2">Origin</th>
-                <th data-sortable="true" scope="col" class="d-inline-block col-2">Destination</th>
-                <th data-sortable="true" scope="col" class="d-inline-block col-2">PM Assigned</th>
-                <th data-sortable="true" scope="col" class="d-inline-block col-1">Status</th>
-                <th data-sortable="true" scope="col" class="d-inline-block col-2">Est. Start</th>
+            <th data-sortable="true" scope="col" class="d-inline-block col-2 ">Customer</th>
+            <th data-sortable="true" scope="col" class="d-inline-block col-2">Origin</th>
+            <th data-sortable="true" scope="col" class="d-inline-block col-2">Destination</th>
+            <th data-sortable="true" scope="col" class="d-inline-block col-2">Barge(s)</th>
+            <th data-sortable="true" scope="col" class="d-inline-block col-1">PM Assigned</th>
+            <th data-sortable="true" scope="col" class="d-inline-block col-1">Lump Sum</th>
+            <th data-sortable="true" scope="col" class="d-inline-block col-1">Est. Start</th>
                 <!-- <th scope="col" class="d-inline-block col-1">#</th> -->
               </tr>
             </thead>
-            <% for (let i = 0; i < jobs.length; i++) { %>
-              <% if (jobs[i].status  === "Completed") { %>
-                <tbody>
-                  <tr class="accordion-toggle collapsed row m-0" id="accordion1" data-toggle="collapse" data-parent="#accordion1" href="#jobID<%= jobs[i].order_id %>">
-                    <td class="d-inline-block col-1"><%= jobs[i].ordnbr %></td>
-                    <td class="d-inline-block col-2"><%= jobs[i].customer %></td>
-                    <td class="d-inline-block col-2"><%= jobs[i].origin %></td>
-                    <td class="d-inline-block col-2"><%= jobs[i].destination %></td>
-                    <td class="d-inline-block col-2"><%= jobs[i].pm_assigned %></td>
-                    <td class="d-inline-block col-1"><%= jobs[i].status %></td>
-                    <td class="d-inline-block col-2"><%= moment(jobs[i].est_start_date).format('M/D/YY') %></td>
+            <% jobs.forEach(function(job) { %>
+              <% if (job.status  === "Completed") { %>
+                <tbody class="uvs">
+                  <tr class="accordion-toggle collapsed row m-0" id="accordion1" data-toggle="collapse" data-parent="#accordion1" href="#jobID<%= job.order_id %>">
+                    <td class="d-inline-block col-1"><%= job.ordnbr %></td>
+                <td class="d-inline-block col-2"><%= job.customer %></td>
+                <td class="d-inline-block col-2"><%= job.origin %></td>
+                <td class="d-inline-block col-2"><%= job.destination %></td>
+                <td class="d-inline-block col-2"><%= job.barge_name %></td>
+                <td class="d-inline-block col-1"><%= job.pm_assigned %></td>
+                <td class="d-inline-block col-1">$<%= Intl.NumberFormat().format(job.lump_sum_amount) %></td>
+                <td class="d-inline-block col-1"><%= moment(job.est_start_date).format('M/D/YY') %></td>
                     <!-- <td class="expand-button" class="d-inline-block col-1"></td> -->
                     </tr>
                       
               <tr class="hide-table-padding">
               <td colspan="12">
-              <div class="collapse in col-sm head-div" id="jobID<%= jobs[i].order_id %>">
+              <div class="collapse in col-sm head-div" id="jobID<%= job.order_id %>">
                 <div class="card" id="tdcard">
                   <div class="card-body">
                     <div class="row">
-                    <h5 class="card-title col align-self-center" id="cardtitle"><%= jobs[i].ordnbr %> - <%= jobs[i].customer %></h5>
-                    <button type="button" class="btn col-1" id="edittripbutton" data-toggle="modal" data-target="#ejobID<%= jobs[i].order_id %>">Edit</button>
-                    <button type="button" class="btn col-1" id="duplicatetripbutton" data-toggle="modal" data-target="#dujobID<%= jobs[i].order_id %>">Duplicate</button>
-                    <button type="button" class="btn col-1" data-toggle="modal" data-target="#djobID<%= jobs[i].order_id %>">Delete</button>
+                    <h5 class="card-title col align-self-center" id="cardtitle"><%= job.ordnbr %> - <%= job.customer %></h5>
+                    <button type="button" class="btn col-1" id="edittripbutton" data-toggle="modal" data-target="#ejobID<%= job.order_id %>">Edit</button>
+                    <button type="button" class="btn col-1" id="duplicatetripbutton" data-toggle="modal" data-target="#dujobID<%= job.order_id %>">Duplicate</button>
+                    <button type="button" class="btn col-1" data-toggle="modal" data-target="#djobID<%= job.order_id %>">Delete</button>
                   </div>
             
                   <!-- Edit Job Modal -->
-                  <div class="modal fade" id="ejobID<%= jobs[i].order_id %>" tabindex="-1" role="dialog" aria-labelledby="editTripModalLabel" aria-hidden="true">
+                  <div class="modal fade" id="ejobID<%= job.order_id %>" tabindex="-1" role="dialog" aria-labelledby="editTripModalLabel" aria-hidden="true">
                     <div class="modal-dialog modal-xl" role="document">
                       <div class="modal-content">
                         <div class="modal-header">
@@ -1607,26 +1614,26 @@ td {
                                 <div class="col-4">
                                     <div class="form-group">
                                         <label hidden for="eid"></label>
-                                        <input hidden type="text" class="form-control" id="eid" placeholder="Order #" value="<%= jobs[i].order_id %>">
+                                        <input hidden type="text" class="form-control eid" placeholder="Order #" value="<%= job.order_id %>">
                                         <label for="eJobNumberInput">Order #</label>
-                                        <input type="text" class="form-control" id="eJobNumberInput" placeholder="Order #" value="<%= jobs[i].ordnbr %>" readonly>
+                                        <input type="text" class="form-control eJobNumberInput" placeholder="Order #" value="<%= job.ordnbr %>">
                                     </div>
                                 </div>
                                 <div class="col-4">
                                   <div class="form-group">
                                     <label for="ejobStatus">Status</label>
-                                    <select class="form-control" id="ejobStatus" value="<%= jobs[i].status %>">
-                                      <option value="Upcoming" <%= jobs[i].status == 'Upcoming' ? 'selected' : ''%>>Upcoming</option>
-                                      <option value="Active" <%= jobs[i].status == 'Active' ? 'selected' : ''%>>Active</option>
-                                      <option value="Completed" <%= jobs[i].status == 'Completed' ? 'selected' : ''%>>Completed</option>
-                                      <option value="Archived" <%= jobs[i].status == 'Archived' ? 'selected' : ''%>>Archived</option>
+                                    <select class="form-control ejobStatus" value="<%= job.status %>">
+                                      <option value="Upcoming" <%= job.status == 'Upcoming' ? 'selected' : ''%>>Upcoming</option>
+                                      <option value="Active" <%= job.status == 'Active' ? 'selected' : ''%>>Active</option>
+                                      <option value="Completed" <%= job.status == 'Completed' ? 'selected' : ''%>>Completed</option>
+                                      <option value="Archived" <%= job.status == 'Archived' ? 'selected' : ''%>>Archived</option>
                                     </select>
                                   </div>
                               </div>
                                   <div class="col-4">
                                       <div class="form-group">
                                           <label for="epmAssigned">PM Assigned</label>
-                                          <input type="text" class="form-control" id="epmAssigned" placeholder="Origin" value="<%= jobs[i].pm_assigned %>">
+                                          <input type="text" class="form-control epmAssigned" placeholder="Origin" value="<%= job.pm_assigned %>">
                                       </div>
                               </div>
                           </div>
@@ -1634,19 +1641,19 @@ td {
                             <div class="col-4">
                                 <div class="form-group">
                                     <label for="eoriginInput">Origin</label>
-                                    <input type="text" class="form-control" id="eoriginInput" placeholder="Origin" value="<%= jobs[i].origin %>">
+                                    <input type="text" class="form-control eoriginInput" placeholder="Origin" value="<%= job.origin %>">
                                 </div>
                             </div>
                             <div class="col-4">
                               <div class="form-group">
                                   <label for="edestinationInput">Destination</label>
-                                  <input type="text" class="form-control" id="edestinationInput" placeholder="Destination" value="<%= jobs[i].destination %>">
+                                  <input type="text" class="form-control edestinationInput" placeholder="Destination" value="<%= job.destination %>">
                               </div>
                           </div>
                               <div class="col-4">
                                   <div class="form-group">
                                       <label for="eestStartDate">Estimated Start Date</label>
-                                      <input type="date" class="form-control" id="eestStartDate" placeholder="Destination" value="<%= jobs[i].est_start_date %>">
+                                      <input type="date" class="form-control eestStartDate" placeholder="Destination" value="<%= job.est_start_date %>">
                                   </div>
                           </div>
                       </div>
@@ -1654,21 +1661,21 @@ td {
                         <div class="col-4">
                             <div class="form-group">
                                 <label for="eoriginDesc">Origin Desc.</label>
-                                <input type="text" class="form-control" id="eoriginDesc" placeholder="Origin Desc." value="<%= jobs[i].origin_desc %>">
+                                <input type="text" class="form-control eoriginDesc" placeholder="Origin Desc." value="<%= job.origin_desc %>">
                             </div>
                         </div>
                         <div class="col-4">
                           <div class="form-group">
                               <label for="edestDesc">Destination Desc.</label>
-                              <input type="text" class="form-control" id="edestDesc" placeholder="Destination Desc." value="<%= jobs[i].destination_desc %>">
+                              <input type="text" class="form-control edestDesc" placeholder="Destination Desc." value="<%= job.destination_desc %>">
                           </div>
                       </div>
                       <div class="col-4">
                         <div class="form-group">
                             <label for="econtractSigned">Contract Signed?</label>
-                            <select class="form-control" id="econtractSigned">
-                              <option value="No" <%= jobs[i].contract_signed == 'No' ? 'selected' : ''%>>No</option>
-                              <option value="Yes" <%= jobs[i].contract_signed == 'Yes' ? 'selected' : ''%>>Yes</option>
+                            <select class="form-control econtractSigned">
+                              <option value="No" <%= job.contract_signed == 'No' ? 'selected' : ''%>>No</option>
+                              <option value="Yes" <%= job.contract_signed == 'Yes' ? 'selected' : ''%>>Yes</option>
                             </select>
                           </div>
                     </div>
@@ -1681,25 +1688,25 @@ td {
                                 <div class="input-group-prepend">
                                   <span class="input-group-text">$</span>
                                 </div>
-                                <input type="text" class="form-control" id="elumpSumAmount" value="<%= jobs[i].lump_sum_amount %>">
+                                <input type="text" class="form-control elumpSumAmount" value="<%= job.lump_sum_amount %>">
                               </div>
                         </div>
                     </div>
                     <div class="col-4">
                         <div class="form-group">
                             <label for="elumpSumPaid">Lump Sum Sent to Billing?</label>
-                            <select class="form-control" id="elumpSumPaid" value="<%= jobs[i].lump_sum_paid %>">
-                              <option value="unsent" <%= jobs[i].lump_sum_paid == 'unsent' ? 'selected' : ''%>>unsent</option>
-                              <option value="sent" <%= jobs[i].lump_sum_paid == 'sent' ? 'selected' : ''%>>sent</option>
+                            <select class="form-control elumpSumPaid" value="<%= job.lump_sum_paid %>">
+                              <option value="unsent" <%= job.lump_sum_paid == 'unsent' ? 'selected' : ''%>>unsent</option>
+                              <option value="sent" <%= job.lump_sum_paid == 'sent' ? 'selected' : ''%>>sent</option>
                             </select>
                           </div>
                   </div>
                   <div class="col-4">
                     <div class="form-group">
                         <label for="ekickoffMeeting">Kickoff Meeting?</label>
-                        <select class="form-control" id="ekickoffMeeting" value="<%= jobs[i].kickoff_meeting %>">
-                          <option value="No" <%= jobs[i].kickoff_meeting == 'No' ? 'selected' : ''%>>No</option>
-                          <option value="Yes" <%= jobs[i].kickoff_meeting == 'Yes' ? 'selected' : ''%>>Yes</option>
+                        <select class="form-control ekickoffMeeting" value="<%= job.kickoff_meeting %>">
+                          <option value="No" <%= job.kickoff_meeting == 'No' ? 'selected' : ''%>>No</option>
+                          <option value="Yes" <%= job.kickoff_meeting == 'Yes' ? 'selected' : ''%>>Yes</option>
                         </select>
                       </div>
                 </div>
@@ -1712,16 +1719,16 @@ td {
                             <div class="input-group-prepend">
                               <span class="input-group-text">$</span>
                             </div>
-                            <input type="text" class="form-control" id="eproformaAmount" value="<%= jobs[i].proforma_amount %>">
+                            <input type="text" class="form-control eproformaAmount" value="<%= job.proforma_amount %>">
                           </div>
                     </div>
                 </div>
                 <div class="col-4">
                     <div class="form-group">
                         <label for="eproformaPaid">Proforma Sent to Billing?</label>
-                        <select class="form-control" id="eproformaPaid" value="<%= jobs[i].proforma_paid %>">
-                          <option value="unsent" <%= jobs[i].proforma_paid == 'unsent' ? 'selected' : ''%>>unsent</option>
-                          <option value="sent" <%= jobs[i].proforma_paid == 'sent' ? 'selected' : ''%>>sent</option>
+                        <select class="form-control eproformaPaid" value="<%= job.proforma_paid %>">
+                          <option value="unsent" <%= job.proforma_paid == 'unsent' ? 'selected' : ''%>>unsent</option>
+                          <option value="sent" <%= job.proforma_paid == 'sent' ? 'selected' : ''%>>sent</option>
                         </select>
                       </div>
               </div>
@@ -1730,13 +1737,13 @@ td {
                 <div class="col-4">
                     <div class="form-group">
                         <label for="ebargeName">Barge(s)</label>
-                        <input type="text" class="form-control" id="ebargeName" value="<%= jobs[i].barge_name %>">
+                        <input type="text" class="form-control ebargeName" value="<%= job.barge_name %>">
                     </div>
                 </div>
                 <div class="col-4">
                   <div class="form-group">
                       <label for="etugName">Tug(s)</label>
-                      <input type="text" class="form-control" id="etugName" value="<%= jobs[i].tug_name %>">
+                      <input type="text" class="form-control etugName" value="<%= job.tug_name %>">
                   </div>
               </div>
           </div>
@@ -1744,7 +1751,7 @@ td {
                       <div class="col-12">
                           <div class="form-group">
                               <label for="ejobNotes">Job Notes</label>
-                              <textarea class="form-control" id="ejobNotes" rows="2" placeholder="Enter any general job notes here."><%= jobs[i].ord_notes %></textarea>
+                              <textarea class="form-control ejobNotes" rows="2" placeholder="Enter any general job notes here."><%= job.ord_notes %></textarea>
                           </div>
                       </div>
                 </div>
@@ -1753,25 +1760,25 @@ td {
                       <div class="col-3">
                           <div class="form-group">
                               <label for="ecustomer">Customer</label>
-                              <input type="text" class="form-control" id="ecustomer" placeholder="Enter Customer Company" value="<%= jobs[i].customer %>">
+                              <input type="text" class="form-control ecustomer" placeholder="Enter Customer Company" value="<%= job.customer %>">
                           </div>
                       </div>
                       <div class="col-3">
                         <div class="form-group">
                             <label for="ecustomer_nm">Customer Contact</label>
-                            <input type="text" class="form-control" id="ecustomer_nm" placeholder="Enter Customer Contact Name" value="<%= jobs[i].customer_nm %>">
+                            <input type="text" class="form-control ecustomer_nm" placeholder="Enter Customer Contact Name" value="<%= job.customer_nm %>">
                         </div>
                     </div>
                         <div class="col-3">
                             <div class="form-group">
                                 <label for="ecustomer_phone">Customer Phone</label>
-                                <input type="text" class="form-control" id="ecustomer_phone" placeholder="Enter Customer Phone" value="<%= jobs[i].customer_phone %>">
+                                <input type="text" class="form-control ecustomer_phone" placeholder="Enter Customer Phone" value="<%= job.customer_phone %>">
                             </div>
                     </div>
                     <div class="col-3">
                       <div class="form-group">
                           <label for="ecustomer_email">Customer Email</label>
-                          <input type="text" class="form-control" id="ecustomer_email" placeholder="Enter Customer Email" value="<%= jobs[i].customer_email %>">
+                          <input type="text" class="form-control ecustomer_email" placeholder="Enter Customer Email" value="<%= job.customer_email %>">
                       </div>
               </div>
                 </div>
@@ -1779,7 +1786,7 @@ td {
                   <div class="col-12">
                       <div class="form-group">
                           <label for="ecustomer_notes">Customer Notes</label>
-                          <textarea class="form-control" id="ecustomer_notes" rows="2" placeholder="Enter any customer notes here."><%= jobs[i].customer_notes %></textarea>
+                          <textarea class="form-control ecustomer_notes" rows="2" placeholder="Enter any customer notes here."><%= job.customer_notes %></textarea>
                       </div>
                   </div>
             </div>
@@ -1788,25 +1795,25 @@ td {
                       <div class="col-3">
                           <div class="form-group">
                               <label for="evendor">Vendor</label>
-                              <input type="text" class="form-control" id="evendor" placeholder="Enter Vendor Company" value="<%= jobs[i].vendor %>">
+                              <input type="text" class="form-control evendor" placeholder="Enter Vendor Company" value="<%= job.vendor %>">
                           </div>
                       </div>
                       <div class="col-3">
                         <div class="form-group">
                             <label for="evendor_nm">Vendor Contact</label>
-                            <input type="text" class="form-control" id="evendor_nm" placeholder="Enter Vendor Contact Name" value="<%= jobs[i].vendor_nm %>">
+                            <input type="text" class="form-control evendor_nm" placeholder="Enter Vendor Contact Name" value="<%= job.vendor_nm %>">
                         </div>
                     </div>
                         <div class="col-3">
                             <div class="form-group">
                                 <label for="evendor_phone">Vendor Phone</label>
-                                <input type="text" class="form-control" id="evendor_phone" placeholder="Enter Vendor Phone" value="<%= jobs[i].vendor_phone %>">
+                                <input type="text" class="form-control evendor_phone" placeholder="Enter Vendor Phone" value="<%= job.vendor_phone %>">
                             </div>
                     </div>
                     <div class="col-3">
                       <div class="form-group">
                           <label for="evendor_email">Vendor Email</label>
-                          <input type="text" class="form-control" id="evendor_email" placeholder="Enter Vendor Email" value="<%= jobs[i].vendor_email %>">
+                          <input type="text" class="form-control evendor_email" placeholder="Enter Vendor Email" value="<%= job.vendor_email %>">
                       </div>
               </div>
                 </div>
@@ -1814,7 +1821,7 @@ td {
                   <div class="col-12">
                       <div class="form-group">
                           <label for="evendor_notes">Vendor Notes</label>
-                          <textarea class="form-control" id="evendor_notes" rows="2" placeholder="Enter any vendor notes here."><%= jobs[i].vendor_notes %></textarea>
+                          <textarea class="form-control evendor_notes" rows="2" placeholder="Enter any vendor notes here."><%= job.vendor_notes %></textarea>
                       </div>
                   </div>
             </div>
@@ -1831,11 +1838,11 @@ td {
                   <!-- Edit Job Modal End -->
         
                   <!-- Duplicate Job Modal Begin -->
-                  <div class="modal fade" id="dujobID<%= jobs[i].order_id %>" tabindex="-1" role="dialog" aria-labelledby="duplicateTripModalLabel" aria-hidden="true">
+                  <div class="modal fade" id="dujobID<%= job.order_id %>" tabindex="-1" role="dialog" aria-labelledby="duplicateTripModalLabel" aria-hidden="true">
                     <div class="modal-dialog modal-xl" role="document">
                       <div class="modal-content">
                         <div class="modal-header">
-                          <h5 class="modal-title" id="editTripModalLabel">Duplicating Job <%= jobs[i].ordnbr %></h5>
+                          <h5 class="modal-title" id="editTripModalLabel">Duplicating Job <%= job.ordnbr %></h5>
                           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                           </button>
@@ -1848,7 +1855,7 @@ td {
                               <div class="col-4">
                                   <div class="form-group">
                                       <label for="duJobNumberInput">Enter New Order #</label>
-                                      <input type="text" class="form-control" id="duJobNumberInput" placeholder="Enter New Order #">
+                                      <input type="text" class="form-control duJobNumberInput" placeholder="Enter New Order #">
                                   </div>
                               </div>
                             </div>
@@ -1857,18 +1864,18 @@ td {
                                 <div class="col-4">
                                   <div class="form-group">
                                     <label for="ejobStatus">Status</label>
-                                    <select class="form-control" id="ejobStatus" value="<%= jobs[i].status %>">
-                                      <option value="Upcoming" <%= jobs[i].status == 'Upcoming' ? 'selected' : ''%>>Upcoming</option>
-                                      <option value="Active" <%= jobs[i].status == 'Active' ? 'selected' : ''%>>Active</option>
-                                      <option value="Completed" <%= jobs[i].status == 'Completed' ? 'selected' : ''%>>Completed</option>
-                                      <option value="Archived" <%= jobs[i].status == 'Archived' ? 'selected' : ''%>>Archived</option>
+                                    <select class="form-control ejobStatus" value="<%= job.status %>">
+                                      <option value="Upcoming" <%= job.status == 'Upcoming' ? 'selected' : ''%>>Upcoming</option>
+                                      <option value="Active" <%= job.status == 'Active' ? 'selected' : ''%>>Active</option>
+                                      <option value="Completed" <%= job.status == 'Completed' ? 'selected' : ''%>>Completed</option>
+                                      <option value="Archived" <%= job.status == 'Archived' ? 'selected' : ''%>>Archived</option>
                                     </select>
                                   </div>
                               </div>
                                   <div class="col-4">
                                       <div class="form-group">
                                           <label for="epmAssigned">PM Assigned</label>
-                                          <input type="text" class="form-control" id="epmAssigned" placeholder="Origin" value="<%= jobs[i].pm_assigned %>">
+                                          <input type="text" class="form-control epmAssigned" placeholder="Origin" value="<%= job.pm_assigned %>">
                                       </div>
                               </div>
                           </div>
@@ -1876,19 +1883,19 @@ td {
                             <div class="col-4">
                                 <div class="form-group">
                                     <label for="eoriginInput">Origin</label>
-                                    <input type="text" class="form-control" id="eoriginInput" placeholder="Origin" value="<%= jobs[i].origin %>">
+                                    <input type="text" class="form-control eoriginInput" placeholder="Origin" value="<%= job.origin %>">
                                 </div>
                             </div>
                             <div class="col-4">
                               <div class="form-group">
                                   <label for="edestinationInput">Destination</label>
-                                  <input type="text" class="form-control" id="edestinationInput" placeholder="Destination" value="<%= jobs[i].destination %>">
+                                  <input type="text" class="form-control edestinationInput" placeholder="Destination" value="<%= job.destination %>">
                               </div>
                           </div>
                               <div class="col-4">
                                   <div class="form-group">
                                       <label for="eestStartDate">Estimated Start Date</label>
-                                      <input type="date" class="form-control" id="eestStartDate" placeholder="Destination" value="<%= jobs[i].est_start_date %>">
+                                      <input type="date" class="form-control eestStartDate" placeholder="Destination" value="<%= job.est_start_date %>">
                                   </div>
                           </div>
                       </div>
@@ -1896,21 +1903,21 @@ td {
                         <div class="col-4">
                             <div class="form-group">
                                 <label for="eoriginDesc">Origin Desc.</label>
-                                <input type="text" class="form-control" id="eoriginDesc" placeholder="Origin Desc." value="<%= jobs[i].origin_desc %>">
+                                <input type="text" class="form-control eoriginDesc" placeholder="Origin Desc." value="<%= job.origin_desc %>">
                             </div>
                         </div>
                         <div class="col-4">
                           <div class="form-group">
                               <label for="edestDesc">Destination Desc.</label>
-                              <input type="text" class="form-control" id="edestDesc" placeholder="Destination Desc." value="<%= jobs[i].destination_desc %>">
+                              <input type="text" class="form-control edestDesc" placeholder="Destination Desc." value="<%= job.destination_desc %>">
                           </div>
                       </div>
                       <div class="col-4">
                         <div class="form-group">
                             <label for="econtractSigned">Contract Signed?</label>
-                            <select class="form-control" id="econtractSigned">
-                              <option value="No" <%= jobs[i].contract_signed == 'No' ? 'selected' : ''%>>No</option>
-                              <option value="Yes" <%= jobs[i].contract_signed == 'Yes' ? 'selected' : ''%>>Yes</option>
+                            <select class="form-control econtractSigned">
+                              <option value="No" <%= job.contract_signed == 'No' ? 'selected' : ''%>>No</option>
+                              <option value="Yes" <%= job.contract_signed == 'Yes' ? 'selected' : ''%>>Yes</option>
                             </select>
                           </div>
                     </div>
@@ -1923,25 +1930,25 @@ td {
                                 <div class="input-group-prepend">
                                   <span class="input-group-text">$</span>
                                 </div>
-                                <input type="text" class="form-control" id="elumpSumAmount" value="<%= jobs[i].lump_sum_amount %>">
+                                <input type="text" class="form-control elumpSumAmount" value="<%= job.lump_sum_amount %>">
                               </div>
                         </div>
                     </div>
                     <div class="col-4">
                         <div class="form-group">
                             <label for="elumpSumPaid">Lump Sum Sent to Billing?</label>
-                            <select class="form-control" id="elumpSumPaid" value="<%= jobs[i].lump_sum_paid %>">
-                              <option value="unsent" <%= jobs[i].lump_sum_paid == 'unsent' ? 'selected' : ''%>>unsent</option>
-                              <option value="sent" <%= jobs[i].lump_sum_paid == 'sent' ? 'selected' : ''%>>sent</option>
+                            <select class="form-control elumpSumPaid" value="<%= job.lump_sum_paid %>">
+                              <option value="unsent" <%= job.lump_sum_paid == 'unsent' ? 'selected' : ''%>>unsent</option>
+                              <option value="sent" <%= job.lump_sum_paid == 'sent' ? 'selected' : ''%>>sent</option>
                             </select>
                           </div>
                   </div>
                   <div class="col-4">
                     <div class="form-group">
                         <label for="ekickoffMeeting">Kickoff Meeting?</label>
-                        <select class="form-control" id="ekickoffMeeting" value="<%= jobs[i].kickoff_meeting %>">
-                          <option value="No" <%= jobs[i].kickoff_meeting == 'No' ? 'selected' : ''%>>No</option>
-                          <option value="Yes" <%= jobs[i].kickoff_meeting == 'Yes' ? 'selected' : ''%>>Yes</option>
+                        <select class="form-control ekickoffMeeting" value="<%= job.kickoff_meeting %>">
+                          <option value="No" <%= job.kickoff_meeting == 'No' ? 'selected' : ''%>>No</option>
+                          <option value="Yes" <%= job.kickoff_meeting == 'Yes' ? 'selected' : ''%>>Yes</option>
                         </select>
                       </div>
                 </div>
@@ -1954,16 +1961,16 @@ td {
                             <div class="input-group-prepend">
                               <span class="input-group-text">$</span>
                             </div>
-                            <input type="text" class="form-control" id="eproformaAmount" value="<%= jobs[i].proforma_amount %>">
+                            <input type="text" class="form-control eproformaAmount" value="<%= job.proforma_amount %>">
                           </div>
                     </div>
                 </div>
                 <div class="col-4">
                     <div class="form-group">
                         <label for="eproformaPaid">Proforma Sent to Billing?</label>
-                        <select class="form-control" id="eproformaPaid" value="<%= jobs[i].proforma_paid %>">
-                          <option value="unsent" <%= jobs[i].proforma_paid == 'unsent' ? 'selected' : ''%>>unsent</option>
-                          <option value="sent" <%= jobs[i].proforma_paid == 'sent' ? 'selected' : ''%>>sent</option>
+                        <select class="form-control eproformaPaid" value="<%= job.proforma_paid %>">
+                          <option value="unsent" <%= job.proforma_paid == 'unsent' ? 'selected' : ''%>>unsent</option>
+                          <option value="sent" <%= job.proforma_paid == 'sent' ? 'selected' : ''%>>sent</option>
                         </select>
                       </div>
               </div>
@@ -1972,13 +1979,13 @@ td {
                 <div class="col-4">
                     <div class="form-group">
                         <label for="ebargeName">Barge(s)</label>
-                        <input type="text" class="form-control" id="ebargeName" value="<%= jobs[i].barge_name %>">
+                        <input type="text" class="form-control ebargeName" value="<%= job.barge_name %>">
                     </div>
                 </div>
                 <div class="col-4">
                   <div class="form-group">
                       <label for="etugName">Tug(s)</label>
-                      <input type="text" class="form-control" id="etugName" value="<%= jobs[i].tug_name %>">
+                      <input type="text" class="form-control etugName" value="<%= job.tug_name %>">
                   </div>
               </div>
           </div>
@@ -1986,7 +1993,7 @@ td {
                       <div class="col-12">
                           <div class="form-group">
                               <label for="ejobNotes">Job Notes</label>
-                              <textarea class="form-control" id="ejobNotes" rows="2" placeholder="Enter any general job notes here."><%= jobs[i].ord_notes %></textarea>
+                              <textarea class="form-control ejobNotes" rows="2" placeholder="Enter any general job notes here."><%= job.ord_notes %></textarea>
                           </div>
                       </div>
                 </div>
@@ -1995,25 +2002,25 @@ td {
                       <div class="col-3">
                           <div class="form-group">
                               <label for="ecustomer">Customer</label>
-                              <input type="text" class="form-control" id="ecustomer" placeholder="Enter Customer Company" value="<%= jobs[i].customer %>">
+                              <input type="text" class="form-control ecustomer" placeholder="Enter Customer Company" value="<%= job.customer %>">
                           </div>
                       </div>
                       <div class="col-3">
                         <div class="form-group">
                             <label for="ecustomer_nm">Customer Contact</label>
-                            <input type="text" class="form-control" id="ecustomer_nm" placeholder="Enter Customer Contact Name" value="<%= jobs[i].customer_nm %>">
+                            <input type="text" class="form-control ecustomer_nm" placeholder="Enter Customer Contact Name" value="<%= job.customer_nm %>">
                         </div>
                     </div>
                         <div class="col-3">
                             <div class="form-group">
                                 <label for="ecustomer_phone">Customer Phone</label>
-                                <input type="text" class="form-control" id="ecustomer_phone" placeholder="Enter Customer Phone" value="<%= jobs[i].customer_phone %>">
+                                <input type="text" class="form-control ecustomer_phone" placeholder="Enter Customer Phone" value="<%= job.customer_phone %>">
                             </div>
                     </div>
                     <div class="col-3">
                       <div class="form-group">
                           <label for="ecustomer_email">Customer Email</label>
-                          <input type="text" class="form-control" id="ecustomer_email" placeholder="Enter Customer Email" value="<%= jobs[i].customer_email %>">
+                          <input type="text" class="form-control ecustomer_email" placeholder="Enter Customer Email" value="<%= job.customer_email %>">
                       </div>
               </div>
                 </div>
@@ -2021,7 +2028,7 @@ td {
                   <div class="col-12">
                       <div class="form-group">
                           <label for="ecustomer_notes">Customer Notes</label>
-                          <textarea class="form-control" id="ecustomer_notes" rows="2" placeholder="Enter any customer notes here."><%= jobs[i].customer_notes %></textarea>
+                          <textarea class="form-control ecustomer_notes" rows="2" placeholder="Enter any customer notes here."><%= job.customer_notes %></textarea>
                       </div>
                   </div>
             </div>
@@ -2030,25 +2037,25 @@ td {
                       <div class="col-3">
                           <div class="form-group">
                               <label for="evendor">Vendor</label>
-                              <input type="text" class="form-control" id="evendor" placeholder="Enter Vendor Company" value="<%= jobs[i].vendor %>">
+                              <input type="text" class="form-control evendor" placeholder="Enter Vendor Company" value="<%= job.vendor %>">
                           </div>
                       </div>
                       <div class="col-3">
                         <div class="form-group">
                             <label for="evendor_nm">Vendor Contact</label>
-                            <input type="text" class="form-control" id="evendor_nm" placeholder="Enter Vendor Contact Name" value="<%= jobs[i].vendor_nm %>">
+                            <input type="text" class="form-control evendor_nm" placeholder="Enter Vendor Contact Name" value="<%= job.vendor_nm %>">
                         </div>
                     </div>
                         <div class="col-3">
                             <div class="form-group">
                                 <label for="evendor_phone">Vendor Phone</label>
-                                <input type="text" class="form-control" id="evendor_phone" placeholder="Enter Vendor Phone" value="<%= jobs[i].vendor_phone %>">
+                                <input type="text" class="form-control evendor_phone" placeholder="Enter Vendor Phone" value="<%= job.vendor_phone %>">
                             </div>
                     </div>
                     <div class="col-3">
                       <div class="form-group">
                           <label for="evendor_email">Vendor Email</label>
-                          <input type="text" class="form-control" id="evendor_email" placeholder="Enter Vendor Email" value="<%= jobs[i].vendor_email %>">
+                          <input type="text" class="form-control evendor_email" placeholder="Enter Vendor Email" value="<%= job.vendor_email %>">
                       </div>
               </div>
                 </div>
@@ -2056,7 +2063,7 @@ td {
                   <div class="col-12">
                       <div class="form-group">
                           <label for="evendor_notes">Vendor Notes</label>
-                          <textarea class="form-control" id="evendor_notes" rows="2" placeholder="Enter any vendor notes here."><%= jobs[i].vendor_notes %></textarea>
+                          <textarea class="form-control evendor_notes" rows="2" placeholder="Enter any vendor notes here."><%= job.vendor_notes %></textarea>
                       </div>
                   </div>
             </div>
@@ -2073,11 +2080,11 @@ td {
                   </div>
                   <!-- Duplicate Job Modal End -->
                   <!-- Delete Job Modal -->
-                  <div class="modal fade" id="djobID<%= jobs[i].order_id %>" tabindex="-1" role="dialog" aria-labelledby="deleteTripModalLable" aria-hidden="true">
+                  <div class="modal fade" id="djobID<%= job.order_id %>" tabindex="-1" role="dialog" aria-labelledby="deleteTripModalLable" aria-hidden="true">
                     <div class="modal-dialog" role="document">
                       <div class="modal-content">
                         <div class="modal-header">
-                          <h5 class="modal-title" id="exampleModalLabel">Are you sure you want to delete job <%= jobs[i].ordnbr %>? </h5>
+                          <h5 class="modal-title" id="exampleModalLabel">Are you sure you want to delete job <%= job.ordnbr %>? </h5>
                           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                           </button>
@@ -2087,7 +2094,7 @@ td {
                           <form class="deletetripform">
                             <div class="form-group">
                               <label hidden for="did"></label>
-                              <input hidden type="text" class="form-control" id="did" placeholder="Order #" value="<%= jobs[i].order_id %>">
+                              <input hidden type="text" class="form-control did" placeholder="Order #" value="<%= job.order_id %>">
                           </div>
                         </div>
                         <div class="modal-footer">
@@ -2114,51 +2121,51 @@ td {
                         <tbody>
                           <tr class="d-flex">
                           <td class="col-3 bold">Origin:</td>
-                          <td class="col-4"><%= jobs[i].origin %></td>
+                          <td class="col-4"><%= job.origin %></td>
                           <td class="col-2 bold">Lump Sum:</td>
-                          <td class="col-3">$<%= Intl.NumberFormat().format(jobs[i].lump_sum_amount) %> <a>(<%= jobs[i].lump_sum_paid %>)</a></td>
+                          <td class="col-3">$<%= Intl.NumberFormat().format(job.lump_sum_amount) %> <a>(<%= job.lump_sum_paid %>)</a></td>
                         </tr>
                         <tr class="d-flex">
                           <td class="col-3 bold">Origin Desc.:</td>
-                          <td class="col-4"><%= jobs[i].origin_desc %></td>
+                          <td class="col-4"><%= job.origin_desc %></td>
                           <td class="col-2 bold">Contract Signed:</td>
-                          <td class="col-3"><%= jobs[i].contract_signed %></td>
+                          <td class="col-3"><%= job.contract_signed %></td>
                         </tr>
                         <tr class="d-flex">
                           <td class="col-3 bold">Destination:</td>
-                          <td class="col-4"><%= jobs[i].destination %></td>
+                          <td class="col-4"><%= job.destination %></td>
                           <td class="col-2 bold">Kickoff Meeting:</td>
-                          <td class="col-3"><%= jobs[i].kickoff_meeting %></td>
+                          <td class="col-3"><%= job.kickoff_meeting %></td>
                         </tr>
                         <tr class="d-flex">
                           <td class="col-3 bold">Destination Description:</td>
-                          <td class="col-4"><%= jobs[i].destination_desc %></td>
+                          <td class="col-4"><%= job.destination_desc %></td>
                           <td class="col-2 bold">Proforma:</td>
-                          <td class="col-3">$<%= Intl.NumberFormat().format(jobs[i].proforma_amount) %> <a>(<%= jobs[i].proforma_paid %>)</a></td>
+                          <td class="col-3">$<%= Intl.NumberFormat().format(job.proforma_amount) %> <a>(<%= job.proforma_paid %>)</a></td>
                         </tr>
                         <tr class="d-flex">
                           <td class="col-3 bold">Start Date:</td>
-                          <td class="col-6"><%= moment(jobs[i].est_start_date).format('M/D/YY') %></td>
+                          <td class="col-6"><%= moment(job.est_start_date).format('M/D/YY') %></td>
                         </tr>
                         <tr class="d-flex">
                           <td class="col-3 bold">PM Assigned:</td>
-                          <td class="col-6"><%= jobs[i].pm_assigned %></td>
+                          <td class="col-6"><%= job.pm_assigned %></td>
                         </tr>
                         <tr class="d-flex">
                           <td class="col-3 bold">Status:</td>
-                          <td class="col-6"><%= jobs[i].status %></td>
+                          <td class="col-6"><%= job.status %></td>
                         </tr>
                         <tr class="d-flex">
                           <td class="col-3 bold">Barge(s):</td>
-                          <td class="col-6"><%= jobs[i].barge_name %></td>
+                          <td class="col-6"><%= job.barge_name %></td>
                         </tr>
                         <tr class="d-flex">
                           <td class="col-3 bold">Tug(s):</td>
-                          <td class="col-6"><%= jobs[i].tug_name %></td>
+                          <td class="col-6"><%= job.tug_name %></td>
                         </tr>
                         <tr class="d-flex">
                           <td class="col-3 bold">Trip Notes:</td>
-                          <td class="col-9" style="white-space: pre-wrap"><%= jobs[i].ord_notes %></td>
+                          <td class="col-9" style="white-space: pre-wrap"><%= job.ord_notes %></td>
                         </tr>
                       </tbody>
                     </table>
@@ -2173,23 +2180,23 @@ td {
                       <tbody>
                       <tr class="d-flex">
                         <td class="col-4">Customer:</td>
-                        <td class="col-6"><%= jobs[i].customer %></td>
+                        <td class="col-6"><%= job.customer %></td>
                       </tr>
                       <tr class="d-flex">
                         <td class="col-4">Customer Contact:</td>
-                        <td class="col-6"><%= jobs[i].customer_nm %></td>
+                        <td class="col-6"><%= job.customer_nm %></td>
                       </tr>
                       <tr class="d-flex">
                         <td class="col-4">Customer Phone:</td>
-                        <td class="col-6"><%= jobs[i].customer_phone %></td>
+                        <td class="col-6"><%= job.customer_phone %></td>
                       </tr>
                       <tr class="d-flex">
                         <td class="col-4">Customer Email:</td>
-                        <td class="col-6"><%= jobs[i].customer_email %></td>
+                        <td class="col-6"><%= job.customer_email %></td>
                       </tr>
                       <tr class="d-flex">
                         <td class="col-4">Notes:</td>
-                        <td class="col-6" style="white-space: pre-wrap"><%= jobs[i].customer_notes %></td>
+                        <td class="col-6" style="white-space: pre-wrap"><%= job.customer_notes %></td>
                       </tr>
                     </tbody>
                   </table>
@@ -2205,23 +2212,23 @@ td {
                   <tbody>
                   <tr class="d-flex">
                     <td class="col-4">Vendor:</td>
-                    <td class="col-6"><%= jobs[i].vendor %></td>
+                    <td class="col-6"><%= job.vendor %></td>
                   </tr>
                   <tr class="d-flex">
                     <td class="col-4">Vendor Contact:</td>
-                    <td class="col-6"><%= jobs[i].vendor_nm %></td>
+                    <td class="col-6"><%= job.vendor_nm %></td>
                   </tr>
                   <tr class="d-flex">
                     <td class="col-4">Vendor Phone:</td>
-                    <td class="col-6"><%= jobs[i].vendor_phone %></td>
+                    <td class="col-6"><%= job.vendor_phone %></td>
                   </tr>
                   <tr class="d-flex">
                     <td class="col-4">Vendor Email:</td>
-                    <td class="col-6"><%= jobs[i].vendor_email %></td>
+                    <td class="col-6"><%= job.vendor_email %></td>
                   </tr>
                   <tr class="d-flex">
                     <td class="col-4">Notes:</td>
-                    <td class="col-6" style="white-space: pre-wrap"><%= jobs[i].vendor_notes %></td>
+                    <td class="col-6" style="white-space: pre-wrap"><%= job.vendor_notes %></td>
                   </tr>
                 </tbody>
               </table>
@@ -2236,8 +2243,8 @@ td {
             </td>
             </tr>
                 </tbody>
-        <% } %>
-          <% } %>
+                <% } %>
+                <% }); %>
             </table>
           </div>
       </div>
@@ -2252,40 +2259,42 @@ td {
             <th data-sortable="true" scope="col" class="d-inline-block col-2 ">Customer</th>
             <th data-sortable="true" scope="col" class="d-inline-block col-2">Origin</th>
             <th data-sortable="true" scope="col" class="d-inline-block col-2">Destination</th>
-            <th data-sortable="true" scope="col" class="d-inline-block col-2">PM Assigned</th>
-            <th data-sortable="true" scope="col" class="d-inline-block col-1">Status</th>
-            <th data-sortable="true" scope="col" class="d-inline-block col-2">Est. Start</th>
+            <th data-sortable="true" scope="col" class="d-inline-block col-2">Barge(s)</th>
+            <th data-sortable="true" scope="col" class="d-inline-block col-1">PM Assigned</th>
+            <th data-sortable="true" scope="col" class="d-inline-block col-1">Lump Sum</th>
+            <th data-sortable="true" scope="col" class="d-inline-block col-1">Est. Start</th>
             <!-- <th scope="col" class="d-inline-block col-1">#</th> -->
           </tr>
         </thead>
-        <% for (let i = 0; i < jobs.length; i++) { %>
-          <% if (jobs[i].status  === "Archived") { %>
-            <tbody>
-              <tr class="accordion-toggle collapsed row m-0" id="accordion1" data-toggle="collapse" data-parent="#accordion1" href="#jobID<%= jobs[i].order_id %>">
-                <td class="d-inline-block col-1"><%= jobs[i].ordnbr %></td>
-                <td class="d-inline-block col-2"><%= jobs[i].customer %></td>
-                <td class="d-inline-block col-2"><%= jobs[i].origin %></td>
-                <td class="d-inline-block col-2"><%= jobs[i].destination %></td>
-                <td class="d-inline-block col-2"><%= jobs[i].pm_assigned %></td>
-                <td class="d-inline-block col-1"><%= jobs[i].status %></td>
-                <td class="d-inline-block col-2"><%= moment(jobs[i].est_start_date).format('M/D/YY') %></td>
+        <% jobs.forEach(function(job) { %>
+          <% if (job.status  === "Archived") { %>
+            <tbody class="uvs">
+              <tr class="accordion-toggle collapsed row m-0" id="accordion1" data-toggle="collapse" data-parent="#accordion1" href="#jobID<%= job.order_id %>">
+                <td class="d-inline-block col-1"><%= job.ordnbr %></td>
+                <td class="d-inline-block col-2"><%= job.customer %></td>
+                <td class="d-inline-block col-2"><%= job.origin %></td>
+                <td class="d-inline-block col-2"><%= job.destination %></td>
+                <td class="d-inline-block col-2"><%= job.barge_name %></td>
+                <td class="d-inline-block col-1"><%= job.pm_assigned %></td>
+                <td class="d-inline-block col-1">$<%= Intl.NumberFormat().format(job.lump_sum_amount) %></td>
+                <td class="d-inline-block col-1"><%= moment(job.est_start_date).format('M/D/YY') %></td>
                 <!-- <td class="expand-button" class="d-inline-block col-1"></td> -->
                 </tr>
                   
           <tr class="hide-table-padding">
           <td colspan="12">
-          <div class="collapse in col-sm head-div" id="jobID<%= jobs[i].order_id %>">
+          <div class="collapse in col-sm head-div" id="jobID<%= job.order_id %>">
             <div class="card" id="tdcard">
               <div class="card-body">
                 <div class="row">
-                <h5 class="card-title col align-self-center" id="cardtitle"><%= jobs[i].ordnbr %> - <%= jobs[i].customer %></h5>
-                <button type="button" class="btn col-1" id="edittripbutton" data-toggle="modal" data-target="#ejobID<%= jobs[i].order_id %>">Edit</button>
-                <button type="button" class="btn col-1" id="duplicatetripbutton" data-toggle="modal" data-target="#dujobID<%= jobs[i].order_id %>">Duplicate</button>
-                <button type="button" class="btn col-1" data-toggle="modal" data-target="#djobID<%= jobs[i].order_id %>">Delete</button>
+                <h5 class="card-title col align-self-center" id="cardtitle"><%= job.ordnbr %> - <%= job.customer %></h5>
+                <button type="button" class="btn col-1" id="edittripbutton" data-toggle="modal" data-target="#ejobID<%= job.order_id %>">Edit</button>
+                <button type="button" class="btn col-1" id="duplicatetripbutton" data-toggle="modal" data-target="#dujobID<%= job.order_id %>">Duplicate</button>
+                <button type="button" class="btn col-1" data-toggle="modal" data-target="#djobID<%= job.order_id %>">Delete</button>
               </div>
         
               <!-- Edit Job Modal -->
-              <div class="modal fade" id="ejobID<%= jobs[i].order_id %>" tabindex="-1" role="dialog" aria-labelledby="editTripModalLabel" aria-hidden="true">
+              <div class="modal fade" id="ejobID<%= job.order_id %>" tabindex="-1" role="dialog" aria-labelledby="editTripModalLabel" aria-hidden="true">
                 <div class="modal-dialog modal-xl" role="document">
                   <div class="modal-content">
                     <div class="modal-header">
@@ -2302,26 +2311,26 @@ td {
                             <div class="col-4">
                                 <div class="form-group">
                                     <label hidden for="eid"></label>
-                                    <input hidden type="text" class="form-control" id="eid" placeholder="Order #" value="<%= jobs[i].order_id %>">
+                                    <input hidden type="text" class="form-control eid" placeholder="Order #" value="<%= job.order_id %>">
                                     <label for="eJobNumberInput">Order #</label>
-                                    <input type="text" class="form-control" id="eJobNumberInput" placeholder="Order #" value="<%= jobs[i].ordnbr %>" readonly>
+                                    <input type="text" class="form-control eJobNumberInput" placeholder="Order #" value="<%= job.ordnbr %>">
                                 </div>
                             </div>
                             <div class="col-4">
                               <div class="form-group">
                                 <label for="ejobStatus">Status</label>
-                                <select class="form-control" id="ejobStatus" value="<%= jobs[i].status %>">
-                                  <option value="Upcoming" <%= jobs[i].status == 'Upcoming' ? 'selected' : ''%>>Upcoming</option>
-                                  <option value="Active" <%= jobs[i].status == 'Active' ? 'selected' : ''%>>Active</option>
-                                  <option value="Completed" <%= jobs[i].status == 'Completed' ? 'selected' : ''%>>Completed</option>
-                                  <option value="Archived" <%= jobs[i].status == 'Archived' ? 'selected' : ''%>>Archived</option>
+                                <select class="form-control ejobStatus" value="<%= job.status %>">
+                                  <option value="Upcoming" <%= job.status == 'Upcoming' ? 'selected' : ''%>>Upcoming</option>
+                                  <option value="Active" <%= job.status == 'Active' ? 'selected' : ''%>>Active</option>
+                                  <option value="Completed" <%= job.status == 'Completed' ? 'selected' : ''%>>Completed</option>
+                                  <option value="Archived" <%= job.status == 'Archived' ? 'selected' : ''%>>Archived</option>
                                 </select>
                               </div>
                           </div>
                               <div class="col-4">
                                   <div class="form-group">
                                       <label for="epmAssigned">PM Assigned</label>
-                                      <input type="text" class="form-control" id="epmAssigned" placeholder="Origin" value="<%= jobs[i].pm_assigned %>">
+                                      <input type="text" class="form-control epmAssigned" placeholder="Origin" value="<%= job.pm_assigned %>">
                                   </div>
                           </div>
                       </div>
@@ -2329,19 +2338,19 @@ td {
                         <div class="col-4">
                             <div class="form-group">
                                 <label for="eoriginInput">Origin</label>
-                                <input type="text" class="form-control" id="eoriginInput" placeholder="Origin" value="<%= jobs[i].origin %>">
+                                <input type="text" class="form-control eoriginInput" placeholder="Origin" value="<%= job.origin %>">
                             </div>
                         </div>
                         <div class="col-4">
                           <div class="form-group">
                               <label for="edestinationInput">Destination</label>
-                              <input type="text" class="form-control" id="edestinationInput" placeholder="Destination" value="<%= jobs[i].destination %>">
+                              <input type="text" class="form-control edestinationInput" placeholder="Destination" value="<%= job.destination %>">
                           </div>
                       </div>
                           <div class="col-4">
                               <div class="form-group">
                                   <label for="eestStartDate">Estimated Start Date</label>
-                                  <input type="date" class="form-control" id="eestStartDate" placeholder="Destination" value="<%= jobs[i].est_start_date %>">
+                                  <input type="date" class="form-control eestStartDate" placeholder="Destination" value="<%= job.est_start_date %>">
                               </div>
                       </div>
                   </div>
@@ -2349,21 +2358,21 @@ td {
                     <div class="col-4">
                         <div class="form-group">
                             <label for="eoriginDesc">Origin Desc.</label>
-                            <input type="text" class="form-control" id="eoriginDesc" placeholder="Origin Desc." value="<%= jobs[i].origin_desc %>">
+                            <input type="text" class="form-control eoriginDesc" placeholder="Origin Desc." value="<%= job.origin_desc %>">
                         </div>
                     </div>
                     <div class="col-4">
                       <div class="form-group">
                           <label for="edestDesc">Destination Desc.</label>
-                          <input type="text" class="form-control" id="edestDesc" placeholder="Destination Desc." value="<%= jobs[i].destination_desc %>">
+                          <input type="text" class="form-control edestDesc" placeholder="Destination Desc." value="<%= job.destination_desc %>">
                       </div>
                   </div>
                   <div class="col-4">
                     <div class="form-group">
                         <label for="econtractSigned">Contract Signed?</label>
-                        <select class="form-control" id="econtractSigned">
-                          <option value="No" <%= jobs[i].contract_signed == 'No' ? 'selected' : ''%>>No</option>
-                          <option value="Yes" <%= jobs[i].contract_signed == 'Yes' ? 'selected' : ''%>>Yes</option>
+                        <select class="form-control econtractSigned">
+                          <option value="No" <%= job.contract_signed == 'No' ? 'selected' : ''%>>No</option>
+                          <option value="Yes" <%= job.contract_signed == 'Yes' ? 'selected' : ''%>>Yes</option>
                         </select>
                       </div>
                 </div>
@@ -2376,25 +2385,25 @@ td {
                             <div class="input-group-prepend">
                               <span class="input-group-text">$</span>
                             </div>
-                            <input type="text" class="form-control" id="elumpSumAmount" value="<%= jobs[i].lump_sum_amount %>">
+                            <input type="text" class="form-control elumpSumAmount" value="<%= job.lump_sum_amount %>">
                           </div>
                     </div>
                 </div>
                 <div class="col-4">
                     <div class="form-group">
                         <label for="elumpSumPaid">Lump Sum Sent to Billing?</label>
-                        <select class="form-control" id="elumpSumPaid" value="<%= jobs[i].lump_sum_paid %>">
-                          <option value="unsent" <%= jobs[i].lump_sum_paid == 'unsent' ? 'selected' : ''%>>unsent</option>
-                          <option value="sent" <%= jobs[i].lump_sum_paid == 'sent' ? 'selected' : ''%>>sent</option>
+                        <select class="form-control elumpSumPaid" value="<%= job.lump_sum_paid %>">
+                          <option value="unsent" <%= job.lump_sum_paid == 'unsent' ? 'selected' : ''%>>unsent</option>
+                          <option value="sent" <%= job.lump_sum_paid == 'sent' ? 'selected' : ''%>>sent</option>
                         </select>
                       </div>
               </div>
               <div class="col-4">
                 <div class="form-group">
                     <label for="ekickoffMeeting">Kickoff Meeting?</label>
-                    <select class="form-control" id="ekickoffMeeting" value="<%= jobs[i].kickoff_meeting %>">
-                      <option value="No" <%= jobs[i].kickoff_meeting == 'No' ? 'selected' : ''%>>No</option>
-                      <option value="Yes" <%= jobs[i].kickoff_meeting == 'Yes' ? 'selected' : ''%>>Yes</option>
+                    <select class="form-control ekickoffMeeting" value="<%= job.kickoff_meeting %>">
+                      <option value="No" <%= job.kickoff_meeting == 'No' ? 'selected' : ''%>>No</option>
+                      <option value="Yes" <%= job.kickoff_meeting == 'Yes' ? 'selected' : ''%>>Yes</option>
                     </select>
                   </div>
             </div>
@@ -2407,16 +2416,16 @@ td {
                         <div class="input-group-prepend">
                           <span class="input-group-text">$</span>
                         </div>
-                        <input type="text" class="form-control" id="eproformaAmount" value="<%= jobs[i].proforma_amount %>">
+                        <input type="text" class="form-control eproformaAmount" value="<%= job.proforma_amount %>">
                       </div>
                 </div>
             </div>
             <div class="col-4">
                 <div class="form-group">
                     <label for="eproformaPaid">Proforma Sent to Billing?</label>
-                    <select class="form-control" id="eproformaPaid" value="<%= jobs[i].proforma_paid %>">
-                      <option value="unsent" <%= jobs[i].proforma_paid == 'unsent' ? 'selected' : ''%>>unsent</option>
-                      <option value="sent" <%= jobs[i].proforma_paid == 'sent' ? 'selected' : ''%>>sent</option>
+                    <select class="form-control eproformaPaid" value="<%= job.proforma_paid %>">
+                      <option value="unsent" <%= job.proforma_paid == 'unsent' ? 'selected' : ''%>>unsent</option>
+                      <option value="sent" <%= job.proforma_paid == 'sent' ? 'selected' : ''%>>sent</option>
                     </select>
                   </div>
           </div>
@@ -2425,13 +2434,13 @@ td {
             <div class="col-4">
                 <div class="form-group">
                     <label for="ebargeName">Barge(s)</label>
-                    <input type="text" class="form-control" id="ebargeName" value="<%= jobs[i].barge_name %>">
+                    <input type="text" class="form-control ebargeName" value="<%= job.barge_name %>">
                 </div>
             </div>
             <div class="col-4">
               <div class="form-group">
                   <label for="etugName">Tug(s)</label>
-                  <input type="text" class="form-control" id="etugName" value="<%= jobs[i].tug_name %>">
+                  <input type="text" class="form-control etugName" value="<%= job.tug_name %>">
               </div>
           </div>
       </div>
@@ -2439,7 +2448,7 @@ td {
                   <div class="col-12">
                       <div class="form-group">
                           <label for="ejobNotes">Job Notes</label>
-                          <textarea class="form-control" id="ejobNotes" rows="2" placeholder="Enter any general job notes here."><%= jobs[i].ord_notes %></textarea>
+                          <textarea class="form-control ejobNotes" rows="2" placeholder="Enter any general job notes here."><%= job.ord_notes %></textarea>
                       </div>
                   </div>
             </div>
@@ -2448,25 +2457,25 @@ td {
                   <div class="col-3">
                       <div class="form-group">
                           <label for="ecustomer">Customer</label>
-                          <input type="text" class="form-control" id="ecustomer" placeholder="Enter Customer Company" value="<%= jobs[i].customer %>">
+                          <input type="text" class="form-control ecustomer" placeholder="Enter Customer Company" value="<%= job.customer %>">
                       </div>
                   </div>
                   <div class="col-3">
                     <div class="form-group">
                         <label for="ecustomer_nm">Customer Contact</label>
-                        <input type="text" class="form-control" id="ecustomer_nm" placeholder="Enter Customer Contact Name" value="<%= jobs[i].customer_nm %>">
+                        <input type="text" class="form-control ecustomer_nm" placeholder="Enter Customer Contact Name" value="<%= job.customer_nm %>">
                     </div>
                 </div>
                     <div class="col-3">
                         <div class="form-group">
                             <label for="ecustomer_phone">Customer Phone</label>
-                            <input type="text" class="form-control" id="ecustomer_phone" placeholder="Enter Customer Phone" value="<%= jobs[i].customer_phone %>">
+                            <input type="text" class="form-control ecustomer_phone" placeholder="Enter Customer Phone" value="<%= job.customer_phone %>">
                         </div>
                 </div>
                 <div class="col-3">
                   <div class="form-group">
                       <label for="ecustomer_email">Customer Email</label>
-                      <input type="text" class="form-control" id="ecustomer_email" placeholder="Enter Customer Email" value="<%= jobs[i].customer_email %>">
+                      <input type="text" class="form-control ecustomer_email" placeholder="Enter Customer Email" value="<%= job.customer_email %>">
                   </div>
           </div>
             </div>
@@ -2474,7 +2483,7 @@ td {
               <div class="col-12">
                   <div class="form-group">
                       <label for="ecustomer_notes">Customer Notes</label>
-                      <textarea class="form-control" id="ecustomer_notes" rows="2" placeholder="Enter any customer notes here."><%= jobs[i].customer_notes %></textarea>
+                      <textarea class="form-control ecustomer_notes" rows="2" placeholder="Enter any customer notes here."><%= job.customer_notes %></textarea>
                   </div>
               </div>
         </div>
@@ -2483,25 +2492,25 @@ td {
                   <div class="col-3">
                       <div class="form-group">
                           <label for="evendor">Vendor</label>
-                          <input type="text" class="form-control" id="evendor" placeholder="Enter Vendor Company" value="<%= jobs[i].vendor %>">
+                          <input type="text" class="form-control evendor" placeholder="Enter Vendor Company" value="<%= job.vendor %>">
                       </div>
                   </div>
                   <div class="col-3">
                     <div class="form-group">
                         <label for="evendor_nm">Vendor Contact</label>
-                        <input type="text" class="form-control" id="evendor_nm" placeholder="Enter Vendor Contact Name" value="<%= jobs[i].vendor_nm %>">
+                        <input type="text" class="form-control evendor_nm" placeholder="Enter Vendor Contact Name" value="<%= job.vendor_nm %>">
                     </div>
                 </div>
                     <div class="col-3">
                         <div class="form-group">
                             <label for="evendor_phone">Vendor Phone</label>
-                            <input type="text" class="form-control" id="evendor_phone" placeholder="Enter Vendor Phone" value="<%= jobs[i].vendor_phone %>">
+                            <input type="text" class="form-control evendor_phone" placeholder="Enter Vendor Phone" value="<%= job.vendor_phone %>">
                         </div>
                 </div>
                 <div class="col-3">
                   <div class="form-group">
                       <label for="evendor_email">Vendor Email</label>
-                      <input type="text" class="form-control" id="evendor_email" placeholder="Enter Vendor Email" value="<%= jobs[i].vendor_email %>">
+                      <input type="text" class="form-control evendor_email" placeholder="Enter Vendor Email" value="<%= job.vendor_email %>">
                   </div>
           </div>
             </div>
@@ -2509,7 +2518,7 @@ td {
               <div class="col-12">
                   <div class="form-group">
                       <label for="evendor_notes">Vendor Notes</label>
-                      <textarea class="form-control" id="evendor_notes" rows="2" placeholder="Enter any vendor notes here."><%= jobs[i].vendor_notes %></textarea>
+                      <textarea class="form-control evendor_notes" rows="2" placeholder="Enter any vendor notes here."><%= job.vendor_notes %></textarea>
                   </div>
               </div>
         </div>
@@ -2526,11 +2535,11 @@ td {
               <!-- Edit Job Modal End -->
     
               <!-- Duplicate Job Modal Begin -->
-              <div class="modal fade" id="dujobID<%= jobs[i].order_id %>" tabindex="-1" role="dialog" aria-labelledby="duplicateTripModalLabel" aria-hidden="true">
+              <div class="modal fade" id="dujobID<%= job.order_id %>" tabindex="-1" role="dialog" aria-labelledby="duplicateTripModalLabel" aria-hidden="true">
                 <div class="modal-dialog modal-xl" role="document">
                   <div class="modal-content">
                     <div class="modal-header">
-                      <h5 class="modal-title" id="editTripModalLabel">Duplicating Job <%= jobs[i].ordnbr %></h5>
+                      <h5 class="modal-title" id="editTripModalLabel">Duplicating Job <%= job.ordnbr %></h5>
                       <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                       </button>
@@ -2543,7 +2552,7 @@ td {
                           <div class="col-4">
                               <div class="form-group">
                                   <label for="duJobNumberInput">Enter New Order #</label>
-                                  <input type="text" class="form-control" id="duJobNumberInput" placeholder="Enter New Order #">
+                                  <input type="text" class="form-control duJobNumberInput" placeholder="Enter New Order #">
                               </div>
                           </div>
                         </div>
@@ -2552,18 +2561,18 @@ td {
                             <div class="col-4">
                               <div class="form-group">
                                 <label for="ejobStatus">Status</label>
-                                <select class="form-control" id="ejobStatus" value="<%= jobs[i].status %>">
-                                  <option value="Upcoming" <%= jobs[i].status == 'Upcoming' ? 'selected' : ''%>>Upcoming</option>
-                                  <option value="Active" <%= jobs[i].status == 'Active' ? 'selected' : ''%>>Active</option>
-                                  <option value="Completed" <%= jobs[i].status == 'Completed' ? 'selected' : ''%>>Completed</option>
-                                  <option value="Archived" <%= jobs[i].status == 'Archived' ? 'selected' : ''%>>Archived</option>
+                                <select class="form-control ejobStatus" value="<%= job.status %>">
+                                  <option value="Upcoming" <%= job.status == 'Upcoming' ? 'selected' : ''%>>Upcoming</option>
+                                  <option value="Active" <%= job.status == 'Active' ? 'selected' : ''%>>Active</option>
+                                  <option value="Completed" <%= job.status == 'Completed' ? 'selected' : ''%>>Completed</option>
+                                  <option value="Archived" <%= job.status == 'Archived' ? 'selected' : ''%>>Archived</option>
                                 </select>
                               </div>
                           </div>
                               <div class="col-4">
                                   <div class="form-group">
                                       <label for="epmAssigned">PM Assigned</label>
-                                      <input type="text" class="form-control" id="epmAssigned" placeholder="Origin" value="<%= jobs[i].pm_assigned %>">
+                                      <input type="text" class="form-control epmAssigned" placeholder="Origin" value="<%= job.pm_assigned %>">
                                   </div>
                           </div>
                       </div>
@@ -2571,19 +2580,19 @@ td {
                         <div class="col-4">
                             <div class="form-group">
                                 <label for="eoriginInput">Origin</label>
-                                <input type="text" class="form-control" id="eoriginInput" placeholder="Origin" value="<%= jobs[i].origin %>">
+                                <input type="text" class="form-control eoriginInput" placeholder="Origin" value="<%= job.origin %>">
                             </div>
                         </div>
                         <div class="col-4">
                           <div class="form-group">
                               <label for="edestinationInput">Destination</label>
-                              <input type="text" class="form-control" id="edestinationInput" placeholder="Destination" value="<%= jobs[i].destination %>">
+                              <input type="text" class="form-control edestinationInput" placeholder="Destination" value="<%= job.destination %>">
                           </div>
                       </div>
                           <div class="col-4">
                               <div class="form-group">
                                   <label for="eestStartDate">Estimated Start Date</label>
-                                  <input type="date" class="form-control" id="eestStartDate" placeholder="Destination" value="<%= jobs[i].est_start_date %>">
+                                  <input type="date" class="form-control eestStartDate" placeholder="Destination" value="<%= job.est_start_date %>">
                               </div>
                       </div>
                   </div>
@@ -2591,21 +2600,21 @@ td {
                     <div class="col-4">
                         <div class="form-group">
                             <label for="eoriginDesc">Origin Desc.</label>
-                            <input type="text" class="form-control" id="eoriginDesc" placeholder="Origin Desc." value="<%= jobs[i].origin_desc %>">
+                            <input type="text" class="form-control eoriginDesc" placeholder="Origin Desc." value="<%= job.origin_desc %>">
                         </div>
                     </div>
                     <div class="col-4">
                       <div class="form-group">
                           <label for="edestDesc">Destination Desc.</label>
-                          <input type="text" class="form-control" id="edestDesc" placeholder="Destination Desc." value="<%= jobs[i].destination_desc %>">
+                          <input type="text" class="form-control edestDesc" placeholder="Destination Desc." value="<%= job.destination_desc %>">
                       </div>
                   </div>
                   <div class="col-4">
                     <div class="form-group">
                         <label for="econtractSigned">Contract Signed?</label>
-                        <select class="form-control" id="econtractSigned">
-                          <option value="No" <%= jobs[i].contract_signed == 'No' ? 'selected' : ''%>>No</option>
-                          <option value="Yes" <%= jobs[i].contract_signed == 'Yes' ? 'selected' : ''%>>Yes</option>
+                        <select class="form-control econtractSigned">
+                          <option value="No" <%= job.contract_signed == 'No' ? 'selected' : ''%>>No</option>
+                          <option value="Yes" <%= job.contract_signed == 'Yes' ? 'selected' : ''%>>Yes</option>
                         </select>
                       </div>
                 </div>
@@ -2618,25 +2627,25 @@ td {
                             <div class="input-group-prepend">
                               <span class="input-group-text">$</span>
                             </div>
-                            <input type="text" class="form-control" id="elumpSumAmount" value="<%= jobs[i].lump_sum_amount %>">
+                            <input type="text" class="form-control elumpSumAmount" value="<%= job.lump_sum_amount %>">
                           </div>
                     </div>
                 </div>
                 <div class="col-4">
                     <div class="form-group">
                         <label for="elumpSumPaid">Lump Sum Sent to Billing?</label>
-                        <select class="form-control" id="elumpSumPaid" value="<%= jobs[i].lump_sum_paid %>">
-                          <option value="unsent" <%= jobs[i].lump_sum_paid == 'unsent' ? 'selected' : ''%>>unsent</option>
-                          <option value="sent" <%= jobs[i].lump_sum_paid == 'sent' ? 'selected' : ''%>>sent</option>
+                        <select class="form-control elumpSumPaid" value="<%= job.lump_sum_paid %>">
+                          <option value="unsent" <%= job.lump_sum_paid == 'unsent' ? 'selected' : ''%>>unsent</option>
+                          <option value="sent" <%= job.lump_sum_paid == 'sent' ? 'selected' : ''%>>sent</option>
                         </select>
                       </div>
               </div>
               <div class="col-4">
                 <div class="form-group">
                     <label for="ekickoffMeeting">Kickoff Meeting?</label>
-                    <select class="form-control" id="ekickoffMeeting" value="<%= jobs[i].kickoff_meeting %>">
-                      <option value="No" <%= jobs[i].kickoff_meeting == 'No' ? 'selected' : ''%>>No</option>
-                      <option value="Yes" <%= jobs[i].kickoff_meeting == 'Yes' ? 'selected' : ''%>>Yes</option>
+                    <select class="form-control ekickoffMeeting" value="<%= job.kickoff_meeting %>">
+                      <option value="No" <%= job.kickoff_meeting == 'No' ? 'selected' : ''%>>No</option>
+                      <option value="Yes" <%= job.kickoff_meeting == 'Yes' ? 'selected' : ''%>>Yes</option>
                     </select>
                   </div>
             </div>
@@ -2649,16 +2658,16 @@ td {
                         <div class="input-group-prepend">
                           <span class="input-group-text">$</span>
                         </div>
-                        <input type="text" class="form-control" id="eproformaAmount" value="<%= jobs[i].proforma_amount %>">
+                        <input type="text" class="form-control eproformaAmount" value="<%= job.proforma_amount %>">
                       </div>
                 </div>
             </div>
             <div class="col-4">
                 <div class="form-group">
                     <label for="eproformaPaid">Proforma Sent to Billing?</label>
-                    <select class="form-control" id="eproformaPaid" value="<%= jobs[i].proforma_paid %>">
-                      <option value="unsent" <%= jobs[i].proforma_paid == 'unsent' ? 'selected' : ''%>>unsent</option>
-                      <option value="sent" <%= jobs[i].proforma_paid == 'sent' ? 'selected' : ''%>>sent</option>
+                    <select class="form-control eproformaPaid" value="<%= job.proforma_paid %>">
+                      <option value="unsent" <%= job.proforma_paid == 'unsent' ? 'selected' : ''%>>unsent</option>
+                      <option value="sent" <%= job.proforma_paid == 'sent' ? 'selected' : ''%>>sent</option>
                     </select>
                   </div>
           </div>
@@ -2667,13 +2676,13 @@ td {
             <div class="col-4">
                 <div class="form-group">
                     <label for="ebargeName">Barge(s)</label>
-                    <input type="text" class="form-control" id="ebargeName" value="<%= jobs[i].barge_name %>">
+                    <input type="text" class="form-control ebargeName" value="<%= job.barge_name %>">
                 </div>
             </div>
             <div class="col-4">
               <div class="form-group">
                   <label for="etugName">Tug(s)</label>
-                  <input type="text" class="form-control" id="etugName" value="<%= jobs[i].tug_name %>">
+                  <input type="text" class="form-control etugName" value="<%= job.tug_name %>">
               </div>
           </div>
       </div>
@@ -2681,7 +2690,7 @@ td {
                   <div class="col-12">
                       <div class="form-group">
                           <label for="ejobNotes">Job Notes</label>
-                          <textarea class="form-control" id="ejobNotes" rows="2" placeholder="Enter any general job notes here."><%= jobs[i].ord_notes %></textarea>
+                          <textarea class="form-control ejobNotes" rows="2" placeholder="Enter any general job notes here."><%= job.ord_notes %></textarea>
                       </div>
                   </div>
             </div>
@@ -2690,25 +2699,25 @@ td {
                   <div class="col-3">
                       <div class="form-group">
                           <label for="ecustomer">Customer</label>
-                          <input type="text" class="form-control" id="ecustomer" placeholder="Enter Customer Company" value="<%= jobs[i].customer %>">
+                          <input type="text" class="form-control ecustomer" placeholder="Enter Customer Company" value="<%= job.customer %>">
                       </div>
                   </div>
                   <div class="col-3">
                     <div class="form-group">
                         <label for="ecustomer_nm">Customer Contact</label>
-                        <input type="text" class="form-control" id="ecustomer_nm" placeholder="Enter Customer Contact Name" value="<%= jobs[i].customer_nm %>">
+                        <input type="text" class="form-control ecustomer_nm" placeholder="Enter Customer Contact Name" value="<%= job.customer_nm %>">
                     </div>
                 </div>
                     <div class="col-3">
                         <div class="form-group">
                             <label for="ecustomer_phone">Customer Phone</label>
-                            <input type="text" class="form-control" id="ecustomer_phone" placeholder="Enter Customer Phone" value="<%= jobs[i].customer_phone %>">
+                            <input type="text" class="form-control ecustomer_phone" placeholder="Enter Customer Phone" value="<%= job.customer_phone %>">
                         </div>
                 </div>
                 <div class="col-3">
                   <div class="form-group">
                       <label for="ecustomer_email">Customer Email</label>
-                      <input type="text" class="form-control" id="ecustomer_email" placeholder="Enter Customer Email" value="<%= jobs[i].customer_email %>">
+                      <input type="text" class="form-control ecustomer_email" placeholder="Enter Customer Email" value="<%= job.customer_email %>">
                   </div>
           </div>
             </div>
@@ -2716,7 +2725,7 @@ td {
               <div class="col-12">
                   <div class="form-group">
                       <label for="ecustomer_notes">Customer Notes</label>
-                      <textarea class="form-control" id="ecustomer_notes" rows="2" placeholder="Enter any customer notes here."><%= jobs[i].customer_notes %></textarea>
+                      <textarea class="form-control ecustomer_notes" rows="2" placeholder="Enter any customer notes here."><%= job.customer_notes %></textarea>
                   </div>
               </div>
         </div>
@@ -2725,25 +2734,25 @@ td {
                   <div class="col-3">
                       <div class="form-group">
                           <label for="evendor">Vendor</label>
-                          <input type="text" class="form-control" id="evendor" placeholder="Enter Vendor Company" value="<%= jobs[i].vendor %>">
+                          <input type="text" class="form-control evendor" placeholder="Enter Vendor Company" value="<%= job.vendor %>">
                       </div>
                   </div>
                   <div class="col-3">
                     <div class="form-group">
                         <label for="evendor_nm">Vendor Contact</label>
-                        <input type="text" class="form-control" id="evendor_nm" placeholder="Enter Vendor Contact Name" value="<%= jobs[i].vendor_nm %>">
+                        <input type="text" class="form-control evendor_nm" placeholder="Enter Vendor Contact Name" value="<%= job.vendor_nm %>">
                     </div>
                 </div>
                     <div class="col-3">
                         <div class="form-group">
                             <label for="evendor_phone">Vendor Phone</label>
-                            <input type="text" class="form-control" id="evendor_phone" placeholder="Enter Vendor Phone" value="<%= jobs[i].vendor_phone %>">
+                            <input type="text" class="form-control evendor_phone" placeholder="Enter Vendor Phone" value="<%= job.vendor_phone %>">
                         </div>
                 </div>
                 <div class="col-3">
                   <div class="form-group">
                       <label for="evendor_email">Vendor Email</label>
-                      <input type="text" class="form-control" id="evendor_email" placeholder="Enter Vendor Email" value="<%= jobs[i].vendor_email %>">
+                      <input type="text" class="form-control evendor_email" placeholder="Enter Vendor Email" value="<%= job.vendor_email %>">
                   </div>
           </div>
             </div>
@@ -2751,7 +2760,7 @@ td {
               <div class="col-12">
                   <div class="form-group">
                       <label for="evendor_notes">Vendor Notes</label>
-                      <textarea class="form-control" id="evendor_notes" rows="2" placeholder="Enter any vendor notes here."><%= jobs[i].vendor_notes %></textarea>
+                      <textarea class="form-control evendor_notes" rows="2" placeholder="Enter any vendor notes here."><%= job.vendor_notes %></textarea>
                   </div>
               </div>
         </div>
@@ -2768,11 +2777,11 @@ td {
               </div>
               <!-- Duplicate Job Modal End -->
               <!-- Delete Job Modal -->
-              <div class="modal fade" id="djobID<%= jobs[i].order_id %>" tabindex="-1" role="dialog" aria-labelledby="deleteTripModalLable" aria-hidden="true">
+              <div class="modal fade" id="djobID<%= job.order_id %>" tabindex="-1" role="dialog" aria-labelledby="deleteTripModalLable" aria-hidden="true">
                 <div class="modal-dialog" role="document">
                   <div class="modal-content">
                     <div class="modal-header">
-                      <h5 class="modal-title" id="exampleModalLabel">Are you sure you want to delete job <%= jobs[i].ordnbr %>? </h5>
+                      <h5 class="modal-title" id="exampleModalLabel">Are you sure you want to delete job <%= job.ordnbr %>? </h5>
                       <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                       </button>
@@ -2782,7 +2791,7 @@ td {
                       <form class="deletetripform">
                         <div class="form-group">
                           <label hidden for="did"></label>
-                          <input hidden type="text" class="form-control" id="did" placeholder="Order #" value="<%= jobs[i].order_id %>">
+                          <input hidden type="text" class="form-control did" placeholder="Order #" value="<%= job.order_id %>">
                       </div>
                     </div>
                     <div class="modal-footer">
@@ -2809,51 +2818,51 @@ td {
                     <tbody>
                       <tr class="d-flex">
                       <td class="col-3 bold">Origin:</td>
-                      <td class="col-4"><%= jobs[i].origin %></td>
+                      <td class="col-4"><%= job.origin %></td>
                       <td class="col-2 bold">Lump Sum:</td>
-                      <td class="col-3">$<%= Intl.NumberFormat().format(jobs[i].lump_sum_amount) %> <a>(<%= jobs[i].lump_sum_paid %>)</a></td>
+                      <td class="col-3">$<%= Intl.NumberFormat().format(job.lump_sum_amount) %> <a>(<%= job.lump_sum_paid %>)</a></td>
                     </tr>
                     <tr class="d-flex">
                       <td class="col-3 bold">Origin Desc.:</td>
-                      <td class="col-4"><%= jobs[i].origin_desc %></td>
+                      <td class="col-4"><%= job.origin_desc %></td>
                       <td class="col-2 bold">Contract Signed:</td>
-                      <td class="col-3"><%= jobs[i].contract_signed %></td>
+                      <td class="col-3"><%= job.contract_signed %></td>
                     </tr>
                     <tr class="d-flex">
                       <td class="col-3 bold">Destination:</td>
-                      <td class="col-4"><%= jobs[i].destination %></td>
+                      <td class="col-4"><%= job.destination %></td>
                       <td class="col-2 bold">Kickoff Meeting:</td>
-                      <td class="col-3"><%= jobs[i].kickoff_meeting %></td>
+                      <td class="col-3"><%= job.kickoff_meeting %></td>
                     </tr>
                     <tr class="d-flex">
                       <td class="col-3 bold">Destination Description:</td>
-                      <td class="col-4"><%= jobs[i].destination_desc %></td>
+                      <td class="col-4"><%= job.destination_desc %></td>
                       <td class="col-2 bold">Proforma:</td>
-                      <td class="col-3">$<%= Intl.NumberFormat().format(jobs[i].proforma_amount) %> <a>(<%= jobs[i].proforma_paid %>)</a></td>
+                      <td class="col-3">$<%= Intl.NumberFormat().format(job.proforma_amount) %> <a>(<%= job.proforma_paid %>)</a></td>
                     </tr>
                     <tr class="d-flex">
                       <td class="col-3 bold">Start Date:</td>
-                      <td class="col-6"><%= moment(jobs[i].est_start_date).format('M/D/YY') %></td>
+                      <td class="col-6"><%= moment(job.est_start_date).format('M/D/YY') %></td>
                     </tr>
                     <tr class="d-flex">
                       <td class="col-3 bold">PM Assigned:</td>
-                      <td class="col-6"><%= jobs[i].pm_assigned %></td>
+                      <td class="col-6"><%= job.pm_assigned %></td>
                     </tr>
                     <tr class="d-flex">
                       <td class="col-3 bold">Status:</td>
-                      <td class="col-6"><%= jobs[i].status %></td>
+                      <td class="col-6"><%= job.status %></td>
                     </tr>
                     <tr class="d-flex">
                       <td class="col-3 bold">Barge(s):</td>
-                      <td class="col-6"><%= jobs[i].barge_name %></td>
+                      <td class="col-6"><%= job.barge_name %></td>
                     </tr>
                     <tr class="d-flex">
                       <td class="col-3 bold">Tug(s):</td>
-                      <td class="col-6"><%= jobs[i].tug_name %></td>
+                      <td class="col-6"><%= job.tug_name %></td>
                     </tr>
                     <tr class="d-flex">
                       <td class="col-3 bold">Trip Notes:</td>
-                      <td class="col-9" style="white-space: pre-wrap"><%= jobs[i].ord_notes %></td>
+                      <td class="col-9" style="white-space: pre-wrap"><%= job.ord_notes %></td>
                     </tr>
                   </tbody>
                 </table>
@@ -2868,23 +2877,23 @@ td {
                   <tbody>
                   <tr class="d-flex">
                     <td class="col-4">Customer:</td>
-                    <td class="col-6"><%= jobs[i].customer %></td>
+                    <td class="col-6"><%= job.customer %></td>
                   </tr>
                   <tr class="d-flex">
                     <td class="col-4">Customer Contact:</td>
-                    <td class="col-6"><%= jobs[i].customer_nm %></td>
+                    <td class="col-6"><%= job.customer_nm %></td>
                   </tr>
                   <tr class="d-flex">
                     <td class="col-4">Customer Phone:</td>
-                    <td class="col-6"><%= jobs[i].customer_phone %></td>
+                    <td class="col-6"><%= job.customer_phone %></td>
                   </tr>
                   <tr class="d-flex">
                     <td class="col-4">Customer Email:</td>
-                    <td class="col-6"><%= jobs[i].customer_email %></td>
+                    <td class="col-6"><%= job.customer_email %></td>
                   </tr>
                   <tr class="d-flex">
                     <td class="col-4">Notes:</td>
-                    <td class="col-6" style="white-space: pre-wrap"><%= jobs[i].customer_notes %></td>
+                    <td class="col-6" style="white-space: pre-wrap"><%= job.customer_notes %></td>
                   </tr>
                 </tbody>
               </table>
@@ -2900,23 +2909,23 @@ td {
               <tbody>
               <tr class="d-flex">
                 <td class="col-4">Vendor:</td>
-                <td class="col-6"><%= jobs[i].vendor %></td>
+                <td class="col-6"><%= job.vendor %></td>
               </tr>
               <tr class="d-flex">
                 <td class="col-4">Vendor Contact:</td>
-                <td class="col-6"><%= jobs[i].vendor_nm %></td>
+                <td class="col-6"><%= job.vendor_nm %></td>
               </tr>
               <tr class="d-flex">
                 <td class="col-4">Vendor Phone:</td>
-                <td class="col-6"><%= jobs[i].vendor_phone %></td>
+                <td class="col-6"><%= job.vendor_phone %></td>
               </tr>
               <tr class="d-flex">
                 <td class="col-4">Vendor Email:</td>
-                <td class="col-6"><%= jobs[i].vendor_email %></td>
+                <td class="col-6"><%= job.vendor_email %></td>
               </tr>
               <tr class="d-flex">
                 <td class="col-4">Notes:</td>
-                <td class="col-6" style="white-space: pre-wrap"><%= jobs[i].vendor_notes %></td>
+                <td class="col-6" style="white-space: pre-wrap"><%= job.vendor_notes %></td>
               </tr>
             </tbody>
           </table>
@@ -2931,8 +2940,8 @@ td {
         </td>
         </tr>
             </tbody>
-    <% } %>
-      <% } %>
+            <% } %>
+            <% }); %>
         </table>
       </div>
   </div>

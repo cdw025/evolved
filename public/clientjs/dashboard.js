@@ -1,3 +1,23 @@
+
+// Search input handler
+
+$(document).ready(function(){
+    $('#search').on('input', function() {
+    if(this.value !== '') {
+      var value = $(this).val().toLowerCase();
+      $(".uvs").filter(function() {
+      $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+      });
+    } else {
+      var value = $(this).val().toLowerCase();
+      $(".uvs").filter(function() {
+      $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+      });
+    }
+    });
+    });
+
+
 // submit new job form handler
 
 $(() => {
@@ -13,6 +33,7 @@ $('.newjobform').submit((event) => {
             window.location = `dashboard`;
         }).catch(error => {
             console.error(error);
+            showErrorMessage(error.responseJSON.message);
         });
         });
     });
@@ -56,6 +77,7 @@ $(document).delegate('.edittripform', 'submit', function(event) {
         window.location = `dashboard`;
     }).catch(error => {
         console.error(error);
+        showErrorMessage(error.responseJSON.message);
     });
 });
 
@@ -78,6 +100,7 @@ $(document).delegate('.deletetripform', 'submit', function(event) {
         window.location = `dashboard`;
     }).catch(error => {
         console.error(error);
+        showErrorMessage(error.responseJSON.message);
     });
 });
 
@@ -109,12 +132,6 @@ function deleteJob(job) {
         return $.post(`${AUTH_URL}/duplicatejob`, job);
     }
 
-    // if no assets in group, then hide group
-
-    $(".asset-tbody").filter(function() {
-        return !$(this).html().trim();
-    }).parent().parent().parent().hide();
-
     // enable datetimepicker to utilize momentjs
 
 $.datetimepicker.setDateFormatter({
@@ -134,69 +151,3 @@ $( function() {
         format: 'M/D/YY @ kk:mm'
     });
   } );
-
-    // Add new asset form handler
-    $(document).delegate('.newassetform', 'submit', function(event) {
-        event.preventDefault();
-        var form = $(this);
-        var asset = getNewAssetFromForm(form);
-        console.log(asset);
-        createAsset(asset)
-        .then(result => {
-            console.log(result);
-            window.location = `dashboard`;
-        }).catch(error => {
-            console.error(error);
-            showErrorMessage(error.responseJSON.message);
-        });
-    });
-
-    function createAsset(asset) {
-        return $.post(`${AUTH_URL}/newasset`, asset);
-    }
-
-
-    // edit asset form handler
-    $(document).delegate('.editassetform', 'submit', function(event) {
-        event.preventDefault();
-        var form = $(this);
-        var asset = getEditAssetFromForm(form);
-        console.log(asset);
-        editAsset(asset)
-        .then(result => {
-            console.log(result);
-            window.location = `dashboard`;
-        }).catch(error => {
-            console.error(error);
-            showErrorMessage(error.responseJSON.message);
-        });
-    });
-    
-        // routes job info to put route to edit job
-    
-    function editAsset(asset) {
-        return $.put(`${AUTH_URL}/dashboard/asset/${asset.asset_id}`, asset);
-    }
-
-    // delete asset form handler
-
-    $(document).delegate('.deleteassetform', 'submit', function(event) {
-        event.preventDefault();
-        var form = $(this);
-        const asset = getDeleteAssetFromForm(form);
-        console.log(asset);
-        deleteAsset(asset)
-        .then(result => {
-            console.log(result);
-            window.location = `dashboard`;
-        }).catch(error => {
-            console.error(error);
-            showErrorMessage(error.responseJSON.message);
-        });
-    });
-    
-        // routes delete asset to delete route
-    
-    function deleteAsset(asset) {
-        return $.delete(`${AUTH_URL}/dashboard/asset/${asset.asset_id}`, asset);
-    }

@@ -21,19 +21,26 @@
         font-size: 90%;
     }
 
+    .company-container-div {
+  padding-left: 50px;
+  padding-right: 50px;
+}
+
 </style>
-<body class="container"></body>
+<body></body>
 <header class="page header">
     <%- include ('partials/header') %>
  </header>
 </body>
 <main>
     <br>
+    <div class="container-fluid company-container-div">
 <div class="row" id="headerDivId">
     <div class="col-1"></div>
     <h3 class='text-center col-10' id="tripTableHeader">On Call General Details</h3>
 </div>
     <%- include ('partials/oncalldetails') %>
+</div>
     </main>
     <footer>
         <%- include ('partials/footer') %>

@@ -1,6 +1,14 @@
 const API_URL = getHostURL();
 const AUTH_URL = `${API_URL}/auth`;
 
+function logout() {
+  localStorage.clear();
+  $.get(`${AUTH_URL}/logout`)
+  .then(result => {
+    console.log(result);
+  });
+}
+
 function getHostURL() {
     if (window.location.host.indexOf('localhost') != -1) {
       return 'http://localhost:3000';
@@ -102,34 +110,49 @@ function getHostURL() {
   }
   
   function getEditJobFromForm(form) {
-    const order_id = form.find('input[id=eid]').val();
-    const ordnbr = form.find('input[id=eJobNumberInput]').val();
-    const status = form.find('select[id=ejobStatus]').val();
-    const pm_assigned = form.find('input[id=epmAssigned]').val();
-    const origin = form.find('input[id=eoriginInput]').val();
-    const destination = form.find('input[id=edestinationInput]').val();
-    const est_start_date = form.find('input[id=eestStartDate]').val();
-    const origin_desc = form.find('input[id=eoriginDesc]').val();
-    const destination_desc = form.find('input[id=edestDesc]').val();
-    const ord_notes = form.find('textarea[id=ejobNotes]').val();
-    const customer = form.find('input[id=ecustomer]').val();
-    const customer_nm = form.find('input[id=ecustomer_nm]').val();
-    const customer_phone = form.find('input[id=ecustomer_phone]').val();
-    const customer_email = form.find('input[id=ecustomer_email]').val();
-    const customer_notes = form.find('textarea[id=ecustomer_notes]').val();
-    const vendor = form.find('input[id=evendor]').val();
-    const vendor_nm = form.find('input[id=evendor_nm]').val();
-    const vendor_phone = form.find('input[id=evendor_phone]').val();
-    const vendor_email = form.find('input[id=evendor_email]').val();
-    const vendor_notes = form.find('textarea[id=evendor_notes]').val();
-    const contract_signed = form.find('select[id=econtractSigned]').val();
-    const lump_sum_amount = form.find('input[id=elumpSumAmount]').val();
-    const lump_sum_paid = form.find('select[id=elumpSumPaid]').val();
-    const proforma_amount = form.find('input[id=eproformaAmount]').val();
-    const proforma_paid = form.find('select[id=eproformaPaid]').val();
-    const kickoff_meeting = form.find('select[id=ekickoffMeeting]').val();
-    const barge_name = form.find('input[id=ebargeName]').val();
-    const tug_name = form.find('input[id=etugName]').val();
+    const order_id = form.find('.eid').val();
+    const ordnbr = form.find('.eJobNumberInput').val();
+    const status = form.find('.ejobStatus').val();
+    const pm_assigned = form.find('.epmAssigned').val();
+    const origin = form.find('.eoriginInput').val();
+    const destination = form.find('.edestinationInput').val();
+    const est_start_date = form.find('.eestStartDate').val();
+    const origin_desc = form.find('.eoriginDesc').val();
+    const destination_desc = form.find('.edestDesc').val();
+    const ord_notes = form.find('.ejobNotes').val();
+    const customer = form.find('.ecustomer').val();
+    const customer_nm = form.find('.ecustomer_nm').val();
+    var customer_phone = form.find('.ecustomer_phone').val();
+    if (customer_phone <1) {
+      customer_phone = 0;
+    } else {
+      customer_phone = customer_phone;
+    }
+    const customer_email = form.find('.ecustomer_email').val();
+    const customer_notes = form.find('.ecustomer_notes').val();
+    const vendor = form.find('.evendor').val();
+    const vendor_nm = form.find('.evendor_nm').val();
+    var vendor_phone = form.find('.evendor_phone').val();
+    if (vendor_phone <1) {
+      vendor_phone = 0;
+    } else {
+      vendor_phone = vendor_phone;
+    }
+    const vendor_email = form.find('.evendor_email').val();
+    const vendor_notes = form.find('.evendor_notes').val();
+    const contract_signed = form.find('.econtractSigned').val();
+    var lump_sum_amount = form.find('.elumpSumAmount').val();
+    if (lump_sum_amount <1) {
+      lump_sum_amount = 0;
+    } else {
+      lump_sum_amount = lump_sum_amount;
+    }
+    const lump_sum_paid = form.find('.elumpSumPaid').val();
+    const proforma_amount = form.find('.eproformaAmount').val();
+    const proforma_paid = form.find('.eproformaPaid').val();
+    const kickoff_meeting = form.find('.ekickoffMeeting').val();
+    const barge_name = form.find('.ebargeName').val();
+    const tug_name = form.find('.etugName').val();
 
         const job = {
             order_id,
@@ -166,33 +189,33 @@ function getHostURL() {
 
 // duplicate job form getter
 function getDuplicateJobFromForm(form) {
-  const ordnbr = form.find('input[id=duJobNumberInput]').val();
-  const status = form.find('select[id=ejobStatus]').val();
-  const pm_assigned = form.find('input[id=epmAssigned]').val();
-  const origin = form.find('input[id=eoriginInput]').val();
-  const destination = form.find('input[id=edestinationInput]').val();
-  const est_start_date = form.find('input[id=eestStartDate]').val();
-  const origin_desc = form.find('input[id=eoriginDesc]').val();
-  const destination_desc = form.find('input[id=edestDesc]').val();
-  const ord_notes = form.find('textarea[id=ejobNotes]').val();
-  const customer = form.find('input[id=ecustomer]').val();
-  const customer_nm = form.find('input[id=ecustomer_nm]').val();
-  const customer_phone = form.find('input[id=ecustomer_phone]').val();
-  const customer_email = form.find('input[id=ecustomer_email]').val();
-  const customer_notes = form.find('textarea[id=ecustomer_notes]').val();
-  const vendor = form.find('input[id=evendor]').val();
-  const vendor_nm = form.find('input[id=evendor_nm]').val();
-  const vendor_phone = form.find('input[id=evendor_phone]').val();
-  const vendor_email = form.find('input[id=evendor_email]').val();
-  const vendor_notes = form.find('textarea[id=evendor_notes]').val();
-  const contract_signed = form.find('select[id=econtractSigned]').val();
-  const lump_sum_amount = form.find('input[id=elumpSumAmount]').val();
-  const lump_sum_paid = form.find('select[id=elumpSumPaid]').val();
-  const proforma_amount = form.find('input[id=eproformaAmount]').val();
-  const proforma_paid = form.find('select[id=eproformaPaid]').val();
-  const kickoff_meeting = form.find('select[id=ekickoffMeeting]').val();
-  const barge_name = form.find('input[id=ebargeName]').val();
-  const tug_name = form.find('input[id=etugName]').val();
+  const ordnbr = form.find('.duJobNumberInput').val();
+  const status = form.find('.ejobStatus').val();
+  const pm_assigned = form.find('.epmAssigned').val();
+  const origin = form.find('.eoriginInput').val();
+  const destination = form.find('.edestinationInput').val();
+  const est_start_date = form.find('.eestStartDate').val();
+  const origin_desc = form.find('.eoriginDesc').val();
+  const destination_desc = form.find('.edestDesc').val();
+  const ord_notes = form.find('.ejobNotes').val();
+  const customer = form.find('.ecustomer').val();
+  const customer_nm = form.find('.ecustomer_nm').val();
+  const customer_phone = form.find('.ecustomer_phone').val();
+  const customer_email = form.find('.ecustomer_email').val();
+  const customer_notes = form.find('.ecustomer_notes').val();
+  const vendor = form.find('.evendor').val();
+  const vendor_nm = form.find('.evendor_nm').val();
+  const vendor_phone = form.find('.evendor_phone').val();
+  const vendor_email = form.find('.evendor_email').val();
+  const vendor_notes = form.find('.evendor_notes').val();
+  const contract_signed = form.find('.econtractSigned').val();
+  const lump_sum_amount = form.find('.elumpSumAmount').val();
+  const lump_sum_paid = form.find('.elumpSumPaid').val();
+  const proforma_amount = form.find('.eproformaAmount').val();
+  const proforma_paid = form.find('.eproformaPaid').val();
+  const kickoff_meeting = form.find('.ekickoffMeeting').val();
+  const barge_name = form.find('.ebargeName').val();
+  const tug_name = form.find('.etugName').val();
 
       const job = {
           ordnbr,
@@ -228,7 +251,7 @@ function getDuplicateJobFromForm(form) {
 
 
     function getDeleteJobFromForm(form) {
-      const ordnbr = form.find('input[id=did]').val();
+      const ordnbr = form.find('.did').val();
   
           const job = {
               ordnbr
@@ -237,69 +260,125 @@ function getDuplicateJobFromForm(form) {
       }
 
       function getNewAssetFromForm(form) {
-        const ordnbr = form.find('input[id=asset_ordnbr]').val();
-        const asset_type = form.find('input[id=asset_type]').val();
-        const asset_name = form.find('input[id=asset_name]').val();
-        const vendor_name = form.find('input[id=vendor_name]').val();
-        const tow_group = form.find('input[id=tow_group]').val();
-        const asset_start = form.find('input[id=asset_start]').val();
-        const asset_stop = form.find('input[id=asset_stop]').val();
-        const asset_status = form.find('input[id=asset_status]').val();
-        
-     const asset = {
-                ordnbr,
-                asset_type,
-                asset_name,
-                vendor_name,
-                tow_group,
-                asset_start,
-                asset_stop,
-                asset_status
-            };
-
-            if (asset.asset_stop === "") {
-              delete asset.asset_stop
-            };
+        const order_id = form.find('.orderIdInput').val();
+        const asset_status= form.find('.assetStatus').val();
+        const tow_group= form.find('.towGroup').val();
+        const asset_name = form.find('.assetName').val();
+        const vendor_name = form.find('.assetVendor').val();
+        const asset_type = form.find('.assetType').val();
+        const asset_start = form.find('.assetStart').val();
+        const asset_stop = form.find('.assetStop').val();
+        const start_fuel = form.find('.assetStartFuel').val();
+        const stop_fuel = form.find('.assetStopFuel').val();
+        const start_lube = form.find('.assetStartLube').val();
+        const stop_lube = form.find('.assetStopLube').val();
     
-            return asset;
+        if(asset_stop) {
+          const asset = {
+                     order_id,
+                     asset_status,
+                     tow_group,
+                     asset_name,
+                     vendor_name,
+                     asset_type,
+                     asset_start,
+                     asset_stop,
+                     start_fuel,
+                     stop_fuel,
+                     start_lube,
+                     stop_lube
+                 };
+         
+                 return asset;
+
+        } else {
+          const asset = {
+            order_id,
+            asset_status,
+            tow_group,
+            asset_name,
+            vendor_name,
+            asset_type,
+            asset_start,
+            start_fuel,
+            stop_fuel,
+            start_lube,
+            stop_lube
+        };
+
+        return asset;
+        }
       }
 
       function getEditAssetFromForm(form) {
-        const ordnbr = form.find('input[id=asset_ordnbr]').val();
-        const asset_id = form.find('input[id=asset_id]').val();
-        const asset_type = form.find('input[id=asset_type]').val();
-        const asset_name = form.find('input[id=asset_name]').val();
-        const vendor_name = form.find('input[id=vendor_name]').val();
-        const tow_group = form.find('input[id=tow_group]').val();
-        const asset_start = form.find('input[id=asset_start]').val();
-        const asset_stop = form.find('input[id=asset_stop]').val();
-        const asset_status = form.find('input[id=asset_status]').val();
-        
+        const asset_id = form.find('.eassetIdInput').val();
+        const asset_status= form.find('.eassetStatus').val();
+        const tow_group= form.find('.etowGroup').val();
+        const asset_name = form.find('.eassetName').val();
+        const vendor_name = form.find('.eassetVendor').val();
+        const asset_type = form.find('.eassetType').val();
+        const asset_start = form.find('.eassetStart').val();
+        const asset_stop = form.find('.eassetStop').val();
+        const start_fuel = form.find('.eassetStartFuel').val();
+        const stop_fuel = form.find('.eassetStopFuel').val();
+        const start_lube = form.find('.eassetStartLube').val();
+        const stop_lube = form.find('.eassetStopLube').val();
+    
      const asset = {
-                ordnbr,
                 asset_id,
-                asset_type,
+                asset_status,
+                tow_group,
                 asset_name,
                 vendor_name,
-                tow_group,
+                asset_type,
                 asset_start,
                 asset_stop,
-                asset_status
-            };
-
-            if (asset.asset_stop === "") {
-              delete asset.asset_stop
+                start_fuel,
+                stop_fuel,
+                start_lube,
+                stop_lube
             };
     
             return asset;
       }
 
 
-      function getDeleteAssetFromForm(form) {
-        const asset_id = form.find('input[id=did]').val();
+      function getNewLogFromForm(form) {
+        const order_id = form.find('.orderId').val();
+        const asset_id = form.find('.assetId').val();
+        const tow_group = form.find('.towgroup').val();
+        const location_type = form.find('.logLocationType').val();
+        const asset_location = form.find('.assetLocation').val();
+        const latitude = form.find('.assetlatitude').val();
+        const longitude = form.find('.assetlongitude').val();
+        const fuel_burn = form.find('.fuelburn').val();
+        const lube_burn = form.find('.lubeburn').val();
+        const speed = form.find('.currentspeed').val();
+        const status = form.find('.logstatus').val();
+        const direction = form.find('.logdirection').val();
+        const eta = form.find('.logeta').val();
+        const miles_made = form.find('.milesmade').val();
+        const miles_to_go = form.find('.milestogo').val();
+        const notes = form.find('.lognotes').val();
     
-            const asset = {
-                asset_id
+     const log = {
+                order_id,
+                asset_id,
+                tow_group,
+                location_type,
+                asset_location,
+                latitude,
+                longitude,
+                fuel_burn,
+                lube_burn,
+                speed,
+                status,
+                direction,
+                eta,
+                miles_made,
+                miles_to_go,
+                notes
             };
-            return asset;
-        }
+    
+            return log;
+      }

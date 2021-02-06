@@ -2,7 +2,8 @@
 <html lang="en">
 <head>
     <%- include ('partials/head') %>
-  </head>
+    <link rel="stylesheet" href="https://unpkg.com/bootstrap-table@1.18.1/dist/bootstrap-table.min.css">
+</head>
 <style>
   tr.hide-table-padding td {
   padding: 0;
@@ -62,10 +63,6 @@
   font-size: 100%;
 }
 
-.delay-row {
-  font-size: 90%;
-}
-
 .job-details {
   padding-top: 10px;
   font-size: 100%;
@@ -85,6 +82,8 @@
   padding-left: 50px;
   padding-right: 50px;
 }
+
+
 
 /* .table td {
    text-align: left;  
@@ -156,15 +155,6 @@ td {
 .dropdown-item {
   font-size: small;
 }
-
-.break {
-  padding-top: 10px;
-}
-
-.bbvs {
-  padding-left: 10px;
-  padding-right: 10px;
-}
 </style>
 
 <header class="page header">
@@ -174,62 +164,47 @@ td {
 <main>
   <br>
   <div class="container-fluid company-container-div">
-  <h3 style="text-align: center;">Active Job Logs</h3>
+  <h3 style="text-align: center;">Locations</h3>
   <div class="container-fluid">
     <div class="row">
       <div class="col-9"></div>
-      <div class="col-3">
-        <input class="form-control" type="search" id="search" placeholder="Search" aria-label="Search" style="text-align: left;">
-      </div>
-
+      <div class="table-responsive">
+        <table class="table table-hover table-sm" data-toggle="table" data-search="true" data-pagination="true" data-page-size="25">
+          <thead>
+            <tr>
+              <th data-sortable="true" scope="col">Location Name</th>
+              <th data-sortable="true" scope="col">Latitude</th>
+              <th data-sortable="true" scope="col">Longitude</th>
+              <th data-sortable="true" scope="col">River Name</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% locations.forEach(function(location) { %>
+                <tr>
+                    <td><%= location.location_name %></td>
+                    <td><%= location.latitude %></td>
+                    <td><%= location.longitude %></td>
+                    <td><%= location.river_name %></td>
+                </tr>
+                <% }); %>
+          </tbody>
+        </table>
+        </div>
     </div>
     <br>
    </div>
    <div class="container-fluid">
-    <% jobs.forEach(function(job) { %>
-      <% if (job.status  === "Active") { %>
-        <%- include('partials/logcard', { job: job, locations : locations}); %>
-        <% } %>
-        <% }); %>
-      <br>
+    <br>
     </div>  
     </main>
 </div>
     <footer>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/bootstrap-table@1.18.1/dist/bootstrap-table.min.js"></script>
         <%- include ('partials/footer') %>
     </footer>
-    <script type="text/javascript" src="/shared.js" charset="utf-8"></script>
-    <script type="text/javascript" src="/company.js" charset="utf-8"></script>
-    <script>
-      $( function() {
-    var data = <%- JSON.stringify(locations) %>;
-    // console.log(data);
-      var locationnames = data.map(function(i) {
-        return i.location_name;
-      });
-
-      $(".autopopulatelocation").focus(function() {
-        var clicked = $(this);
-        clicked.autocomplete({
-          source: function(request, response) {
-        var results = $.ui.autocomplete.filter(locationnames, request.term);
-
-        response(results.slice(0, 10));
-        },
-          appendTo : $(this).parent().parent(),
-          select: function( event , ui ) {
-            var results = data.filter(function(entry) {
-              return entry.location_name === ui.item.label;  
-            });
-            var latitude = results[0].latitude;
-            console.log(latitude);
-            $(this).closest(".crunch").find('.assetlatitude').val(latitude);
-            var longitude = results[0].longitude;
-            console.log(longitude);
-            $(this).closest(".crunch").find('.assetlongitude').val(longitude);
-        }
-        });
-      });
-      });
-    </script>
+    <script src="/shared.js" charset="utf-8"></script>
+    <script src="/company.js" charset="utf-8"></script>
 </html>

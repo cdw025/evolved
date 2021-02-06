@@ -1,0 +1,102 @@
+<div class="card uvs">
+    <div class="card-header sm" id="headingOne">
+      <div class="row">
+        <div class="col-2">
+      <h5 class="mb-0">
+        <a class="btn btn-link" href="#" role="button" id="job<%- job.ordnbr %>">
+          <%- job.ordnbr %>
+        </a>
+      </h5>
+    </div>
+    <div class="col-7"></div>
+    <div class="col-1" style="text-align: right;">
+    </div>
+
+    <div class="col-1">
+
+    </div>
+    </div>
+    </div>
+    <div id="jobID<%- job.order_id %>" class="collapse show container-fluid" aria-labelledby="headingOne" data-parent="#accordion">
+      <div class="row">
+      <div class="card-body col-9">
+        <table class="table table-sm">
+          <thead>
+            <tr class="d-flex asset-row">
+              <th class="col-2">Asset</th>
+              <th class="col-1">Status</th>
+              <th class="col-sm text-center">Location</th>
+              <th class="col-sm text-center">Speed</th>
+              <th class="col-sm text-center">ETA</th>
+              <th class="col-sm text-center">Miles Made</th>
+              <th class="col-sm text-center">MTG</th>
+              <th class="col-sm text-center">Date Submitted</th>
+              <th class="col-1"></th>
+            </tr>
+          </thead>
+          <tbody class="asset-tbody">
+            <% assets.forEach(function(asset) {  %>
+              <% if (asset.order_id  === job.order_id) { %>
+                <tr class="d-flex asset-row">
+                  <td class="col-2">
+                    <%- asset.asset_name %>
+                  </td>
+                  <% logs.forEach(function(log) { %>
+                    <% if (log.order_id === asset.order_id && log.asset_id === asset.asset_id) { %>
+                      <td class="col-1">
+                        <%- log.status %>
+                      </td>
+                    <td class="col-sm text-center">
+                      <%- log.asset_location %> 
+                    </td>
+                    <td class="col-sm text-center">
+                      <%- log.speed %> mph 
+                    </td>
+                    <td class="col-sm text-center">
+                      <%- moment(log.eta).format('M/D/YY @ kk:mm') %> 
+                    </td>
+                    <td class="col-sm text-center">
+                      <%- log.miles_made %> 
+                    </td>
+                    <td class="col-sm text-center">
+                      <%- log.miles_to_go %> 
+                    </td>
+                    <td class="col-sm text-center logdttm">
+                      <%- moment(log.log_dttm).format('M/D/YY @ kk:mm') %> 
+                    </td>
+                    <% }  %>
+                    <% }); %>
+                        <td class="col-1 ml-auto">
+                          <div class="dropdown">
+                            <a class="btn btn-info dropdown-toggle btn-sm" role="button" id="logsDropDown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                              More
+                            </a>
+
+                            <div class="dropdown-menu" aria-labelledby="logsDropDown">
+                              <a class="dropdown-item" data-toggle="modal" href="#newLog<%- asset.asset_id %>">Create Log</a>
+                              <a class="dropdown-item" href="#">Edit Current Log</a>
+                            </div>
+                            <%- include('assets/editassetmodal', { job: job, asset : asset }); %>
+                            <%- include('logs/newlogmodal', { job: job, asset : asset }); %>
+
+                          </div>
+                        </td>
+                </tr>
+                <% } %>
+              <% }); %>
+          </tbody>
+        </table>
+      </div>
+      <div class="card-body col-3">
+        <table class="table table-sm">
+          <thead>
+            <tr class="d-flex asset-row">
+              <th class="col-12" style="text-align: center;">Delays Last 24hrs</th>
+            </tr>
+          </thead>
+        </table>
+      </div>
+    </div>
+    </div>
+  </div>
+  <br>

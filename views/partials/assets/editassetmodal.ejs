@@ -1,0 +1,112 @@
+<div class="modal fade" id="editAsset<%- asset.asset_id %>" tabindex="-1" role="dialog" aria-labelledby="editAssetModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="NewAssetModalLabel">EditAsset for <%- job.ordnbr %></h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form class="editassetform">
+            <div class="row">
+                <div class="col-4">
+                    <div class="form-group">
+                        <label hidden for="orderIdInput"></label>
+                        <input hidden type="text" class="form-control orderIdInput" value="<%- job.order_id %>">
+                        <label hidden for="eassetIdInput"></label>
+                        <input hidden type="text" class="form-control eassetIdInput" value="<%- asset.asset_id %>">
+                        <label for="JobNumberInput">Job #</label>
+                        <input type="text" class="form-control JobNumberInput" value="<%- job.ordnbr %>" readonly>
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="form-group">
+                        <label for="eassetStatus">Asset Status</label>
+                        <select class="form-control eassetStatus" value="<%- asset.asset_status %>">
+                            <option value="Inactive" <%= asset.asset_status == 'Inactive' ? 'selected' : ''%>>Inactive</option>
+                            <option value="Active" <%= asset.asset_status == 'Active' ? 'selected' : ''%>>Active</option>
+                        </select>
+                      </div>
+              </div>
+                  <div class="col-4">
+                      <div class="form-group">
+                          <label for="etowGroup">Tow Group</label>
+                          <input type="integer" class="form-control etowGroup" value="<%- asset.tow_group %>">
+                      </div>
+              </div>
+          </div>
+          <div class="row">
+            <div class="col-4">
+                <div class="form-group">
+                    <label for="eassetName">Asset Name</label>
+                    <input type="text" class="form-control eassetName" value="<%- asset.asset_name %>">
+                </div>
+            </div>
+            <div class="col-4">
+              <div class="form-group">
+                  <label for="eassetVendor">Vendor Name</label>
+                  <input type="text" class="form-control eassetVendor" value="<%- asset.vendor_name %>">
+              </div>
+          </div>
+          <div class="col-4">
+            <div class="form-group">
+                <label for="eassetType">Asset Type</label>
+                <select class="form-control eassetType" value="<%- asset.asset_type %>">
+                    <option value="Barge" <%= asset.asset_type == 'Barge' ? 'selected' : ''%>>Barge</option>
+                    <option value="Tug" <%= asset.asset_type == 'Tug' ? 'selected' : ''%>>Tug</option>
+                </select>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+              <div class="col-4">
+                  <div class="form-group">
+                      <label for="eassetStart">Asset Start</label>
+                      <input type="datetime-local"  class="form-control eassetStart" value="<%- moment(asset.asset_start).format('YYYY-MM-DDThh:mm') %>">
+                  </div>
+          </div>
+                  <div class="col-4">
+                    <div class="form-group">
+                        <label for="eassetStop">Asset Stop</label>
+                        <input type="datetime-local"  class="form-control eassetStop" value="<%- moment(asset.asset_stop).format('YYYY-MM-DDThh:mm') %>">
+                    </div>
+                  </div>
+            </div>
+            <div class="row">
+                <div class="col-4">
+                    <div class="form-group">
+                        <label for="eassetStartFuel">Start Fuel</label>
+                        <input type="integer" class="form-control eassetStartFuel" value="<%- asset.start_fuel %>">
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="form-group">
+                        <label for="eassetStopFuel">Stop Fuel</label>
+                        <input type="integer" class="form-control eassetStopFuel" value="<%- asset.stop_fuel %>">
+                    </div>
+                </div>
+          </div>
+          <div class="row">
+            <div class="col-4">
+                <div class="form-group">
+                    <label for="eassetStartLube">Start Lube</label>
+                    <input type="integer" class="form-control eassetStartLube" value="<%- asset.start_lube %>">
+                </div>
+            </div>
+            <div class="col-4">
+                <div class="form-group">
+                    <label for="eassetStopLube">Stop Lube</label>
+                    <input type="integer" class="form-control eassetStopLube" value="<%- asset.stop_lube %>">
+                </div>
+            </div>
+      </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary">Save Changes</button>
+            </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

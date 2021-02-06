@@ -21,26 +21,38 @@
         font-size: 90%;
     }
 
+    .dashboard-container {
+        padding-left: 200px;
+        padding-right: 200px;
+    }
 </style>
-<body class="container"></body>
+
 <header class="page header">
     <%- include ('partials/header') %>
  </header>
-</body>
+
 <main>
     <br>
+    <div class="container-fluid dashboard-container">
 <div class="row" id="headerDivId">
-    <div class="col-1"></div>
-    <h3 class='text-center col-10' id="tripTableHeader">Job Table</h3>
-    <button class="btn btn-primary col-1" data-toggle="modal" data-target="#exampleModal">New Job</button>
+    <h3 class='text-center col-12' id="tripTableHeader">Job Table</h3>
     <%- include ('partials/newjobmodal') %>
 </div>
+<br>
+<div class="row">
+    <div class="col-3">
+        <input class="form-control" type="search" id="search" placeholder="Search" aria-label="Search" style="text-align: left;">
+    </div>
+    <div class="col-8"></div>
+    <button class="btn btn-primary col-1" data-toggle="modal" data-target="#exampleModal">New Job</button>
+
+  </div>
     <%- include ('partials/tripview') %>
-    </main>
+</div>
+</main>
     <footer>
         <%- include ('partials/footer') %>
     </footer>
     <script src="shared.js" charset="utf-8"></script>
     <script src="dashboard.js" charset="utf-8"></script>
-</body>
 </html>

@@ -21,6 +21,9 @@ module.exports = {
   },
   delete: function(order_id) {
     return knex('deckorderfil').where('order_id', order_id).update({status : 'Archived'});
-  }
+  },
+  getCompanyJobs: function() {
+    return knex('deckorderfil').where('company', company);
+  },
 }
 

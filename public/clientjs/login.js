@@ -7,8 +7,9 @@ $(() => {
 
         login(user)
         .then(result => {
-            console.log(result);
-            window.location = `dashboard`;
+            localStorage.company = result.company;
+            window.location = `/dashboard`;
+            // window.location = `/company/${result.company}`;
         }).catch(error => {
             console.error(error);
             showErrorMessage(error.responseJSON.message);
