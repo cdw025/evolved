@@ -1,0 +1,146 @@
+<div class="modal fade crunch" id="newLog<%- asset.asset_id %>" tabindex="-1" role="dialog" aria-labelledby="newLogModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="newLogModalLabel">Add New Log for <%- asset.asset_name %> for Job <%- job.ordnbr %></h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form class="newlogform">
+            <div class="row">
+                <div class="col-6">
+                    <div class="form-group">
+                        <label hidden for="assetId"></label>
+                        <input hidden type="text" class="form-control assetId" value="<%- asset.asset_id %>">
+                        <label hidden for="towgroup"></label>
+                        <input hidden type="text" class="form-control towgroup" value="<%- asset.tow_group %>">
+                        <label hidden for="orderId"></label>
+                        <input hidden type="integer" class="form-control orderId" value="<%- job.order_id %>">
+                        <label for="JobNumberInput">Job #</label>
+                        <input type="text" class="form-control JobNumberInput" value="<%- job.ordnbr %>" readonly>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="form-group">
+                        <label for="assetName">Asset</label>
+                        <input type="text" class="form-control assetName" value="<%- asset.asset_name %>" readonly>
+                      </div>
+              </div>
+          </div>
+          <div class="row">
+            <div class="col-6">
+                <div class="form-group">
+                    <label for="logLocationType">Location Type</label>
+                    <select class="form-control logLocationType">
+                        <option value="inland">Inland</option>
+                        <option value="offshore">Offshore</option>
+                      </select>
+                </div>
+            </div>
+            <div class="col-6 locationinland">
+                <div class="form-group">
+                    <label for="assetLocation">Location</label>
+                    <input type="text" class="form-control assetLocation autopopulatelocation" placeholder="ex. LM - 7, UM - 100, OH - 230">
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-6 locationoffshore">
+                <div class="form-group">
+                    <label for="assetlatitude">Latitude (xx.xxxxxx)</label>
+                    <input type="text" class="form-control assetlatitude" placeholder="latitude" required>
+                </div>
+            </div>
+            <div class="col-6 locationoffshore">
+              <div class="form-group">
+                  <label for="assetlongitude">Longitude (-xx.xxxxxx)</label>
+                  <input type="text" class="form-control assetlongitude" placeholder="longitude" required>
+          </div>
+        </div>
+        </div>
+    <div class="row">
+              <div class="col-6">
+                  <div class="form-group">
+                      <label for="fuelburn">Fuel Burn Last 24hrs</label>
+                      <input type="integer" class="form-control fuelburn" placeholder="Fuel Burned (gal)" required>
+                  </div>
+          </div>
+                  <div class="col-6">
+                    <div class="form-group">
+                        <label for="lubeburn">Lube Burn Last 24hrs</label>
+                        <input type="integer" class="form-control lubeburn" placeholder="Lube Burned (gal)" required>
+                    </div>
+                  </div>
+            </div>
+            <div class="row">
+                <div class="col-6">
+                    <div class="form-group">
+                        <label for="currentspeed">Current Speed (mph)</label>
+                        <input type="number" class="form-control currentspeed" placeholder="ex. 4.5" required>
+                    </div>
+            </div>
+            <div class="col-6">
+                <div class="form-group">
+                    <label for="logstatus">Status</label>
+                    <select class="form-control logstatus">
+                        <option value="blank"></option>
+                        <option value="Mobilizing">Mobilizing</option>
+                        <option value="Loading">Loading</option>
+                        <option value="Unloading">Unloading</option>
+                        <option value="De-Mobilizing">De-Mobilizing</option>
+                        <option value="Standby">Standby For Orders</option>
+                      </select>
+                </div>
+            </div>
+              </div>
+            <div class="row">
+                <div class="col-6">
+                    <div class="form-group">
+                        <label for="logdirection">Direction</label>
+                        <select class="form-control logdirection">
+                            <option value="blank"></option>
+                            <option value="North">North</option>
+                            <option value="South">South</option>
+                            <option value="East">East</option>
+                            <option value="West">West</option>
+                          </select>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="form-group">
+                        <label for="logeta">ETA</label>
+                        <input type="datetime-local" class="form-control logeta">
+                    </div>
+                </div>
+          </div>
+          <div class="row">
+            <div class="col-6">
+                <div class="form-group">
+                    <label for="milesmade">Miles Made Last 24hrs</label>
+                    <input type="integer" class="form-control milesmade" placeholder="miles made last 24hrs">
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="form-group">
+                    <label for="milestogo">Miles to Go</label>
+                    <input type="integer" class="form-control milestogo" placeholder="miles to go">
+                </div>
+            </div>
+      </div>
+      <div class="row">
+          <div class="col-12">
+                <label for="lognotes">Log Notes</label>
+              <textarea class="form-control lognotes" rows="2" placeholder="Enter any notes you wish here"></textarea>
+          </div>
+      </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary">Save Changes</button>
+            </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
