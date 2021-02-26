@@ -8,6 +8,9 @@ const Job = require('../db/job');
 const Asset = require('../db/asset');
 const AssetLog = require('../db/assetlog');
 const Location = require('../db/location');
+const Delay = require('../db/delay');
+var _ = require('lodash');
+const { json } = require('body-parser');
 
 
 router.get('/:company', authMiddleware.ensureLoggedIn, authMiddleware.ensureCorrectCompany, (req, res) => {
@@ -16,6 +19,8 @@ router.get('/:company', authMiddleware.ensureLoggedIn, authMiddleware.ensureCorr
             Asset.getAssetsByVendor(req.params.company).then(assets => {
                 AssetLog.getFirstLog().then(logs => {
                 Location.getLocations().then(locations => {
+                Delay.getDelays().then(delays => {
+                delays = JSON.parse(JSON.stringify(delays));
                 locations = JSON.parse(JSON.stringify(locations));
                 jobs = JSON.parse(JSON.stringify(jobs));
                 assets = JSON.parse(JSON.stringify(assets));
@@ -37,8 +42,9 @@ router.get('/:company', authMiddleware.ensureLoggedIn, authMiddleware.ensureCorr
                     }
                     arrayFiltered.push(obj);
                 });
-                res.render('companynotcanal', { title : 'Express', 'jobs' : jobs, 'assets' : assets, logs : arrayFiltered, locations : locations });
+                res.render('companynotcanal', { title : 'Express', 'jobs' : jobs, 'assets' : assets, logs : arrayFiltered, locations : locations, delays : delays });
             });    
+            });
             });
             });
         }
@@ -49,6 +55,8 @@ router.get('/:company', authMiddleware.ensureLoggedIn, authMiddleware.ensureCorr
             Asset.getAssets().then(assets => {
                 AssetLog.getFirstLog().then(logs => {
                 Location.getLocations().then(locations => {
+                Delay.getDelays().then(delays => {
+                delays = JSON.parse(JSON.stringify(delays));
                 locations = JSON.parse(JSON.stringify(locations));
                 jobs = JSON.parse(JSON.stringify(jobs));
                 assets = JSON.parse(JSON.stringify(assets));
@@ -56,6 +64,19 @@ router.get('/:company', authMiddleware.ensureLoggedIn, authMiddleware.ensureCorr
                 assets = assets.sort((a, b) => parseFloat(a.tow_group) - parseFloat(b.tow_group));
                 jobs = jobs.sort((a, b) => parseFloat(a.order_id) - parseFloat(b.order_id));
                 logs = logs.sort((a, b) => parseFloat(b.log_id) - parseFloat(a.log_id));
+                // trying to group delays by date
+                // let finalObj = {}
+                // delays.forEach((games) => {
+                //     const date = games.delay_stop.split('T')[0]
+                //     if (finalObj[date]) {
+                //         finalObj[date].push(games);
+                //     } else {
+                //         finalObj[date] = [games];
+                //     }
+                // });
+                // finalObj = JSON.parse(JSON.stringify(finalObj));
+                // console.log(finalObj);
+
                 // javascript function to find max log_id value for each asset_name 
                 // in order to only print one result per asset name
                 const arrayFiltered = [];
@@ -69,8 +90,9 @@ router.get('/:company', authMiddleware.ensureLoggedIn, authMiddleware.ensureCorr
                     }
                     arrayFiltered.push(obj);
                 });
-                res.render('company', { title : 'Express', 'jobs' : jobs, 'assets' : assets, logs : arrayFiltered, locations : locations });
+                res.render('company', { title : 'Express', 'jobs' : jobs, 'assets' : assets, logs : arrayFiltered, locations : locations, delays: delays });
             });    
+            });
             });
             });
         }

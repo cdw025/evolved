@@ -1,0 +1,391 @@
+<% var today = new Date().toLocaleDateString();%>
+<% var yesterday = new Date(new Date().setDate(new Date().getDate()-1)).toLocaleDateString() ; %>
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-3 blah blah-header">
+        Date
+      </div>
+      <div class="col-3 blah blah-header">
+        Asset
+      </div>
+      <div class="col-1 blah blah-header">
+        Load/Unload
+      </div>
+      <div class="col-1 blah blah-header">
+        Lock
+      </div>
+      <div class="col-1 blah blah-header">
+        Weather
+      </div>
+      <div class="col-1 blah blah-header">
+        Traffic
+      </div>
+      <div class="col-1 blah blah-header">
+        Customs
+      </div>
+      <div class="col-1 blah blah-header">
+        Other
+      </div>
+    </div>
+  </div>
+  <div class="container-fluid">
+ <div class="row">
+  <div class="col-sm-3 d-flex flex-column justify-content-center border">
+    <div class="row">
+      <div class="col-8 col-sm-12 blah">
+        <%- today %>
+      </div>
+    </div>
+  </div>
+
+
+
+    <div class="col-sm-3">
+  <% assets.forEach(function(asset) {  %>
+    <% if (asset.order_id  === job.order_id) { %>
+      <div class="row border">
+        <div class="col-8 col-sm-12 blah">
+      <%- asset.asset_name %>
+        </div>
+      </div>
+      <% } %>
+        <% }); %>
+    </div>
+    <div class="col-sm-1">
+        <% assets.forEach(function(asset) {  %>
+          <% if (asset.order_id  === job.order_id) { %>
+            <% var durationSum = 0; %>
+            <% var delay_details = []; %>
+            <% delays.forEach(function(delay) {  %>
+                <% if (asset.asset_id  === delay.asset_id && (delay.delay_type === 'Loading' || delay.delay_type === 'Unloading') && new Date(moment(delay.delay_stop)).toLocaleDateString() === today) { %>
+                    <% durationSum += Number(delay.delay_duration) %>
+                <% delay_details.push(delay); %>
+                <% delay_concat = delay_details.map(function(elem) { return elem.delay_id;}).join("_"); %>
+                <% } %>
+                  <% }); %>
+                  <div class="row border">
+                    <div class="col-8 col-12 blah">
+                      <% if(durationSum == 0) { %>
+                        <%- %>
+                        <% } else { %>
+                          <a class="details_button" data-toggle="modal" data-target="#delay_details_<%- asset.asset_id %>_<%- job.order_id %>_<%-delay_concat %>"><%- durationSum.toFixed(2) %></a>
+                          <%- include('delaydetailsmodal', { job : job, asset: asset, delay_details : delay_details}); %>
+                          <% } %>
+                    </div>
+                  </div>
+                    <% } %>
+                  <% }); %>
+                </div>
+                <div class="col-sm-1">
+                    <% assets.forEach(function(asset) {  %>
+                      <% if (asset.order_id  === job.order_id) { %>
+                        <% var durationSum = 0; %>
+                        <% var delay_details = []; %>
+                        <% delays.forEach(function(delay) {  %>
+                            <% if (asset.asset_id  === delay.asset_id && delay.delay_type === 'Lock' && new Date(moment(delay.delay_stop)).toLocaleDateString() === today) { %>
+                                <% durationSum += Number(delay.delay_duration) %>
+                            <% delay_details.push(delay); %>
+                            <% delay_concat = delay_details.map(function(elem) { return elem.delay_id;}).join("_"); %>
+                            
+                            <% } %>
+                              <% }); %>
+                              <div class="row border">
+                                <div class="col-8 col-12 blah">
+                                  <% if(durationSum == 0) { %>
+                                    <%- %>
+                                    <% } else { %>
+                                      <a class="details_button" data-toggle="modal" data-target="#delay_details_<%- asset.asset_id %>_<%- job.order_id %>_<%-delay_concat %>"><%- durationSum.toFixed(2) %></a>
+                                      <%- include('delaydetailsmodal', { job : job, asset: asset, delay_details : delay_details}); %>
+                                      <% } %>
+                                </div>
+                              </div>
+                                <% } %>
+                              <% }); %>
+                            </div>
+            <div class="col-sm-1">
+                <% assets.forEach(function(asset) {  %>
+                    <% if (asset.order_id  === job.order_id) { %>
+                    <% var durationSum = 0; %>
+                    <% var delay_details = []; %>
+                    <% delays.forEach(function(delay) {  %>
+                        <% if (asset.asset_id  === delay.asset_id && delay.delay_type === 'Weather' && new Date(moment(delay.delay_stop)).toLocaleDateString() === today) { %>
+                            <% durationSum += Number(delay.delay_duration) %>
+                        <% delay_details.push(delay); %>
+                        <% delay_concat = delay_details.map(function(elem) { return elem.delay_id;}).join("_"); %>
+                        
+                        <% } %>
+                            <% }); %>
+                            <div class="row border">
+                            <div class="col-8 col-12 blah">
+                                <% if(durationSum == 0) { %>
+                                <%- %>
+                                <% } else { %>
+                                    <a class="details_button" data-toggle="modal" data-target="#delay_details_<%- asset.asset_id %>_<%- job.order_id %>_<%-delay_concat %>"><%- durationSum.toFixed(2) %></a>
+                                    <%- include('delaydetailsmodal', { job : job, asset: asset, delay_details : delay_details}); %>
+                                    <% } %>
+                            </div>
+                            </div>
+                            <% } %>
+                            <% }); %>
+                        </div>
+        <div class="col-sm-1">
+            <% assets.forEach(function(asset) {  %>
+                <% if (asset.order_id  === job.order_id) { %>
+                <% var durationSum = 0; %>
+                <% var delay_details = []; %>
+                <% delays.forEach(function(delay) {  %>
+                    <% if (asset.asset_id  === delay.asset_id && delay.delay_type === 'Traffic' && new Date(moment(delay.delay_stop)).toLocaleDateString() === today) { %>
+                        <% durationSum += Number(delay.delay_duration) %>
+                    <% delay_details.push(delay); %>
+                    <% delay_concat = delay_details.map(function(elem) { return elem.delay_id;}).join("_"); %>
+                    
+                    <% } %>
+                        <% }); %>
+                        <div class="row border">
+                        <div class="col-8 col-12 blah">
+                            <% if(durationSum == 0) { %>
+                            <%- %>
+                            <% } else { %>
+                                <a class="details_button" data-toggle="modal" data-target="#delay_details_<%- asset.asset_id %>_<%- job.order_id %>_<%-delay_concat %>"><%- durationSum.toFixed(2) %></a>
+                                <%- include('delaydetailsmodal', { job : job, asset: asset, delay_details : delay_details}); %>
+                                <% } %>
+                        </div>
+                        </div>
+                        <% } %>
+                        <% }); %>
+                    </div>
+    <div class="col-sm-1">
+        <% assets.forEach(function(asset) {  %>
+            <% if (asset.order_id  === job.order_id) { %>
+            <% var durationSum = 0; %>
+            <% var delay_details = []; %>
+            <% delays.forEach(function(delay) {  %>
+                <% if (asset.asset_id  === delay.asset_id && delay.delay_type === 'Customs' && new Date(moment(delay.delay_stop)).toLocaleDateString() === today) { %>
+                    <% durationSum += Number(delay.delay_duration) %>
+                <% delay_details.push(delay); %>
+                <% delay_concat = delay_details.map(function(elem) { return elem.delay_id;}).join("_"); %>
+                
+                <% } %>
+                    <% }); %>
+                    <div class="row border">
+                    <div class="col-8 col-12 blah">
+                        <% if(durationSum == 0) { %>
+                        <%- %>
+                        <% } else { %>
+                            <a class="details_button" data-toggle="modal" data-target="#delay_details_<%- asset.asset_id %>_<%- job.order_id %>_<%-delay_concat %>"><%- durationSum.toFixed(2) %></a>
+                            <%- include('delaydetailsmodal', { job : job, asset: asset, delay_details : delay_details}); %>
+                            <% } %>
+                    </div>
+                    </div>
+                    <% } %>
+                    <% }); %>
+                </div>
+    <div class="col-sm-1">
+        <% assets.forEach(function(asset) {  %>
+            <% if (asset.order_id  === job.order_id) { %>
+            <% var durationSum = 0; %>
+            <% var delay_details = []; %>
+            <% delays.forEach(function(delay) {  %>
+                <% if (asset.asset_id  === delay.asset_id && delay.delay_type === 'Other' && new Date(moment(delay.delay_stop)).toLocaleDateString() === today) { %>
+                    <% durationSum += Number(delay.delay_duration) %>
+                <% delay_details.push(delay); %>
+                <% delay_concat = delay_details.map(function(elem) { return elem.delay_id;}).join("_"); %>
+                
+                <% } %>
+                    <% }); %>
+                    <div class="row border">
+                    <div class="col-8 col-12 blah">
+                        <% if(durationSum == 0) { %>
+                        <%- %>
+                        <% } else { %>
+                            <a class="details_button" data-toggle="modal" data-target="#delay_details_<%- asset.asset_id %>_<%- job.order_id %>_<%-delay_concat %>"><%- durationSum.toFixed(2) %></a>
+                            <%- include('delaydetailsmodal', { job : job, asset: asset, delay_details : delay_details}); %>
+                            <% } %>
+                    </div>
+                    </div>
+                    <% } %>
+                    <% }); %>
+                </div>
+          </div>
+          
+</div>
+<div class="container-fluid">
+  <div class="row">
+  <div class="col-sm-3 d-flex flex-column justify-content-center border">
+    <div class="row">
+      <div class="col-8 col-sm-12 blah">
+        <%- yesterday %>
+      </div>
+    </div>
+  </div>
+
+    <div class="col-sm-3 asset-tbody">
+  <% assets.forEach(function(asset) {  %>
+    <% if (asset.order_id  === job.order_id) { %>
+      <div class="row border">
+        <div class="col-8 col-sm-12 blah">
+      <%- asset.asset_name %>
+        </div>
+      </div>
+      <% } %>
+        <% }); %>
+    </div>
+    <div class="col-sm-1">
+        <% assets.forEach(function(asset) {  %>
+          <% if (asset.order_id  === job.order_id) { %>
+            <% var durationSum = 0; %>
+            <% var delay_details = []; %>
+            <% delays.forEach(function(delay) {  %>
+                <% if (asset.asset_id  === delay.asset_id && (delay.delay_type === 'Loading' || delay.delay_type === 'Unloading') && new Date(moment(delay.delay_stop)).toLocaleDateString() === yesterday) { %>
+                    <% durationSum += Number(delay.delay_duration) %>
+                <% delay_details.push(delay); %>
+                <% delay_concat = delay_details.map(function(elem) { return elem.delay_id;}).join("_"); %>
+                
+                <% } %>
+                  <% }); %>
+                  <div class="row border">
+                    <div class="col-8 col-12 blah">
+                      <% if(durationSum == 0) { %>
+                        <%- %>
+                        <% } else { %>
+                          <a class="details_button" data-toggle="modal" data-target="#delay_details_<%- asset.asset_id %>_<%- job.order_id %>_<%-delay_concat %>"><%- durationSum.toFixed(2) %></a>
+                          <%- include('delaydetailsmodal', { job : job, asset: asset, delay_details : delay_details}); %>
+                          <% } %>
+                    </div>
+                  </div>
+                    <% } %>
+                  <% }); %>
+                </div>
+            
+    <div class="col-sm-1">
+        <% assets.forEach(function(asset) {  %>
+            <% if (asset.order_id  === job.order_id) { %>
+            <% var durationSum = 0; %>
+            <% var delay_details = []; %>
+            <% delays.forEach(function(delay) {  %>
+                <% if (asset.asset_id  === delay.asset_id && delay.delay_type === 'Lock' && new Date(moment(delay.delay_stop)).toLocaleDateString() === yesterday) { %>
+                    <% durationSum += Number(delay.delay_duration) %>
+                <% delay_details.push(delay); %>
+                <% delay_concat = delay_details.map(function(elem) { return elem.delay_id;}).join("_"); %>
+                
+                <% } %>
+                    <% }); %>
+                    <div class="row border">
+                    <div class="col-8 col-12 blah">
+                        <% if(durationSum == 0) { %>
+                        <%- %>
+                        <% } else { %>
+                            <a class="details_button" data-toggle="modal" data-target="#delay_details_<%- asset.asset_id %>_<%- job.order_id %>_<%-delay_concat %>"><%- durationSum.toFixed(2) %></a>
+                            <%- include('delaydetailsmodal', { job : job, asset: asset, delay_details : delay_details}); %>
+                            <% } %>
+                    </div>
+                    </div>
+                    <% } %>
+                    <% }); %>
+                </div>
+    <div class="col-sm-1">
+        <% assets.forEach(function(asset) {  %>
+            <% if (asset.order_id  === job.order_id) { %>
+            <% var durationSum = 0; %>
+            <% var delay_details = []; %>
+            <% delays.forEach(function(delay) {  %>
+                <% if (asset.asset_id  === delay.asset_id && delay.delay_type === 'Weather' && new Date(moment(delay.delay_stop)).toLocaleDateString() === yesterday) { %>
+                    <% durationSum += Number(delay.delay_duration) %>
+                <% delay_details.push(delay); %>
+                <% delay_concat = delay_details.map(function(elem) { return elem.delay_id;}).join("_"); %>
+                
+                <% } %>
+                    <% }); %>
+                    <div class="row border">
+                    <div class="col-8 col-12 blah">
+                        <% if(durationSum == 0) { %>
+                        <%- %>
+                        <% } else { %>
+                            <a class="details_button" data-toggle="modal" data-target="#delay_details_<%- asset.asset_id %>_<%- job.order_id %>_<%-delay_concat %>"><%- durationSum.toFixed(2) %></a>
+                            <%- include('delaydetailsmodal', { job : job, asset: asset, delay_details : delay_details}); %>
+                            <% } %>
+                    </div>
+                    </div>
+                    <% } %>
+                    <% }); %>
+                </div>
+        <div class="col-sm-1">
+            <% assets.forEach(function(asset) {  %>
+                <% if (asset.order_id  === job.order_id) { %>
+                <% var durationSum = 0; %>
+                <% var delay_details = []; %>
+                <% delays.forEach(function(delay) {  %>
+                    <% if (asset.asset_id  === delay.asset_id && delay.delay_type === 'Traffic' && new Date(moment(delay.delay_stop)).toLocaleDateString() === yesterday) { %>
+                        <% durationSum += Number(delay.delay_duration) %>
+                    <% delay_details.push(delay); %>
+                    <% delay_concat = delay_details.map(function(elem) { return elem.delay_id;}).join("_"); %>
+                    
+                    <% } %>
+                        <% }); %>
+                        <div class="row border">
+                        <div class="col-8 col-12 blah">
+                            <% if(durationSum == 0) { %>
+                            <%- %>
+                            <% } else { %>
+                                <a class="details_button" data-toggle="modal" data-target="#delay_details_<%- asset.asset_id %>_<%- job.order_id %>_<%-delay_concat %>"><%- durationSum.toFixed(2) %></a>
+                                <%- include('delaydetailsmodal', { job : job, asset: asset, delay_details : delay_details}); %>
+                                <% } %>
+                        </div>
+                        </div>
+                        <% } %>
+                        <% }); %>
+                    </div>
+        <div class="col-sm-1">
+            <% assets.forEach(function(asset) {  %>
+                <% if (asset.order_id  === job.order_id) { %>
+                <% var durationSum = 0; %>
+                <% var delay_details = []; %>
+                <% delays.forEach(function(delay) {  %>
+                    <% if (asset.asset_id  === delay.asset_id && delay.delay_type === 'Customs' && new Date(moment(delay.delay_stop)).toLocaleDateString() === yesterday) { %>
+                        <% durationSum += Number(delay.delay_duration) %>
+                    <% delay_details.push(delay); %>
+                    <% delay_concat = delay_details.map(function(elem) { return elem.delay_id;}).join("_"); %>
+                    
+                    <% } %>
+                        <% }); %>
+                        <div class="row border">
+                        <div class="col-8 col-12 blah">
+                            <% if(durationSum == 0) { %>
+                            <%- %>
+                            <% } else { %>
+                                <a class="details_button" data-toggle="modal" data-target="#delay_details_<%- asset.asset_id %>_<%- job.order_id %>_<%-delay_concat %>"><%- durationSum.toFixed(2) %></a>
+                                <%- include('delaydetailsmodal', { job : job, asset: asset, delay_details : delay_details}); %>
+                                <% } %>
+                        </div>
+                        </div>
+                        <% } %>
+                        <% }); %>
+                    </div>
+        <div class="col-sm-1">
+            <% assets.forEach(function(asset) {  %>
+                <% if (asset.order_id  === job.order_id) { %>
+                <% var durationSum = 0; %>
+                <% var delay_details = []; %>
+                <% delays.forEach(function(delay) {  %>
+                    <% if (asset.asset_id  === delay.asset_id && delay.delay_type === 'Other' && new Date(moment(delay.delay_stop)).toLocaleDateString() === yesterday) { %>
+                        <% durationSum += Number(delay.delay_duration) %>
+                    <% delay_details.push(delay); %>
+                    <% delay_concat = delay_details.map(function(elem) { return elem.delay_id;}).join("_"); %>
+                    
+                    <% } %>
+                        <% }); %>
+                        <div class="row border">
+                        <div class="col-8 col-12 blah">
+                            <% if(durationSum == 0) { %>
+                            <%- %>
+                            <% } else { %>
+                                <a class="details_button" data-toggle="modal" data-target="#delay_details_<%- asset.asset_id %>_<%- job.order_id %>_<%-delay_concat %>"><%- durationSum.toFixed(2) %></a>
+                                <%- include('delaydetailsmodal', { job : job, asset: asset, delay_details : delay_details}); %>
+                                <% } %>
+                        </div>
+                        </div>
+                        <% } %>
+                        <% }); %>
+                    </div>
+          </div>
+  </div>

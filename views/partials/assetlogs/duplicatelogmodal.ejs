@@ -1,0 +1,156 @@
+<% logs.forEach(function(log) { %>
+    <% if (log.order_id === asset.order_id && log.asset_id === asset.asset_id) { %>
+<div class="modal fade crunch" id="duLog<%- asset.asset_id %>" tabindex="-1" role="dialog" aria-labelledby="duLogModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="duLogModalLabel">Duplicate Log of <%- asset.asset_name %> for Job <%- job.ordnbr %></h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form class="dulogform">
+            <div class="row">
+                <div class="col-6">
+                    <div class="form-group">
+                        <label hidden for="duassetId"></label>
+                        <input hidden type="text" class="form-control duassetId" value="<%- asset.asset_id %>">
+                        <label hidden for="duassetname"></label>
+                        <input hidden type="text" class="form-control duassetname" value="<%- asset.asset_name %>">
+                        <label hidden for="dutowgroup"></label>
+                        <input hidden type="text" class="form-control dutowgroup" value="<%- asset.tow_group %>">
+                        <label hidden for="duorderId"></label>
+                        <input hidden type="integer" class="form-control duorderId" value="<%- job.order_id %>">
+                        <label for="duJobNumberInput">Job #</label>
+                        <input type="text" class="form-control duJobNumberInput" value="<%- job.ordnbr %>" readonly>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="form-group">
+                        <label for="duassetName">Asset</label>
+                        <input type="text" class="form-control duassetName" value="<%- asset.asset_name %>" readonly>
+                      </div>
+              </div>
+          </div>
+          <div class="row">
+            <div class="col-6">
+                <div class="form-group">
+                    <label for="dulogLocationType">Location Type</label>
+                      <select class="form-control dulogLocationType" value="<%- log.location_type %>">
+                        <option value="inland" <%= log.location_type == 'inland' ? 'selected' : ''%>>inland</option>
+                        <option value="offshore" <%= log.location_type == 'offshore' ? 'selected' : ''%>>offshore</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-6 locationinland">
+                <div class="form-group">
+                    <label name="duassetLocation">Location
+                        <img src="../tooltip.png" width = "20" height = "20" 
+                        data-toggle="tooltip" data-placement="right" title="Type a location.  If a location is suggested, the latitude and longitude will auto-populate once selected."
+                        style="font-size: 90%; align-items: center;">
+                    </label>
+                    <input type="text" class="form-control duassetLocation autopopulatelocation" placeholder="ex. LM - 7, UM - 100, OH - 230" value="<%- log.asset_location %>">
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-6 locationoffshore">
+                <div class="form-group">
+                    <label for="duassetlatitude">Latitude (xx.xxxxxx)</label>
+                    <input type="text" class="form-control duassetlatitude" placeholder="latitude" required value="<%- log.latitude %>">
+                </div>
+            </div>
+            <div class="col-6 locationoffshore">
+              <div class="form-group">
+                  <label for="duassetlongitude">Longitude (-xx.xxxxxx)</label>
+                  <input type="text" class="form-control duassetlongitude" placeholder="longitude" required value="<%- log.longitude %>">
+          </div>
+        </div>
+        </div>
+    <div class="row">
+              <div class="col-6">
+                  <div class="form-group">
+                      <label for="dufuelburn">Fuel Burn Last 24hrs</label>
+                      <input type="integer" class="form-control dufuelburn" placeholder="Fuel Burned (gal)" required value="<%- log.fuel_burn %>">
+                  </div>
+          </div>
+                  <div class="col-6">
+                    <div class="form-group">
+                        <label for="dulubeburn">Lube Burn Last 24hrs</label>
+                        <input type="integer" class="form-control dulubeburn" placeholder="Lube Burned (gal)" required value="<%- log.lube_burn %>">
+                    </div>
+                  </div>
+            </div>
+            <div class="row">
+                <div class="col-6">
+                    <div class="form-group">
+                        <label for="ducurrentspeed">Current Speed (mph)</label>
+                        <input type="number" class="form-control ducurrentspeed" placeholder="ex. 4.5" required value="<%- log.speed %>">
+                    </div>
+            </div>
+            <div class="col-6">
+                <div class="form-group">
+                    <label for="dulogstatus">Status</label>
+                    <select class="form-control dulogstatus" value="<%- log.location_type %>">
+                        <option value="blank" <%= log.status == 'blank' ? 'selected' : ''%>></option>
+                        <option value="Mobilizing" <%= log.status == 'Mobilizing' ? 'selected' : ''%>>Mobilizing</option>
+                        <option value="Loading" <%= log.status == 'Loading' ? 'selected' : ''%>>Loading</option>
+                        <option value="Unloading" <%= log.status == 'Unloading' ? 'selected' : ''%>>Unloading</option>
+                        <option value="De-Mobilizing" <%= log.status == 'De-Mobilizing' ? 'selected' : ''%>>De-Mobilizing</option>
+                        <option value="Standby" <%= log.status == 'Standby' ? 'selected' : ''%>>Standby For Orders</option>
+                    </select>
+                </div>
+            </div>
+              </div>
+            <div class="row">
+                <div class="col-6">
+                    <div class="form-group">
+                        <label for="dulogdirection">Direction</label>
+                        <select class="form-control dulogdirection" value="<%- log.direction %>">
+                            <option value="blank" <%= log.direction == 'blank' ? 'selected' : ''%>></option>
+                            <option value="North" <%= log.direction == 'North' ? 'selected' : ''%>>North</option>
+                            <option value="South" <%= log.direction == 'South' ? 'selected' : ''%>>South</option>
+                            <option value="East" <%= log.direction == 'East' ? 'selected' : ''%>>East</option>
+                            <option value="West" <%= log.direction == 'West' ? 'selected' : ''%>>West</option>
+                          </select>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="form-group">
+                        <label for="dulogeta">ETA</label>
+                        <input type="datetime-local" class="form-control dulogeta" value="<%- moment(log.eta).format('YYYY-MM-DDTHH:mm') %>">
+                    </div>
+                </div>
+          </div>
+          <div class="row">
+            <div class="col-6">
+                <div class="form-group">
+                    <label for="dumilesmade">Miles Made Last 24hrs</label>
+                    <input type="integer" class="form-control dumilesmade" placeholder="miles made last 24hrs" value="<%- log.miles_made %>">
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="form-group">
+                    <label for="dumilestogo">Miles to Go</label>
+                    <input type="integer" class="form-control dumilestogo" placeholder="miles to go" value="<%- log.miles_to_go %>">
+                </div>
+            </div>
+      </div>
+      <div class="row">
+          <div class="col-12">
+                <label for="dulognotes">Log Notes</label>
+              <textarea class="form-control dulognotes" rows="2" placeholder="Enter any notes you wish here"><%- log.notes %></textarea>
+          </div>
+      </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary">Save Changes</button>
+            </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<% }  %>
+ <% }); %>

@@ -2,70 +2,396 @@
 <html lang="en">
 <head>
     <%- include ('partials/head') %>
+<style>
+.row>.col, .row>[class^=col-] {
+    padding-top: .75rem;
+    padding-bottom: .75rem;
+    background-color: rgba(86,61,124,.15);
+    border: 1px solid rgba(86,61,124,.2);
+}
+
+.blah:after {
+    content: '\200b';
+}
+.blah {
+  text-align: center;
+}
+</style>
 </head>
 
 <main>
-    <table class="table table-sm">
-        <thead>
-          <tr>
-            <th >Delay ID</th>
-            <th >Order ID</th>
-            <th >Asset ID</th>
-            <th >Tow Group</th>
-            <th >Delay Type</th>
-            <th >Delay Start</th>
-            <th >Delay Stop</th>
-            <th >Delay Duration</th>
-            <th >Delay Description</th>
-            <th >Delay Asset Number</th>
-          </tr>
-        </thead>
-        <tbody class="asset-tbody">
+  <% var today = new Date().toLocaleDateString();%>
+  <% var yesterday = new Date(new Date().setDate(new Date().getDate()-1)).toLocaleDateString() ; %>
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-3 blah">
+        Date
+      </div>
+      <div class="col-3 blah">
+        Asset
+      </div>
+      <div class="col-1 blah">
+        Load/Unload
+      </div>
+      <div class="col-1 blah">
+        Lock
+      </div>
+      <div class="col-1 blah">
+        Weather
+      </div>
+      <div class="col-1 blah">
+        Traffic
+      </div>
+      <div class="col-1 blah">
+        Customs
+      </div>
+      <div class="col-1 blah">
+        Other
+      </div>
+    </div>
+ <div class="row">
+  <div class="col-sm-3 d-flex flex-column justify-content-center">
+    <div class="row">
+      <div class="col-8 col-sm-12 blah">
+        <%- today %>
+      </div>
+    </div>
+  </div>
+ 
+<% jobs.forEach(function(job) { %>
+  <% if (job.status  === "Active") { %>
+
+
+
+    <div class="col-sm-3">
+  <% assets.forEach(function(asset) {  %>
+    <% if (asset.order_id  === job.order_id) { %>
+      <div class="row">
+        <div class="col-8 col-sm-12 blah">
+      <%- asset.asset_name %>
+        </div>
+      </div>
+      <% } %>
+        <% }); %>
+    </div>
+    <div class="col-sm-1">
+    <% assets.forEach(function(asset) {  %>
+      <% if (asset.order_id  === job.order_id) { %>
+        <% var weatherDurationSum = 0; %>
+        <% delays.forEach(function(delay) {  %>
+          <% if (asset.asset_id  === delay.asset_id && (delay.delay_type === 'Loading' || delay.delay_type === 'Unloading') && new Date(moment(delay.delay_stop)).toLocaleDateString() === today) { %>
+            <% weatherDurationSum += Number(delay.delay_duration) %>
+            <% } %>
+              <% }); %>
+              <div class="row">
+                <div class="col-8 col-12 blah">
+                  <% if(weatherDurationSum == 0) { %>
+                    <%- %>
+                    <% } else { %>
+                      <%- weatherDurationSum.toFixed(2) %>
+                      <% } %>
+                </div>
+              </div>
+                <% } %>
+              <% }); %>
+            </div>
+      <div class="col-sm-1">
+        <% assets.forEach(function(asset) {  %>
+          <% if (asset.order_id  === job.order_id) { %>
+            <% var weatherDurationSum = 0; %>
+            <% delays.forEach(function(delay) {  %>
+              <% if (asset.asset_id  === delay.asset_id && delay.delay_type === 'Lock' && new Date(moment(delay.delay_stop)).toLocaleDateString() === today) { %>
+                <% weatherDurationSum += Number(delay.delay_duration) %>
+                <% } %>
+                  <% }); %>
+                  <div class="row">
+                    <div class="col-8 col-12 blah">
+                      <% if(weatherDurationSum == 0) { %>
+                        <%- %>
+                        <% } else { %>
+                          <%- weatherDurationSum.toFixed(2) %>
+                          <% } %>
+                    </div>
+                  </div>
+                    <% } %>
+                  <% }); %>
+                </div>
+        <div class="col-sm-1">
+          <% assets.forEach(function(asset) {  %>
+            <% if (asset.order_id  === job.order_id) { %>
+              <% var weatherDurationSum = 0; %>
+              <% delays.forEach(function(delay) {  %>
+                <% if (asset.asset_id  === delay.asset_id && delay.delay_type === 'Weather' && new Date(moment(delay.delay_stop)).toLocaleDateString() === today) { %>
+                  <% weatherDurationSum += Number(delay.delay_duration) %>
+                  <% } %>
+                    <% }); %>
+                    <div class="row">
+                      <div class="col-8 col-12 blah">
+                        <% if(weatherDurationSum == 0) { %>
+                          <%- %>
+                          <% } else { %>
+                            <%- weatherDurationSum.toFixed(2) %>
+                            <% } %>
+                      </div>
+                    </div>
+                      <% } %>
+                    <% }); %>
+                  </div>
+          <div class="col-sm-1">
+            <% assets.forEach(function(asset) {  %>
+              <% if (asset.order_id  === job.order_id) { %>
+                <% var weatherDurationSum = 0; %>
+                <% delays.forEach(function(delay) {  %>
+                  <% if (asset.asset_id  === delay.asset_id && delay.delay_type === 'Traffic' && new Date(moment(delay.delay_stop)).toLocaleDateString() === today) { %>
+                    <% weatherDurationSum += Number(delay.delay_duration) %>
+                    <% } %>
+                      <% }); %>
+                      <div class="row">
+                        <div class="col-8 col-12 blah">
+                          <% if(weatherDurationSum == 0) { %>
+                            <%- %>
+                            <% } else { %>
+                              <%- weatherDurationSum.toFixed(2) %>
+                              <% } %>
+                        </div>
+                      </div>
+                        <% } %>
+                      <% }); %>
+                    </div>
+          <div class="col-sm-1">
+            <% assets.forEach(function(asset) {  %>
+              <% if (asset.order_id  === job.order_id) { %>
+                <% var weatherDurationSum = 0; %>
+                <% delays.forEach(function(delay) {  %>
+                  <% if (asset.asset_id  === delay.asset_id && delay.delay_type === 'Customs' && new Date(moment(delay.delay_stop)).toLocaleDateString() === today) { %>
+                    <% weatherDurationSum += Number(delay.delay_duration) %>
+                    <% } %>
+                      <% }); %>
+                      <div class="row">
+                        <div class="col-8 col-12 blah">
+                          <% if(weatherDurationSum == 0) { %>
+                            <%- %>
+                            <% } else { %>
+                              <%- weatherDurationSum.toFixed(2) %>
+                              <% } %>
+                        </div>
+                      </div>
+                        <% } %>
+                      <% }); %>
+                    </div>
+          <div class="col-sm-1">
+            <% assets.forEach(function(asset) {  %>
+              <% if (asset.order_id  === job.order_id) { %>
+                <% var weatherDurationSum = 0; %>
+                <% delays.forEach(function(delay) {  %>
+                  <% if (asset.asset_id  === delay.asset_id && delay.delay_type === 'Other' && new Date(moment(delay.delay_stop)).toLocaleDateString() === today) { %>
+                    <% weatherDurationSum += Number(delay.delay_duration) %>
+                    <% } %>
+                      <% }); %>
+                      <div class="row">
+                        <div class="col-8 col-12 blah">
+                          <% if(weatherDurationSum == 0) { %>
+                            <%- %>
+                            <% } else { %>
+                              <%- weatherDurationSum.toFixed(2) %>
+                              <% } %>
+                        </div>
+                      </div>
+                        <% } %>
+                      <% }); %>
+                    </div>
+          </div>
+    <% } %>
+    <% }); %>
+</div>
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-3 blah">
+      Date
+    </div>
+    <div class="col-3 blah">
+      Asset
+    </div>
+    <div class="col-1 blah">
+      Load/Unload
+    </div>
+    <div class="col-1 blah">
+      Lock
+    </div>
+    <div class="col-1 blah">
+      Weather
+    </div>
+    <div class="col-1 blah">
+      Traffic
+    </div>
+    <div class="col-1 blah">
+      Customs
+    </div>
+    <div class="col-1 blah">
+      Other
+    </div>
+  </div>
+<div class="row">
+<div class="col-sm-3 d-flex flex-column justify-content-center">
+  <div class="row">
+    <div class="col-8 col-sm-12 blah">
+      <%- yesterday %>
+    </div>
+  </div>
+</div>
+
+<% jobs.forEach(function(job) { %>
+<% if (job.status  === "Active") { %>
+
+
+
+  <div class="col-sm-3">
+<% assets.forEach(function(asset) {  %>
+  <% if (asset.order_id  === job.order_id) { %>
+    <div class="row">
+      <div class="col-8 col-sm-12 blah">
+    <%- asset.asset_name %>
+      </div>
+    </div>
+    <% } %>
+      <% }); %>
+  </div>
+  <div class="col-sm-1">
+  <% assets.forEach(function(asset) {  %>
+    <% if (asset.order_id  === job.order_id) { %>
+      <% var weatherDurationSum = 0; %>
+      <% delays.forEach(function(delay) {  %>
+        <% if (asset.asset_id  === delay.asset_id && (delay.delay_type === 'Loading' || delay.delay_type === 'Unloading') && new Date(moment(delay.delay_stop)).toLocaleDateString() === yesterday) { %>
+          <% weatherDurationSum += Number(delay.delay_duration) %>
+          <% } %>
+            <% }); %>
+            <div class="row">
+              <div class="col-8 col-12 blah">
+                <% if(weatherDurationSum == 0) { %>
+                  <%- %>
+                  <% } else { %>
+                    <%- weatherDurationSum.toFixed(2) %>
+                    <% } %>
+              </div>
+            </div>
+              <% } %>
+            <% }); %>
+          </div>
+    <div class="col-sm-1">
+      <% assets.forEach(function(asset) {  %>
+        <% if (asset.order_id  === job.order_id) { %>
+          <% var weatherDurationSum = 0; %>
           <% delays.forEach(function(delay) {  %>
-              <tr>
-                <td>
-                  <%- delay.delay_id %>
-                </td>
-                <td>
-                    <%- delay.order_id %>
-                  </td>
-                  <td>
-                    <%- delay.asset_id %>
-                  </td>
-                  <td>
-                    <%- delay.tow_group %>
-                  </td>
-                  <td>
-                    <%- delay.delay_type %>
-                  </td>
-                  <td>
-                    <%- delay.delay_start %>
-                  </td>
-                  <td>
-                    <%- delay.delay_stop %>
-                  </td>
-                  <td>
-                    <%- delay.delay_duration %> hours
-                  </td>
-                  <td>
-                    <%- delay.description %>
-                  </td>
-                  <td>
-                    <%- delay.asset_delay_number %>
-                  </td>
-                </tr>
-                <%  });  %>
-                
-        </tbody>
-      </table>
-
-
-
+            <% if (asset.asset_id  === delay.asset_id && delay.delay_type === 'Lock' && new Date(moment(delay.delay_stop)).toLocaleDateString() === yesterday) { %>
+              <% weatherDurationSum += Number(delay.delay_duration) %>
+              <% } %>
+                <% }); %>
+                <div class="row">
+                  <div class="col-8 col-12 blah">
+                    <% if(weatherDurationSum == 0) { %>
+                      <%- %>
+                      <% } else { %>
+                        <%- weatherDurationSum.toFixed(2) %>
+                        <% } %>
+                  </div>
+                </div>
+                  <% } %>
+                <% }); %>
+              </div>
+      <div class="col-sm-1">
+        <% assets.forEach(function(asset) {  %>
+          <% if (asset.order_id  === job.order_id) { %>
+            <% var weatherDurationSum = 0; %>
+            <% delays.forEach(function(delay) {  %>
+              <% if (asset.asset_id  === delay.asset_id && delay.delay_type === 'Weather' && new Date(moment(delay.delay_stop)).toLocaleDateString() === yesterday) { %>
+                <% weatherDurationSum += Number(delay.delay_duration) %>
+                <% } %>
+                  <% }); %>
+                  <div class="row">
+                    <div class="col-8 col-12 blah">
+                      <% if(weatherDurationSum == 0) { %>
+                        <%- %>
+                        <% } else { %>
+                          <%- weatherDurationSum.toFixed(2) %>
+                          <% } %>
+                    </div>
+                  </div>
+                    <% } %>
+                  <% }); %>
+                </div>
+        <div class="col-sm-1">
+          <% assets.forEach(function(asset) {  %>
+            <% if (asset.order_id  === job.order_id) { %>
+              <% var weatherDurationSum = 0; %>
+              <% delays.forEach(function(delay) {  %>
+                <% if (asset.asset_id  === delay.asset_id && delay.delay_type === 'Traffic' && new Date(moment(delay.delay_stop)).toLocaleDateString() === yesterday) { %>
+                  <% weatherDurationSum += Number(delay.delay_duration) %>
+                  <% } %>
+                    <% }); %>
+                    <div class="row">
+                      <div class="col-8 col-12 blah">
+                        <% if(weatherDurationSum == 0) { %>
+                          <%- %>
+                          <% } else { %>
+                            <%- weatherDurationSum.toFixed(2) %>
+                            <% } %>
+                      </div>
+                    </div>
+                      <% } %>
+                    <% }); %>
+                  </div>
+        <div class="col-sm-1">
+          <% assets.forEach(function(asset) {  %>
+            <% if (asset.order_id  === job.order_id) { %>
+              <% var weatherDurationSum = 0; %>
+              <% delays.forEach(function(delay) {  %>
+                <% if (asset.asset_id  === delay.asset_id && delay.delay_type === 'Customs' && new Date(moment(delay.delay_stop)).toLocaleDateString() === yesterday) { %>
+                  <% weatherDurationSum += Number(delay.delay_duration) %>
+                  <% } %>
+                    <% }); %>
+                    <div class="row">
+                      <div class="col-8 col-12 blah">
+                        <% if(weatherDurationSum == 0) { %>
+                          <%- %>
+                          <% } else { %>
+                            <%- weatherDurationSum.toFixed(2) %>
+                            <% } %>
+                      </div>
+                    </div>
+                      <% } %>
+                    <% }); %>
+                  </div>
+        <div class="col-sm-1">
+          <% assets.forEach(function(asset) {  %>
+            <% if (asset.order_id  === job.order_id) { %>
+              <% var weatherDurationSum = 0; %>
+              <% delays.forEach(function(delay) {  %>
+                <% if (asset.asset_id  === delay.asset_id && delay.delay_type === 'Other' && new Date(moment(delay.delay_stop)).toLocaleDateString() === yesterday) { %>
+                  <% weatherDurationSum += Number(delay.delay_duration) %>
+                  <% } %>
+                    <% }); %>
+                    <div class="row">
+                      <div class="col-8 col-12 blah">
+                        <% if(weatherDurationSum == 0) { %>
+                          <%- %>
+                          <% } else { %>
+                            <%- weatherDurationSum.toFixed(2) %>
+                            <% } %>
+                      </div>
+                    </div>
+                      <% } %>
+                    <% }); %>
+                  </div>
+        </div>
+  <% } %>
+  <% }); %>
+</div>
 </main>
     <footer>
         <%- include ('partials/footer') %>
     </footer>
     <script src="shared.js" charset="utf-8"></script>
     <script src="dashboard.js" charset="utf-8"></script>
+    <script src="company.js" charset="utf-8"></script>
 
 </html>

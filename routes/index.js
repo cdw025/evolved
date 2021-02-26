@@ -67,9 +67,15 @@ router.get('/oncall', authMiddleware.ensureLoggedIn, authMiddleware.EnsureCanalF
 
 router.get('/test', authMiddleware.ensureLoggedIn, authMiddleware.EnsureCanalForAccess, function(req, res) {
   Delay.getDelays().then(delays => {
+    Asset.getAssets().then(assets => {
+      Job.getJobs().then(jobs => {
+        jobs = JSON.parse(JSON.stringify(jobs));
+      assets = JSON.parse(JSON.stringify(assets));
     delays = JSON.parse(JSON.stringify(delays));
-    res.render('test', { title : 'Express', delays : delays });
+    res.render('test', { title : 'Express', delays : delays, assets : assets, jobs : jobs });
     console.log(delays);
+  });
+});
   });
 });
 

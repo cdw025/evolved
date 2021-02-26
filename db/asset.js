@@ -5,8 +5,13 @@ module.exports = {
   getAssets: function() {
     return knex('deckassetfil');
   },
-  getMatchingAssets : function(log) {
-    return knex('deckassetfil').where({'order_id' : log.order_id, 'tow_group' : log.tow_group }).then(assets => {
+  getMatchingAssets : function(delay) {
+    return knex('deckassetfil').where({'order_id' : delay.order_id, 'tow_group' : delay.tow_group }).then(assets => {
+      return assets;
+    });
+  },
+  getAssetsbyJobNumber : function(order_id) {
+    return knex('deckassetfil').where({'order_id' : order_id }).then(assets => {
       return assets;
     });
   },

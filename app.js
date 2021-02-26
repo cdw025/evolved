@@ -8,6 +8,7 @@ var _ = require('lodash');
 var index = require('./routes/index');
 var user = require('./routes/user');
 var company = require('./routes/company');
+var job = require('./routes/job');
 var auth = require('./auth/index');
 
 var app = express();
@@ -28,8 +29,8 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser('process.env.COOKIE_SECRET'));
 app.use(express.static('public'));
-app.use(express.static('public/clientjs'));
 app.use(express.static('public/images'));
+app.use(express.static('public/clientjs'));
 
 // any request that begins with /auth will go into the auth router defined above (var auth = require...)
 app.use('/auth', auth);
@@ -39,7 +40,8 @@ app.use('/', index);
 app.use('/user', user);
 // any request that begins with /company will go into the company router defined above (var company = require...)
 app.use('/company', company);
-
+// any request that begins with /job will go into the job router defined above (var job = require...)
+app.use('/job', job);
 
 
 // catch 404 and forward to error handler

@@ -125,7 +125,27 @@ window.addEventListener('keydown',function(e){
         event.preventDefault();
         var form = $(this);
         const log = getNewLogFromForm(form);
-        // console.log(log);
+        console.log(log);
+        createLog(log)
+        .then(result => {
+            console.log(result);
+            window.location = `${localStorage.company}`;
+        }).catch(error => {
+            console.error(error);
+            showErrorMessage(error.responseJSON.message);
+        });
+    });
+
+    function createLog(log) {
+        return $.post(`${AUTH_URL}/newlog`, log);
+    }
+
+    // Duplicate log form handler
+    $(document).delegate('.dulogform', 'submit', function(event) {
+        event.preventDefault();
+        var form = $(this);
+        const log = getDuplicateLogFromForm(form);
+        console.log(log);
         createLog(log)
         .then(result => {
             console.log(result);
@@ -146,16 +166,56 @@ window.addEventListener('keydown',function(e){
         return !$(this).html().trim();
     }).closest(".bbvs").hide();
 
+    // $(".col-sm-3").filter(function() {
+    //     return !$(this).html().trim();
+    // }).closest(".bbvs").hide();
+
 
     // change color of log date submitted to red if date is less than today
     $( ".logdttm").each(function() {
         var today = new Date();
         var momentToday = moment(today).startOf('day');
-        console.log(today);
         var dttm = $(this).html();
         var momentDate = moment(dttm, 'MM-DD-YYYY').toDate();
-        console.log(momentDate);
         if(momentDate < momentToday) {
             $(this).css('color', 'red');
         }
     });
+
+
+
+        // Add new delay form handler
+        $(() => {
+        $(document).delegate('.newdelayform', 'submit', function(event) {
+            event.preventDefault();
+            var form = $(this);
+            const delay = getNewDelayFromForm(form);
+            console.log(delay);
+            createDelay(delay)
+            .then(result => {
+                console.log(result);
+                window.location = `${localStorage.company}`;
+            }).catch(error => {
+                console.error(error);
+                console.log(delay.asset_id);
+                showDelayError(error.responseJSON.message, delay);
+            });
+        });
+    });
+    
+        function createDelay(delay) {
+            return $.post(`${AUTH_URL}/newdelay`, delay);
+        }
+
+
+        // enable tooltips
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip()
+          });
+
+          //
+          function showDelayError(message, delay) {
+            const $errorMessage = $('#errorMessage' + '_' + delay.asset_id);
+            $errorMessage.text(message);
+            $errorMessage.show();
+          }

@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%- include ('partials/head') %>
+  </head>
+  <style>
+      .job-container-div {
+  padding-left: 50px;
+  padding-right: 50px;
+}
+
+
+#tdcard {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.tow-card {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  background-color: #686a6e;
+}
+
+#cardtitle {
+  margin-bottom: 0px;
+}
+
+.table-responsive {
+  margin-top: 10px;
+}
+
+.card-body {
+  padding: 10px;
+}
+
+.horizontal-line {
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.hr-line-line {
+  margin: 1px;
+  border: 1px solid #F0F8FF;
+}
+
+.asset-row {
+  font-size: 80%;
+}
+
+.job-details {
+  padding-top: 10px;
+  font-size: 100%;
+}
+
+.nav-tabs a {
+  color: black;
+}
+
+.table>tbody>tr>td {
+  border-top: none;
+}
+
+
+table>thead>tr>th {
+  border-top: none;
+}
+
+.table {
+  margin: 0px;
+}
+
+.btn-sm {
+  height:90%;
+  width:90%;
+  font-size: 100%;
+  padding: 0px;
+  vertical-align: middle;
+}
+
+.btn-secondary {
+  font-size: 80%;
+}
+
+.dropdown-item {
+  font-size: 100%;
+}
+
+.job-notes {
+  white-space: pre-wrap;
+}
+
+td {
+  font-size: 90%;
+}
+
+.form-group {
+  font-size: 120%;
+}
+
+.job-note-headers {
+  text-align: left;
+  text-decoration: underline;
+}
+
+.right-tabs .nav {
+    float: right;
+}
+
+.bold {
+  font-weight: bold;
+}
+
+.form-control {
+  color: black;
+}
+
+.table th, .table td {
+    padding: 0px;
+}
+
+  </style>
+
+  <header class="page header">
+    <%- include ('partials/header') %>
+ </header>
+
+<script type="text/javascript">
+  window.addEventListener('keydown',function(e){if(e.keyIdentifier=='U+000A'||e.keyIdentifier=='Enter'||e.keyCode==13){if(e.target.nodeName=='INPUT'&&e.target.type=='text'){e.preventDefault();return false;}}},true);
+</script>
+
+ <main>
+    <br>
+    <div class="container-fluid job-container-div">
+    <h3 style="text-align: center;">Job # <%- job.ordnbr %></h3>
+    <h5 style="text-align: center;">Delays Overview</h5>
+    <div class="alert alert-danger" role="alert" id="errorMessage" style="display:none">
+      This is a danger alert—check it out!
+    </div>
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-10"></div>
+        <div class="col-2">
+            <div class="dropdown show">
+                <a class="btn btn-secondary dropdown-toggle float-right" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  Go To...
+                </a>
+              
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                  <a class="dropdown-item" href="/job/<%- job.order_id %>">General Info</a>
+                  <a class="dropdown-item" href="#">One Pager</a>
+                  <a class="dropdown-item" href="/job/<%- job.order_id %>/logs">Logs</a>
+                  <a class="dropdown-item" href="/job/<%- job.order_id %>/delays">Delays</a>
+                  <a class="dropdown-item" href="#">Proforma</a>
+                  <a class="dropdown-item" href="#">Financials</a>
+                </div>
+              </div>
+        </div>
+  
+      </div>
+      <br>
+     </div>
+     <div class="container-fluid">
+        <div class="card">
+                  <table class="table table-bordered text-center">
+                    <thead>
+                      <tr>
+                        <th scope="col">Delay Entry Date</th>
+                        <th scope="col">Asset</th>
+                        <th scope="col">Type</th>
+                        <th scope="col">Start</th>
+                        <th scope="col">Stop</th>
+                        <th scope="col">Duration</th>
+                        <th scope="col">Description</th>
+                        <th></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <% delays.forEach(function(delay) {  %>
+                        <% if (job.order_id === delay.order_id) { %>
+                          <tr>
+                            <th scope="row"><%- moment(delay.log_dttm).format('M/D/YY @ kk:mm') %></th>
+                            <td><%- delay.asset_name %></td>
+                            <td><%- delay.delay_type %></td>
+                            <td><%- moment(delay.delay_start).format('M/D/YY @ kk:mm') %></td>
+                            <td><%- moment(delay.delay_stop).format('M/D/YY @ kk:mm') %></td>
+                            <td><%- delay.delay_duration %></td>
+                            <td><%- delay.description %></td>
+                            <td>
+                              <div class="dropdown">
+                                <a class="btn btn-info dropdown-toggle btn-sm" role="button" id="delayManipDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                  Edit/Delete
+                                </a>
+                                <div class="dropdown-menu" aria-labelledby="delayManipDropdown">
+                                  <a class="dropdown-item" data-toggle="modal" data-target="#editDelay<%- delay.delay_id %>">Edit</a>
+                                  <a class="dropdown-item" data-toggle="modal" data-target="#ddelay_id<%- delay.delay_id %>">Delete</a>
+                                    </div>
+                                    <%- include('partials/delays/editdelaymodal', { job : job, delay : delay}); %>
+                                    <%- include('partials/delays/deletedelaymodal', { job : job, delay : delay}); %>
+                              </div>
+                            
+                            </td>
+                          </tr>
+                          <% } %>
+                              <% }); %>
+                    </tbody>
+                  </table>
+        </div>
+      </div>  
+      </main>
+  </div>
+      <footer>
+          <%- include ('partials/footer') %>
+      </footer>
+      <script type="text/javascript" src="/shared.js" charset="utf-8"></script>
+      <script type="text/javascript" src="/jobview.js" charset="utf-8"></script>
+      <script>
+        $( function() {
+      var data = <%- JSON.stringify(locations) %>;
+      // console.log(data);
+        var locationnames = data.map(function(i) {
+          return i.location_name;
+        });
+  
+        $(".autopopulatelocation").focus(function() {
+          var clicked = $(this);
+          clicked.autocomplete({
+            source: function(request, response) {
+          var results = $.ui.autocomplete.filter(locationnames, request.term);
+  
+          response(results.slice(0, 10));
+          },
+            appendTo : $(this).parent().parent(),
+            select: function( event , ui ) {
+              var results = data.filter(function(entry) {
+                return entry.location_name === ui.item.label;  
+              });
+              var latitude = results[0].latitude;
+              console.log(latitude);
+              $(this).closest(".crunch").find('.assetlatitude').val(latitude);
+              var longitude = results[0].longitude;
+              console.log(longitude);
+              $(this).closest(".crunch").find('.assetlongitude').val(longitude);
+          }
+          });
+        });
+        });
+      </script>
+  </html>

@@ -1,23 +1,55 @@
 <link rel="stylesheet" href="https://unpkg.com/bootstrap-table@1.18.2/dist/bootstrap-table.min.css">
 <script src="https://unpkg.com/bootstrap-table@1.18.2/dist/bootstrap-table.min.js"></script>
+
+<style>
+  tr.hide-table-padding td {
+  padding: 0;
+}
+
+.delay-header {
+  display: flex; 
+  align-items: center;
+  padding-bottom: 8px;
+}
+
+.tow-group-card {
+  padding-top: 10px;
+  
+}
+
+/* .row>.col, .row>[class^=col-] {
+    padding-top: .75rem;
+    padding-bottom: .75rem;
+    background-color: rgba(86,61,124,.15);
+    border: 1px solid rgba(86,61,124,.2);
+} */
+
+.blah:after {
+    content: '\200b';
+}
+
+.reducefont {
+  font-size: 90%;
+}
+</style>
 <div class="card uvs">
     <div class="card-header sm" id="headingOne">
       <div class="row">
         <div class="col-2">
       <h5 class="mb-0">
-        <a class="btn btn-link" href="#" role="button" id="job<%- job.ordnbr %>">
+        <a class="btn btn-link" href="/job/<%- job.order_id %>" role="button" id="job<%- job.ordnbr %>">
           <%- job.ordnbr %> 
         </a>
       </h5>
     </div>
-    <div class="col-7">
+    <div class="col-8">
     </div>
     <div class="col-1" style="text-align: right;">
-      <a class="btn" data-toggle="modal" data-target="#newAsset<%- job.ordnbr %>">Add Asset</a>
+      <a class="btn reducefont" data-toggle="modal" data-target="#newAsset<%- job.ordnbr %>">Add Asset</a>
     </div>
     <%- include('assets/newassetmodal'); %>
     <div class="col-1">
-      <a class="btn">Job Page</a>
+      <a class="btn reducefont">Job Page</a>
     </div>
     </div>
     </div>
@@ -29,14 +61,14 @@
           <a class="nav-link active" data-toggle="tab" href="#logs<%- job.ordnbr %>" role="tab" aria-controls="logs" aria-selected="false">Logs</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" data-toggle="tab" href="#delays<%- job.ordnbr %>" role="tab" aria-controls="delays" aria-selected="false">Delays Last 24hrs</a>
+          <a class="nav-link" data-toggle="tab" href="#delays<%- job.ordnbr %>" role="tab" aria-controls="delays" aria-selected="false">Delays Last 48hrs</a>
         </li>
       </ul>
       <div class="tab-content" id="myTabContent">
         <div class="tab-pane fade show active" id="logs<%- job.ordnbr %>" role="tabpanel" aria-labelledby="logs-tab">
-      <div class="row bbvs">
-        <div class="card-body col-12">
-          <h6 style="line-height: 100%;">Tow Group 1</h6>
+          <div class="row bbvs">
+        <div class="card-body col-12 tow-group-card">
+          <h6>Tow Group 1</h6>
           <table class="table table-sm">
             <thead>
               <tr class="d-flex asset-row">
@@ -48,6 +80,7 @@
                 <th class="col-sm text-center">Miles Made</th>
                 <th class="col-sm text-center">MTG</th>
                 <th class="col-sm text-center">Date Submitted</th>
+                <th class="col-1"></th>
                 <th class="col-1"></th>
               </tr>
             </thead>
@@ -70,7 +103,11 @@
                         <%- log.speed %> mph 
                       </td>
                       <td class="col-sm text-center">
-                        <%- moment(log.eta).format('M/D/YY @ kk:mm') %> 
+                        <% if(log.eta === null) { %>
+                          N/A 
+                      <%  } else { %>
+                          <%- moment(log.eta).format('M/D/YY @ kk:mm') %> 
+                        <% } %>
                       </td>
                       <td class="col-sm text-center">
                         <%- log.miles_made %> 
@@ -84,25 +121,48 @@
                       <% }  %>
                       <% }); %>
                       <% if (asset.asset_type === "Tug") { %>
-                          <td class="col-1 ml-auto">
-                            <div class="dropdown">
-                              <a class="btn btn-info dropdown-toggle btn-sm" role="button" id="logsDropDown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                More
-                              </a>
-  
-                              <div class="dropdown-menu" aria-labelledby="logsDropDown">
-                                <a class="dropdown-item" data-toggle="modal" href="#newLog<%- asset.asset_id %>">Create Log</a>
-                                <a class="dropdown-item" href="#">Edit Current Log</a>
+                        <td class="col-1 ml-auto">
+                          
+                          <a class="btn btn-info btn-sm" data-toggle="modal" href="#newLog<%- asset.asset_id %>">
+                            New Log
+                          </a>
+                        </td>
+                      <td class="col-1">
+                        <div class="dropdown">
+                          <a class="btn btn-info dropdown-toggle btn-sm" role="button" id="logsDropDown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            More
+                          </a>
+                          <div class="dropdown-menu" aria-labelledby="logsDropDown">
+                            <a class="dropdown-item" data-toggle="modal" data-target="#newDelay<%- asset.asset_id %>">Add Delay to Tow Group</a>
+                                <a class="dropdown-item" data-toggle="modal" data-target="#duLog<%- asset.asset_id %>">Duplicate Most Recent Log</a>
+                                <a class="dropdown-item" data-toggle="modal" data-target="#editAsset<%- asset.asset_id %>">Edit Asset</a>
                                 <a class="dropdown-item" href="#">View Asset Logs</a>
-                                <a class="dropdown-item" data-toggle="modal" href="#editAsset<%- asset.asset_id %>">Edit Asset</a>
                                 <a class="dropdown-item" href="#">View Job Logs</a>
                               </div>
                               <%- include('assets/editassetmodal', { job: job, asset : asset }); %>
                               <%- include('assetlogs/newlogmodal', { job: job, asset : asset }); %>
-  
+                              <%- include('assetlogs/duplicatelogmodal', { job: job, asset : asset }); %>
+                          <%- include('delays/newdelaymodal', { job: job, asset : asset }); %>
+                        </div>
+                      </td>
+                      <% } else { %>
+                        <td class="col-1 ml-auto">
+                          <div class="dropdown">
+                            <a class="btn btn-info dropdown-toggle btn-sm" role="button" id="logsDropDown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                              More
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="logsDropDown">
+                              <a class="dropdown-item" data-toggle="modal" href="#newDelay<%- asset.asset_id %>">Add Delay to Tow Group</a>
+                              <a class="dropdown-item" href="#">View Asset Logs</a>
+                              <a class="dropdown-item" data-toggle="modal" href="#editAsset<%- asset.asset_id %>">Edit Asset</a>
+                              <a class="dropdown-item" href="#">View Job Logs</a>
                             </div>
-                          </td>
-                          <% } %>
+                            <%- include('assets/editassetmodal', { job: job, asset : asset }); %>
+                            <%- include('assetlogs/newlogmodal', { job: job, asset : asset }); %>
+                            <%- include('delays/newdelaymodal', { job: job, asset : asset }); %>
+                          </div>
+                        </td>
+                        <% } %>
                   </tr>
                   <% } %>
                 <% }); %>
@@ -111,188 +171,219 @@
         </div>
       </div>
       <div class="row bbvs">
-      <div class="card-body col-9">
-        <h6 style="line-height: 100%;">Tow Group 2</h6>
-        <table class="table table-sm">
-          <thead>
-            <tr class="d-flex asset-row">
-              <th class="col-2">Asset</th>
-              <th class="col-1">Status</th>
-              <th class="col-sm text-center">Location</th>
-              <th class="col-sm text-center">Speed</th>
-              <th class="col-sm text-center">ETA</th>
-              <th class="col-sm text-center">Miles Made</th>
-              <th class="col-sm text-center">MTG</th>
-              <th class="col-sm text-center">Date Submitted</th>
-              <th class="col-1"></th>
-            </tr>
-          </thead>
-          <tbody class="asset-tbody">
-            <% assets.forEach(function(asset) {  %>
-              <% if (asset.order_id  === job.order_id && asset.tow_group === 2) { %>
-                <tr class="d-flex asset-row">
-                  <td class="col-2">
-                    <%- asset.asset_name %>
-                  </td>
-                  <% logs.forEach(function(log) { %>
-                    <% if (log.order_id === asset.order_id && log.asset_id === asset.asset_id) { %>
-                      <td class="col-1">
-                        <%- log.status %>
+        <div class="card-body col-12 tow-group-card">
+          <h6>Tow Group 2</h6>
+          <table class="table table-sm">
+            <thead>
+              <tr class="d-flex asset-row">
+                <th class="col-2">Asset</th>
+                <th class="col-1">Status</th>
+                <th class="col-sm text-center">Location</th>
+                <th class="col-sm text-center">Speed</th>
+                <th class="col-sm text-center">ETA</th>
+                <th class="col-sm text-center">Miles Made</th>
+                <th class="col-sm text-center">MTG</th>
+                <th class="col-sm text-center">Date Submitted</th>
+                <th class="col-1"></th>
+                <th class="col-1"></th>
+              </tr>
+            </thead>
+            <tbody class="asset-tbody">
+              <% assets.forEach(function(asset) {  %>
+                <% if (asset.order_id  === job.order_id && asset.tow_group === 2) { %>
+                  <tr class="d-flex asset-row">
+                    <td class="col-2">
+                      <%- asset.asset_name %>
+                    </td>
+                    <% logs.forEach(function(log) { %>
+                      <% if (log.order_id === asset.order_id && log.asset_id === asset.asset_id) { %>
+                        <td class="col-1">
+                          <%- log.status %>
+                        </td>
+                      <td class="col-sm text-center">
+                        <%- log.asset_location %> 
                       </td>
-                    <td class="col-sm text-center">
-                      <%- log.asset_location %> 
-                    </td>
-                    <td class="col-sm text-center">
-                      <%- log.speed %> mph 
-                    </td>
-                    <td class="col-sm text-center">
-                      <%- moment(log.eta).format('M/D/YY @ kk:mm') %> 
-                    </td>
-                    <td class="col-sm text-center">
-                      <%- log.miles_made %> 
-                    </td>
-                    <td class="col-sm text-center">
-                      <%- log.miles_to_go %> 
-                    </td>
-                    <td class="col-sm text-center logdttm">
-                      <%- moment(log.log_dttm).format('M/D/YY @ kk:mm') %> 
-                    </td>
-                    <% }  %>
-                    <% }); %>
-                    <% if (asset.asset_type === "Tug") { %>
+                      <td class="col-sm text-center">
+                        <%- log.speed %> mph 
+                      </td>
+                      <td class="col-sm text-center">
+                        <% if(log.eta === null) { %>
+                          N/A 
+                      <%  } else { %>
+                          <%- moment(log.eta).format('M/D/YY @ kk:mm') %> 
+                        <% } %>
+                      </td>
+                      <td class="col-sm text-center">
+                        <%- log.miles_made %> 
+                      </td>
+                      <td class="col-sm text-center">
+                        <%- log.miles_to_go %> 
+                      </td>
+                      <td class="col-sm text-center logdttm">
+                        <%- moment(log.log_dttm).format('M/D/YY @ kk:mm') %> 
+                      </td>
+                      <% }  %>
+                      <% }); %>
+                      <% if (asset.asset_type === "Tug") { %>
+                        <td class="col-1 ml-auto">
+                          
+                          <a class="btn btn-info btn-sm" data-toggle="modal" href="#newLog<%- asset.asset_id %>">
+                            New Log
+                          </a>
+                        </td>
+                      <td class="col-1">
+                        <div class="dropdown">
+                          <a class="btn btn-info dropdown-toggle btn-sm" role="button" id="logsDropDown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            More
+                          </a>
+                          <div class="dropdown-menu" aria-labelledby="logsDropDown">
+                            <a class="dropdown-item" data-toggle="modal" href="#newDelay<%- asset.asset_id %>">Add Delay to Tow Group</a>
+                            <a class="dropdown-item" data-toggle="modal" data-target="#duLog<%- asset.asset_id %>">Duplicate Most Recent Log</a>
+                            <a class="dropdown-item" href="#">View Asset Logs</a>
+                            <a class="dropdown-item" data-toggle="modal" href="#editAsset<%- asset.asset_id %>">Edit Asset</a>
+                            <a class="dropdown-item" href="#">View Job Logs</a>
+                          </div>
+                          <%- include('assets/editassetmodal', { job: job, asset : asset }); %>
+                          <%- include('assetlogs/newlogmodal', { job: job, asset : asset }); %>
+                          <%- include('assetlogs/duplicatelogmodal', { job: job, asset : asset }); %>
+                          <%- include('delays/newdelaymodal', { job: job, asset : asset }); %>
+                        </div>
+                      </td>
+                      <% } else { %>
                         <td class="col-1 ml-auto">
                           <div class="dropdown">
                             <a class="btn btn-info dropdown-toggle btn-sm" role="button" id="logsDropDown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                               More
                             </a>
-
                             <div class="dropdown-menu" aria-labelledby="logsDropDown">
-                              <a class="dropdown-item" data-toggle="modal" href="#newLog<%- asset.asset_id %>">Create Log</a>
-                              <a class="dropdown-item" href="#">Edit Current Log</a>
+                              <a class="dropdown-item" data-toggle="modal" href="#newDelay<%- asset.asset_id %>">Add Delay to Tow Group</a>
                               <a class="dropdown-item" href="#">View Asset Logs</a>
                               <a class="dropdown-item" data-toggle="modal" href="#editAsset<%- asset.asset_id %>">Edit Asset</a>
                               <a class="dropdown-item" href="#">View Job Logs</a>
                             </div>
                             <%- include('assets/editassetmodal', { job: job, asset : asset }); %>
                             <%- include('assetlogs/newlogmodal', { job: job, asset : asset }); %>
-
+                            <%- include('delays/newdelaymodal', { job: job, asset : asset }); %>
                           </div>
                         </td>
                         <% } %>
-                </tr>
-                <% } %>
-              <% }); %>
-          </tbody>
-        </table>
+                  </tr>
+                  <% } %>
+                <% }); %>
+            </tbody>
+          </table>
+        </div>
       </div>
-    </div>
-    <div class="row bbvs">
-      <div class="card-body col-9">
-        <h6 style="line-height: 100%;">Tow Group 3</h6>
-        <table class="table table-sm">
-          <thead>
-            <tr class="d-flex asset-row">
-              <th class="col-2">Asset</th>
-              <th class="col-1">Status</th>
-              <th class="col-sm text-center">Location</th>
-              <th class="col-sm text-center">Speed</th>
-              <th class="col-sm text-center">ETA</th>
-              <th class="col-sm text-center">Miles Made</th>
-              <th class="col-sm text-center">MTG</th>
-              <th class="col-sm text-center">Date Submitted</th>
-              <th class="col-1"></th>
-            </tr>
-          </thead>
-          <tbody class="asset-tbody">
-            <% assets.forEach(function(asset) {  %>
-              <% if (asset.order_id  === job.order_id && asset.tow_group === 3) { %>
-                <tr class="d-flex asset-row">
-                  <td class="col-2">
-                    <%- asset.asset_name %>
-                  </td>
-                  <% logs.forEach(function(log) { %>
-                    <% if (log.order_id === asset.order_id && log.asset_id === asset.asset_id) { %>
-                      <td class="col-1">
-                        <%- log.status %>
+      <div class="row bbvs">
+        <div class="card-body col-12 tow-group-card">
+          <h6>Tow Group 3</h6>
+          <table class="table table-sm">
+            <thead>
+              <tr class="d-flex asset-row">
+                <th class="col-2">Asset</th>
+                <th class="col-1">Status</th>
+                <th class="col-sm text-center">Location</th>
+                <th class="col-sm text-center">Speed</th>
+                <th class="col-sm text-center">ETA</th>
+                <th class="col-sm text-center">Miles Made</th>
+                <th class="col-sm text-center">MTG</th>
+                <th class="col-sm text-center">Date Submitted</th>
+                <th class="col-1"></th>
+                <th class="col-1"></th>
+              </tr>
+            </thead>
+            <tbody class="asset-tbody">
+              <% assets.forEach(function(asset) {  %>
+                <% if (asset.order_id  === job.order_id && asset.tow_group === 3) { %>
+                  <tr class="d-flex asset-row">
+                    <td class="col-2">
+                      <%- asset.asset_name %>
+                    </td>
+                    <% logs.forEach(function(log) { %>
+                      <% if (log.order_id === asset.order_id && log.asset_id === asset.asset_id) { %>
+                        <td class="col-1">
+                          <%- log.status %>
+                        </td>
+                      <td class="col-sm text-center">
+                        <%- log.asset_location %> 
                       </td>
-                    <td class="col-sm text-center">
-                      <%- log.asset_location %> 
-                    </td>
-                    <td class="col-sm text-center">
-                      <%- log.speed %> mph 
-                    </td>
-                    <td class="col-sm text-center">
-                      <%- moment(log.eta).format('M/D/YY @ kk:mm') %> 
-                    </td>
-                    <td class="col-sm text-center">
-                      <%- log.miles_made %> 
-                    </td>
-                    <td class="col-sm text-center">
-                      <%- log.miles_to_go %> 
-                    </td>
-                    <td class="col-sm text-center logdttm">
-                      <%- moment(log.log_dttm).format('M/D/YY @ kk:mm') %> 
-                    </td>
-                    <% }  %>
-                    <% }); %>
-                    <% if (asset.asset_type === "Tug") { %>
+                      <td class="col-sm text-center">
+                        <%- log.speed %> mph 
+                      </td>
+                      <td class="col-sm text-center">
+                        <<% if(log.eta === null) { %>
+                          N/A 
+                      <%  } else { %>
+                          <%- moment(log.eta).format('M/D/YY @ kk:mm') %> 
+                        <% } %>
+                      </td>
+                      <td class="col-sm text-center">
+                        <%- log.miles_made %> 
+                      </td>
+                      <td class="col-sm text-center">
+                        <%- log.miles_to_go %> 
+                      </td>
+                      <td class="col-sm text-center logdttm">
+                        <%- moment(log.log_dttm).format('M/D/YY @ kk:mm') %> 
+                      </td>
+                      <% }  %>
+                      <% }); %>
+                      <% if (asset.asset_type === "Tug") { %>
+                        <td class="col-1 ml-auto">
+                          
+                          <a class="btn btn-info btn-sm" data-toggle="modal" href="#newLog<%- asset.asset_id %>">
+                            New Log
+                          </a>
+                        </td>
+                      <td class="col-1">
+                        <div class="dropdown">
+                          <a class="btn btn-info dropdown-toggle btn-sm" role="button" id="logsDropDown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            More
+                          </a>
+                          <div class="dropdown-menu" aria-labelledby="logsDropDown">
+                            <a class="dropdown-item" data-toggle="modal" href="#newDelay<%- asset.asset_id %>">Add Delay to Tow Group</a>
+                            <a class="dropdown-item" data-toggle="modal" data-target="#duLog<%- asset.asset_id %>">Duplicate Most Recent Log</a>
+                            <a class="dropdown-item" href="#">View Asset Logs</a>
+                            <a class="dropdown-item" data-toggle="modal" href="#editAsset<%- asset.asset_id %>">Edit Asset</a>
+                            <a class="dropdown-item" href="#">View Job Logs</a>
+                          </div>
+                          <%- include('assets/editassetmodal', { job: job, asset : asset }); %>
+                          <%- include('assetlogs/newlogmodal', { job: job, asset : asset }); %>
+                          <%- include('assetlogs/duplicatelogmodal', { job: job, asset : asset }); %>
+                          <%- include('delays/newdelaymodal', { job: job, asset : asset }); %>
+                        </div>
+                      </td>
+                      <% } else { %>
                         <td class="col-1 ml-auto">
                           <div class="dropdown">
                             <a class="btn btn-info dropdown-toggle btn-sm" role="button" id="logsDropDown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                               More
                             </a>
-
                             <div class="dropdown-menu" aria-labelledby="logsDropDown">
-                              <a class="dropdown-item" data-toggle="modal" href="#newLog<%- asset.asset_id %>">Create Log</a>
-                              <a class="dropdown-item" href="#">Edit Current Log</a>
+                              <a class="dropdown-item" data-toggle="modal" href="#newDelay<%- asset.asset_id %>">Add Delay to Tow Group</a>
                               <a class="dropdown-item" href="#">View Asset Logs</a>
                               <a class="dropdown-item" data-toggle="modal" href="#editAsset<%- asset.asset_id %>">Edit Asset</a>
                               <a class="dropdown-item" href="#">View Job Logs</a>
                             </div>
                             <%- include('assets/editassetmodal', { job: job, asset : asset }); %>
                             <%- include('assetlogs/newlogmodal', { job: job, asset : asset }); %>
-
+                            <%- include('delays/newdelaymodal', { job: job, asset : asset }); %>
                           </div>
                         </td>
                         <% } %>
-                </tr>
-                <% } %>
-              <% }); %>
-          </tbody>
-        </table>
+                  </tr>
+                  <% } %>
+                <% }); %>
+            </tbody>
+          </table>
+        </div>
       </div>
-    </div>
   </div>
+
+  <!-- Delays Tab -->
   <div class="tab-pane fade" id="delays<%- job.ordnbr %>" role="tabpanel" aria-labelledby="logs-tab">
     <div class="row bbvs">
-      <div class="card-body col-12">
-        <table class="table table-bordered table-sm">
-          <thead>
-            <tr class="d-flex asset-row">
-              <th class="col-1">Type</th>
-              <th class="col-1">Start</th>
-              <th class="col-1">Stop</th>
-              <th class="col-sm">CBC 764</th>
-              <th class="col-sm">CBC 761</th>
-              <th class="col-sm">M/V Callie Cate</th>
-              <th class="col-sm">M/V Trey Paul</th>
-              <th class="col-4">Details</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr class="d-flex asset-row">
-              <td class="col-1">Lock</td>
-              <td class="col-1">Otto</td>
-              <td class="col-1">@mdo</td>
-              <td class="col-sm">@mdo</td>
-              <td class="col-sm">@mdo</td>
-              <td class="col-sm">@mdo</td>
-              <td class="col-sm">@mdo</td>
-              <td class="col-4">@mdo</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+      <%- include('delays/delayview24hrs', { job : job, assets : assets, delays : delays }); %>
     </div>
   </div>
   </div>

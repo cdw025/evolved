@@ -29,13 +29,6 @@ function getHostURL() {
         return user;
   }
 
-  function showErrorMessage(message) {
-    const $errorMessage = $('#errorMessage');
-    $errorMessage.text(message);
-    $errorMessage.show();
-  }
-
-
   function getNewJobFromForm() {
     const ordnbr = $('#JobNumberInput').val();
     const status= $('#jobStatus').val();
@@ -324,28 +317,48 @@ function getDuplicateJobFromForm(form) {
         const start_lube = form.find('.eassetStartLube').val();
         const stop_lube = form.find('.eassetStopLube').val();
     
-     const asset = {
-                asset_id,
-                asset_status,
-                tow_group,
-                asset_name,
-                vendor_name,
-                asset_type,
-                asset_start,
-                asset_stop,
-                start_fuel,
-                stop_fuel,
-                start_lube,
-                stop_lube
-            };
-    
-            return asset;
+        if(asset_stop) {
+          const asset = {
+                     asset_id,
+                     asset_status,
+                     tow_group,
+                     asset_name,
+                     vendor_name,
+                     asset_type,
+                     asset_start,
+                     asset_stop,
+                     start_fuel,
+                     stop_fuel,
+                     start_lube,
+                     stop_lube
+                 };
+         
+                 return asset;
+
+        } else {
+          const asset = {
+            asset_id,
+            asset_status,
+            tow_group,
+            asset_name,
+            vendor_name,
+            asset_type,
+            asset_start,
+            start_fuel,
+            stop_fuel,
+            start_lube,
+            stop_lube
+        };
+
+        return asset;
+        }
       }
 
-
+// get new log form
       function getNewLogFromForm(form) {
         const order_id = form.find('.orderId').val();
         const asset_id = form.find('.assetId').val();
+        const asset_name = form.find('.assetname').val();
         const tow_group = form.find('.towgroup').val();
         const location_type = form.find('.logLocationType').val();
         const asset_location = form.find('.assetLocation').val();
@@ -360,25 +373,268 @@ function getDuplicateJobFromForm(form) {
         const miles_made = form.find('.milesmade').val();
         const miles_to_go = form.find('.milestogo').val();
         const notes = form.find('.lognotes').val();
-    
-     const log = {
-                order_id,
+
+
+        if(eta) {
+          const log = {
+            order_id,
+            asset_id,
+            asset_name,
+            tow_group,
+            location_type,
+            asset_location,
+            latitude,
+            longitude,
+            fuel_burn,
+            lube_burn,
+            speed,
+            status,
+            direction,
+            eta,
+            miles_made,
+            miles_to_go,
+            notes
+        };
+        return log;
+      } else {
+          const log = {
+            order_id,
+            asset_id,
+            asset_name,
+            tow_group,
+            location_type,
+            asset_location,
+            latitude,
+            longitude,
+            fuel_burn,
+            lube_burn,
+            speed,
+            status,
+            direction,
+            miles_made,
+            miles_to_go,
+            notes
+        };
+        return log;
+        }
+      }
+
+      // get duplicate log form
+      function getDuplicateLogFromForm(form) {
+        const order_id = form.find('.duorderId').val();
+        const asset_id = form.find('.duassetId').val();
+        const asset_name = form.find('.duassetname').val();
+        const tow_group = form.find('.dutowgroup').val();
+        const location_type = form.find('.dulogLocationType').val();
+        const asset_location = form.find('.duassetLocation').val();
+        const latitude = form.find('.duassetlatitude').val();
+        const longitude = form.find('.duassetlongitude').val();
+        const fuel_burn = form.find('.dufuelburn').val();
+        const lube_burn = form.find('.dulubeburn').val();
+        const speed = form.find('.ducurrentspeed').val();
+        const status = form.find('.dulogstatus').val();
+        const direction = form.find('.dulogdirection').val();
+        const eta = form.find('.dulogeta').val();
+        const miles_made = form.find('.dumilesmade').val();
+        const miles_to_go = form.find('.dumilestogo').val();
+        const notes = form.find('.dulognotes').val();
+
+
+        if(eta) {
+          const log = {
+            order_id,
+            asset_id,
+            asset_name,
+            tow_group,
+            location_type,
+            asset_location,
+            latitude,
+            longitude,
+            fuel_burn,
+            lube_burn,
+            speed,
+            status,
+            direction,
+            eta,
+            miles_made,
+            miles_to_go,
+            notes
+        };
+        return log;
+      } else {
+          const log = {
+            order_id,
+            asset_id,
+            asset_name,
+            tow_group,
+            location_type,
+            asset_location,
+            latitude,
+            longitude,
+            fuel_burn,
+            lube_burn,
+            speed,
+            status,
+            direction,
+            miles_made,
+            miles_to_go,
+            notes
+        };
+        return log;
+        }
+      }
+
+// get edit log form
+function getEditLogFromForm(form) {
+  const log_id = form.find('.editlogId').val();
+  const order_id = form.find('.editorderId').val();
+  const asset_id = form.find('.editassetId').val();
+  const asset_name = form.find('.editassetname').val();
+  const tow_group = form.find('.edittowgroup').val();
+  const location_type = form.find('.editlogLocationType').val();
+  const asset_location = form.find('.editassetLocation').val();
+  const latitude = form.find('.editassetlatitude').val();
+  const longitude = form.find('.editassetlongitude').val();
+  const fuel_burn = form.find('.editfuelburn').val();
+  const lube_burn = form.find('.editlubeburn').val();
+  const speed = form.find('.editcurrentspeed').val();
+  const status = form.find('.editlogstatus').val();
+  const direction = form.find('.editlogdirection').val();
+  const eta = form.find('.editlogeta').val();
+  const miles_made = form.find('.editmilesmade').val();
+  const miles_to_go = form.find('.editmilestogo').val();
+  const notes = form.find('.editlognotes').val();
+
+
+  if(eta) {
+    const log = {
+      log_id,
+      order_id,
+      asset_id,
+      asset_name,
+      tow_group,
+      location_type,
+      asset_location,
+      latitude,
+      longitude,
+      fuel_burn,
+      lube_burn,
+      speed,
+      status,
+      direction,
+      eta,
+      miles_made,
+      miles_to_go,
+      notes
+  };
+  return log;
+} else {
+    const log = {
+      log_id,
+      order_id,
+      asset_id,
+      asset_name,
+      tow_group,
+      location_type,
+      asset_location,
+      latitude,
+      longitude,
+      fuel_burn,
+      lube_burn,
+      speed,
+      status,
+      direction,
+      miles_made,
+      miles_to_go,
+      notes
+  };
+  return log;
+  }
+}
+
+
+
+
+// New Delay Form getter
+      function getNewDelayFromForm(form) {
+        const asset_id = form.find('.assetId').val();
+        const asset_name = form.find('.assetname').val();
+        const order_id = form.find('.orderId').val();
+        const tow_group = form.find('.towgroup').val();
+        const delay_type = form.find('.delaytype').val();
+        const delay_start = form.find('.delaystart').val();
+        const delay_stop = form.find('.delaystop').val();
+        const description = form.find('.delaynotes').val();
+   
+     const delay = {
                 asset_id,
+                asset_name,
+                order_id,
                 tow_group,
-                location_type,
-                asset_location,
-                latitude,
-                longitude,
-                fuel_burn,
-                lube_burn,
-                speed,
-                status,
-                direction,
-                eta,
-                miles_made,
-                miles_to_go,
-                notes
+                delay_type,
+                delay_start,
+                delay_stop,
+                description
             };
     
-            return log;
+            return delay;
       }
+
+
+// Edit Delay Form getter
+function editDelayFromForm(form) {
+  const delay_id = form.find('.editdelayId').val();
+  const asset_id = form.find('.editassetId').val();
+  const asset_name = form.find('.editassetname').val();
+  const order_id = form.find('.editorderId').val();
+  const tow_group = form.find('.edittowgroup').val();
+  const delay_type = form.find('.editdelaytype').val();
+  const delay_start = form.find('.editdelaystart').val();
+  const delay_stop = form.find('.editdelaystop').val();
+  const description = form.find('.editdelaynotes').val();
+
+const delay = {
+          delay_id,
+          asset_id,
+          asset_name,
+          order_id,
+          tow_group,
+          delay_type,
+          delay_start,
+          delay_stop,
+          description
+      };
+
+      return delay;
+}
+
+// enable error message pop up to show
+      function showErrorMessage(message) {
+        const $errorMessage = $('#errorMessage');
+        $errorMessage.text(message);
+        $errorMessage.show();
+      }
+
+
+
+// Delete Delay Form Getter
+function deleteDelayFromForm(form) {
+  const delay_id = form.find('.ddelay_id').val();
+
+  const delay = {
+    delay_id
+  };
+
+  return delay;
+}
+
+// Delete Delay Form Getter
+function deleteLogFromForm(form) {
+  const log_id = form.find('.dlog_id').val();
+
+  const log = {
+    log_id
+  };
+
+  return log;
+}

@@ -1,0 +1,89 @@
+<div class="modal fade" id="editDelay<%- delay.delay_id %>" tabindex="-1" role="dialog" aria-labelledby="editDelayModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content" style="text-align: left;">
+        <div class="modal-header">
+          <h5 class="modal-title" id="editDelayModalLabel">Edit Delay for Asset #<%- delay.asset_name %> for Job <%- job.ordnbr %></h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+            <form class="editdelayform">
+              <div class="alert alert-danger" role="alert" id="errorMessage_<%- delay.delay_id %>" style="display:none">
+                Ah!
+              </div>
+            <div class="row">
+                <div class="col-12">
+                    <div class="form-group">
+                        <label hidden name="editdelayId"></label>
+                        <input hidden type="text" class="form-control editdelayId" value="<%- delay.delay_id %>">
+                        <label hidden name="editassetId"></label>
+                        <input hidden type="text" class="form-control editassetId" value="<%- delay.asset_id %>">
+                        <label hidden name="editassetname"></label>
+                        <input hidden type="text" class="form-control editassetname" value="<%- delay.asset_name %>">
+                        <label hidden name="editorderId"></label>
+                        <input hidden type="integer" class="form-control editorderId" value="<%- delay.order_id %>">
+                        <label name="editJobNumberInput">Job #</label>
+                        <input type="text" class="form-control editJobNumberInput" value="<%- job.ordnbr %>" readonly>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <div class="form-group">
+                        <label name="edittowgroup">Tow Group
+                            <img src="/tooltip.png" width = "20" height = "20" 
+                            data-toggle="tooltip" data-placement="right" title="By adding a delay, you will be adding it for all assets within this tow group. If an asset needs to be moved to a different tow group please contact your administrator."
+                            style="font-size: 90%; align-items: center;">
+                        </label>
+                        <input type="text" class="form-control edittowgroup" value="<%- delay.tow_group %>" readonly>
+                      </div>
+              </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <div class="form-group">
+                        <label name="editdelaytype">Delay Type</label>
+                    <select class="form-control editdelaytype" value="<%- delay.delay_type %>">
+                      <option value="Lock" <%= delay.delay_type == 'Lock' ? 'selected' : ''%>>Lock</option>
+                      <option value="Weather" <%= delay.delay_type == 'Weather' ? 'selected' : ''%>>Weather</option>
+                      <option value="Loading" <%= delay.delay_type == 'Loading' ? 'selected' : ''%>>Loading</option>
+                      <option value="Unloading" <%= delay.delay_type == 'Unloading' ? 'selected' : ''%>>Unloading</option>
+                      <option value="Traffic" <%= delay.delay_type == 'Traffic' ? 'selected' : ''%>>Traffic</option>
+                      <option value="Customs" <%= delay.delay_type == 'Customs' ? 'selected' : ''%>>Customs</option>
+                      <option value="Other" <%= delay.delay_type == 'Other' ? 'selected' : ''%>>Other</option>
+                      </select>
+                      </div>
+              </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <div class="form-group">
+                        <label name="editdelaystart">Delay Start</label>
+                        <input type="datetime-local" class="form-control editdelaystart" value="<%- moment(delay.delay_start).format('YYYY-MM-DDTHH:mm') %>">
+                      </div>
+              </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <div class="form-group">
+                        <label name="editdelaystop">Delay End</label>
+                        <input type="datetime-local" class="form-control editdelaystop" value="<%- moment(delay.delay_stop).format('YYYY-MM-DDTHH:mm') %>">
+                      </div>
+              </div>
+            </div>
+      <div class="row">
+          <div class="col-12">
+                <label name="editdelaynotes">Delay Details</label>
+              <textarea class="form-control editdelaynotes" rows="2" placeholder="Enter any notes you wish here"><%- delay.description %></textarea>
+          </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary">Save Changes</button>
+    </div>
+</form>
+    </div>
+  </div>
+</div>

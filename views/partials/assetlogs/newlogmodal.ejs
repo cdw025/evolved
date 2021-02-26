@@ -14,6 +14,8 @@
                     <div class="form-group">
                         <label hidden for="assetId"></label>
                         <input hidden type="text" class="form-control assetId" value="<%- asset.asset_id %>">
+                        <label hidden for="assetname"></label>
+                        <input hidden type="text" class="form-control assetname" value="<%- asset.asset_name %>">
                         <label hidden for="towgroup"></label>
                         <input hidden type="text" class="form-control towgroup" value="<%- asset.tow_group %>">
                         <label hidden for="orderId"></label>
@@ -41,8 +43,12 @@
             </div>
             <div class="col-6 locationinland">
                 <div class="form-group">
-                    <label for="assetLocation">Location</label>
-                    <input type="text" class="form-control assetLocation autopopulatelocation" placeholder="ex. LM - 7, UM - 100, OH - 230">
+                    <label name="towgroup">Location
+                        <img src="../tooltip.png" width = "20" height = "20" 
+                        data-toggle="tooltip" data-placement="right" title="Type a location.  If a location is suggested, the latitude and longitude will auto-populate once selected."
+                        style="font-size: 90%; align-items: center;">
+                    </label>
+                    <input type="text" class="form-control assetLocation autopopulatelocation" placeholder="ex. LM - 7, UM - 100, OH - 230" required>
                 </div>
             </div>
         </div>
@@ -119,13 +125,13 @@
             <div class="col-6">
                 <div class="form-group">
                     <label for="milesmade">Miles Made Last 24hrs</label>
-                    <input type="integer" class="form-control milesmade" placeholder="miles made last 24hrs">
+                    <input type="integer" class="form-control milesmade" placeholder="miles made last 24hrs" required>
                 </div>
             </div>
             <div class="col-6">
                 <div class="form-group">
                     <label for="milestogo">Miles to Go</label>
-                    <input type="integer" class="form-control milestogo" placeholder="miles to go">
+                    <input type="integer" class="form-control milestogo" placeholder="miles to go" required>
                 </div>
             </div>
       </div>

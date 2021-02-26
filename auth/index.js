@@ -5,8 +5,8 @@ const User = require('../db/user');
 const Barge = require('../db/barge');
 const Job = require('../db/job');
 const Asset = require('../db/asset');
-const AssetLog = require('../db/assetlog');
-const asset = require('../db/asset');
+const AssetLog = require('../db/assetlog')
+const Delay = require('../db/delay');
 
 // Route paths are prepended with /auth
 
@@ -117,22 +117,6 @@ router.post('/login', (req, res, next) => {
         next(new Error('Invalid Login'));
     }
 });
-
-router.get('/dashboard/:order_id', (req, res) => {
-    if (!isNaN(req.params.order_id)) {
-        Job.getOneByJobId(req.params.order_id).then(job => {
-        if (job) {
-            res.json(job);
-        } else {
-            res.status(404);
-            res.send('job not found');
-        }
-        });
-    } else {
-        res.status(500);
-        res.send('invalid ID');
-    }
-    });
 
 
 router.post('/newjob', (req, res, next) => {
@@ -337,6 +321,7 @@ router.post('/newlog', (req, res, next) => {
     const log = {
         order_id : req.body.order_id,
         asset_id : req.body.asset_id,
+        asset_name : req.body.asset_name,
         tow_group : req.body.tow_group,
         location_type : req.body.location_type,
         asset_location : req.body.asset_location,
@@ -370,81 +355,107 @@ res.json({
     });
 });    
 
+router.put('/editlog/:log_id', (req, res) => {
+    AssetLog
+        .update(req.params.log_id, req.body).then(log => {
+            // redirect
+            res.json(log);
+        });
+});
+
+router.delete('/deletelog/:log_id', (req, res) => {
+    AssetLog.delete(req.params.log_id).then(
+        res.json("log deleted."));
+});
+
+router.put('/editdelay/:delay_id', (req, res, next) => {
+    const delay = {
+        asset_id : req.body.asset_id,
+        asset_name : req.body.asset_name,
+        order_id : req.body.order_id,
+        tow_group : req.body.tow_group,
+        delay_type : req.body.delay_type,
+        delay_start : req.body.delay_start,
+        delay_stop : req.body.delay_stop,
+        description : req.body.description
+    };        
+    
+    
+            var delay_start_date = new Date(delay.delay_start);
+            var delay_stop_date = new Date(delay.delay_stop);
+            if(delay_start_date.setHours(0,0,0,0) == delay_stop_date.setHours(0,0,0,0)) {
+
+                Delay.update(req.params.delay_id, delay).then(delay => {
+                    // redirect
+                    res.json(delay);
+                });
+            } else {
+                next(new Error('ERROR: Start and Stop dates must be on the same day.'));
+            }
+});
+
+router.delete('/deletedelay/:delay_id', (req, res) => {
+    Delay.delete(req.params.delay_id).then(
+        res.json("delay deleted."));
+});
 
 
-// router.post('/newlog', (req, res, next) => {
-//     const log = {
-//         order_id : req.body.order_id,
-//         asset_id : req.body.asset_id,
-//         tow_group : req.body.tow_group,
-//         location_type : req.body.location_type,
-//         asset_location : req.body.asset_location,
-//         latitude : req.body.latitude,
-//         longitude : req.body.longitude,
-//         fuel_burn : req.body.fuel_burn,
-//         lube_burn : req.body.lube_burn,
-//         speed : req.body.speed,
-//         direction : req.body.direction,
-//         eta : req.body.eta,
-//         miles_made : req.body.miles_made,
-//         miles_to_go : req.body. miles_to_go,
-//         notes : req.body.notes,
-//         log_dttm : new Date(),
-//         created_by: 'Neal White',
-//         last_modified_by: 'Neal White',
-//         created_dttm: new Date(),
-//         modified_dttm: new Date()
-//     };
-//     Asset
-//     .getMatchingAssets(log)
-//     .then(assets => {
-//         assets = JSON.parse(JSON.stringify(assets));
-//         // console.log(assets);
+
+router.post('/newdelay', (req, res, next) => {
+    const delay = {
+        asset_id : req.body.asset_id,
+        asset_name : req.body.asset_name,
+        order_id : req.body.order_id,
+        tow_group : req.body.tow_group,
+        delay_type : req.body.delay_type,
+        delay_start : req.body.delay_start,
+        delay_stop : req.body.delay_stop,
+        description : req.body.description,
+        log_dttm : new Date()
+    };
+            var delay_start_date = new Date(delay.delay_start);
+            var delay_stop_date = new Date(delay.delay_stop);
+            if(delay_start_date.setHours(0,0,0,0) == delay_stop_date.setHours(0,0,0,0)) {
+                
+    Asset
+    .getMatchingAssets(delay)
+    .then(assets => {
+        assets = JSON.parse(JSON.stringify(assets));
+        console.log(assets);
         
-//         var modules = [];
+        var modules = [];
         
-//         assets.forEach(function(assets) {
-//             var diffLog = {
-//                 order_id : req.body.order_id,
-//                 asset_id : assets.asset_id,
-//                 tow_group : req.body.tow_group,
-//                 location_type : req.body.location_type,
-//                 asset_location : req.body.asset_location,
-//                 latitude : req.body.latitude,
-//                 longitude : req.body.longitude,
-//                 fuel_burn : req.body.fuel_burn,
-//                 lube_burn : req.body.lube_burn,
-//                 speed : req.body.speed,
-//                 direction : req.body.direction,
-//                 eta : req.body.eta,
-//                 miles_made : req.body.miles_made,
-//                 miles_to_go : req.body. miles_to_go,
-//                 notes : req.body.notes,
-//                 log_dttm : new Date(),
-//                 created_by: 'Neal White',
-//                 last_modified_by: 'Neal White',
-//                 created_dttm: new Date(),
-//                 modified_dttm: new Date()
-//             };
-//             // console.log(diffLog);
-//             AssetLog
-//             .create(diffLog)
-//             .then(diffLog => {
-//                 modules.push(diffLog);
-//                 if(modules.length === assets.length) {
-//                     return modules;
-//                 }
-//             });
-//         });
-//         res.json({
-//             modules,
-//             message: 'logs created for tow_group in job'
-//         });
-//     });
-// });        
+        assets.forEach(function(assets) {
+            var diffDelay = {
+                asset_id : assets.asset_id,
+                asset_name: assets.asset_name,
+                order_id : req.body.order_id,
+                tow_group : req.body.tow_group,
+                delay_type : req.body.delay_type,
+                delay_start : req.body.delay_start,
+                delay_stop : req.body.delay_stop,
+                description : req.body.description,
+                log_dttm : new Date()
+            };
+            // console.log(diffLog);
+            Delay
+            .create(diffDelay)
+            .then(diffDelay => {
+                modules.push(diffDelay);
+                if(modules.length === assets.length) {
+                    return modules;
+                }
+            });
+        });
+        res.json({
+            modules,
+            message: 'logs created for tow_group in job'
+        });
+    });
 
-
-
-
+} else {
+    next(new Error('ERROR: Start and Stop dates must be on the same day.'));
+}
+});        
 
 module.exports = router;

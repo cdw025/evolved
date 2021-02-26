@@ -1,0 +1,154 @@
+<div class="modal fade crunch" id="editLog<%- log.log_id %>" tabindex="-1" role="dialog" aria-labelledby="editLogModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content" style="text-align: left;">
+        <div class="modal-header">
+          <h5 class="modal-title" id="editLogModalLabel">Edit Log of <%- log.asset_name %> for Job <%- job.ordnbr %></h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <form class="editlogform">
+        <div class="modal-body">
+            <div class="row">
+                <div class="col-6">
+                    <div class="form-group">
+                        <label hidden for="editassetId"></label>
+                        <input hidden type="text" class="form-control editassetId" value="<%- log.asset_id %>">
+                        <label hidden for="editlogId"></label>
+                        <input hidden type="text" class="form-control editlogId" value="<%- log.log_id %>">
+                        <label hidden for="editassetname"></label>
+                        <input hidden type="text" class="form-control editassetname" value="<%- log.asset_name %>">
+                        <label hidden for="edittowgroup"></label>
+                        <input hidden type="text" class="form-control edittowgroup" value="<%- log.tow_group %>">
+                        <label hidden for="editorderId"></label>
+                        <input hidden type="integer" class="form-control editorderId" value="<%- log.order_id %>">
+                        <label for="editJobNumberInput">Job #</label>
+                        <input type="text" class="form-control editJobNumberInput" value="<%- job.ordnbr %>" readonly>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="form-group">
+                        <label for="editassetName">Asset</label>
+                        <input type="text" class="form-control editassetName" value="<%- log.asset_name %>" readonly>
+                      </div>
+              </div>
+          </div>
+          <div class="row">
+            <div class="col-6">
+                <div class="form-group">
+                    <label for="editlogLocationType">Location Type</label>
+                      <select class="form-control editlogLocationType" value="<%- log.location_type %>">
+                        <option value="inland" <%= log.location_type == 'inland' ? 'selected' : ''%>>inland</option>
+                        <option value="offshore" <%= log.location_type == 'offshore' ? 'selected' : ''%>>offshore</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-6 locationinland">
+                <div class="form-group">
+                    <label name="editassetLocation">Location
+                        <img src="/tooltip.png" width = "20" height = "20" 
+                        data-toggle="tooltip" data-placement="right" title="Type a location.  If a location is suggested, the latitude and longitude will auto-populate once selected."
+                        style="font-size: 90%; align-items: center;">
+                    </label>
+                    <input type="text" class="form-control editassetLocation autopopulatelocation" placeholder="ex. LM - 7, UM - 100, OH - 230" value="<%- log.asset_location %>">
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-6 locationoffshore">
+                <div class="form-group">
+                    <label for="editassetlatitude">Latitude (xx.xxxxxx)</label>
+                    <input type="text" class="form-control editassetlatitude" placeholder="latitude" required value="<%- log.latitude %>">
+                </div>
+            </div>
+            <div class="col-6 locationoffshore">
+              <div class="form-group">
+                  <label for="editassetlongitude">Longitude (-xx.xxxxxx)</label>
+                  <input type="text" class="form-control editassetlongitude" placeholder="longitude" required value="<%- log.longitude %>">
+          </div>
+        </div>
+        </div>
+    <div class="row">
+              <div class="col-6">
+                  <div class="form-group">
+                      <label for="editfuelburn">Fuel Burn Last 24hrs</label>
+                      <input type="integer" class="form-control editfuelburn" placeholder="Fuel Burned (gal)" required value="<%- log.fuel_burn %>">
+                  </div>
+          </div>
+                  <div class="col-6">
+                    <div class="form-group">
+                        <label for="editlubeburn">Lube Burn Last 24hrs</label>
+                        <input type="integer" class="form-control editlubeburn" placeholder="Lube Burned (gal)" required value="<%- log.lube_burn %>">
+                    </div>
+                  </div>
+            </div>
+            <div class="row">
+                <div class="col-6">
+                    <div class="form-group">
+                        <label for="editcurrentspeed">Current Speed (mph)</label>
+                        <input type="number" class="form-control editcurrentspeed" placeholder="ex. 4.5" required value="<%- log.speed %>">
+                    </div>
+            </div>
+            <div class="col-6">
+                <div class="form-group">
+                    <label for="editlogstatus">Status</label>
+                    <select class="form-control editlogstatus" value="<%- log.location_type %>">
+                        <option value="blank" <%= log.status == 'blank' ? 'selected' : ''%>></option>
+                        <option value="Mobilizing" <%= log.status == 'Mobilizing' ? 'selected' : ''%>>Mobilizing</option>
+                        <option value="Loading" <%= log.status == 'Loading' ? 'selected' : ''%>>Loading</option>
+                        <option value="Unloading" <%= log.status == 'Unloading' ? 'selected' : ''%>>Unloading</option>
+                        <option value="De-Mobilizing" <%= log.status == 'De-Mobilizing' ? 'selected' : ''%>>De-Mobilizing</option>
+                        <option value="Standby" <%= log.status == 'Standby' ? 'selected' : ''%>>Standby For Orders</option>
+                    </select>
+                </div>
+            </div>
+              </div>
+            <div class="row">
+                <div class="col-6">
+                    <div class="form-group">
+                        <label for="editlogdirection">Direction</label>
+                        <select class="form-control editlogdirection" value="<%- log.direction %>">
+                            <option value="blank" <%= log.direction == 'blank' ? 'selected' : ''%>></option>
+                            <option value="North" <%= log.direction == 'North' ? 'selected' : ''%>>North</option>
+                            <option value="South" <%= log.direction == 'South' ? 'selected' : ''%>>South</option>
+                            <option value="East" <%= log.direction == 'East' ? 'selected' : ''%>>East</option>
+                            <option value="West" <%= log.direction == 'West' ? 'selected' : ''%>>West</option>
+                          </select>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="form-group">
+                        <label for="editlogeta">ETA</label>
+                        <input type="datetime-local" class="form-control editlogeta" value="<%- moment(log.eta).format('YYYY-MM-DDTHH:mm') %>">
+                    </div>
+                </div>
+          </div>
+          <div class="row">
+            <div class="col-6">
+                <div class="form-group">
+                    <label for="editmilesmade">Miles Made Last 24hrs</label>
+                    <input type="integer" class="form-control editmilesmade" placeholder="miles made last 24hrs" value="<%- log.miles_made %>">
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="form-group">
+                    <label for="editmilestogo">Miles to Go</label>
+                    <input type="integer" class="form-control editmilestogo" placeholder="miles to go" value="<%- log.miles_to_go %>">
+                </div>
+            </div>
+      </div>
+      <div class="row">
+          <div class="col-12">
+                <label for="editlognotes">Log Notes</label>
+              <textarea class="form-control editlognotes" rows="2" placeholder="Enter any notes you wish here"><%- log.notes %></textarea>
+          </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary">Save Changes</button>
+    </div>
+</form>
+    </div>
+  </div>
+</div>

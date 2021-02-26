@@ -1,0 +1,87 @@
+<div class="modal fade" id="newDelay<%- asset.asset_id %>" tabindex="-1" role="dialog" aria-labelledby="newDelayModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="newDelayModalLabel">Add New Delay for Tow Group #<%- asset.tow_group %> for Job <%- job.ordnbr %></h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+            <form class="newdelayform">
+              <div class="alert alert-danger" role="alert" id="errorMessage_<%- asset.asset_id %>" style="display:none">
+                Ah!
+              </div>
+            <div class="row">
+                <div class="col-12">
+                    <div class="form-group">
+                        <label hidden name="assetId"></label>
+                        <input hidden type="text" class="form-control assetId" value="<%- asset.asset_id %>">
+                        <label hidden name="assetname"></label>
+                        <input hidden type="text" class="form-control assetname" value="<%- asset.asset_name %>">
+                        <label hidden name="towgroup"></label>
+                        <input hidden type="integer" class="form-control orderId" value="<%- job.order_id %>">
+                        <label name="JobNumberInput">Job #</label>
+                        <input type="text" class="form-control JobNumberInput" value="<%- job.ordnbr %>" readonly>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <div class="form-group">
+                        <label name="towgroup">Tow Group
+                            <img src="../tooltip.png" width = "20" height = "20" 
+                            data-toggle="tooltip" data-placement="right" title="By adding a delay, you will be adding it for all assets within this tow group. If an asset needs to be moved to a different tow group please contact your administrator."
+                            style="font-size: 90%; align-items: center;">
+                        </label>
+                        <input type="text" class="form-control towgroup" value="<%- asset.tow_group %>" readonly>
+                      </div>
+              </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <div class="form-group">
+                        <label name="delaytype">Delay Type</label>
+                    <select class="form-control delaytype">
+                        <option value="Lock">Lock</option>
+                        <option value="Weather">Weather</option>
+                        <option value="Loading">Loading</option>
+                        <option value="Unloading">Unloading</option>
+                        <option value="Traffic">Traffic</option>
+                        <option value="Customs">Customs</option>
+                        <option value="Other">Other</option>
+                      </select>
+                      </div>
+              </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <div class="form-group">
+                        <label name="delaystart">Delay Start</label>
+                        <input type="datetime-local" class="form-control delaystart">
+                      </div>
+              </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <div class="form-group">
+                        <label name="delaystop">Delay End</label>
+                        <input type="datetime-local" class="form-control delaystop">
+                      </div>
+              </div>
+            </div>
+      <div class="row">
+          <div class="col-12">
+                <label name="delaynotes">Delay Details</label>
+              <textarea class="form-control delaynotes" rows="2" placeholder="Enter any notes you wish here"></textarea>
+          </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary">Save Changes</button>
+    </div>
+</form>
+    </div>
+  </div>
+</div>
